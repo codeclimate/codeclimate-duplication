@@ -9,3 +9,7 @@ if File.exists?("/config.json")
 else
   engine_config = {}
 end
+
+CC::Engine::Flay.new(
+  directory: "/code", engine_config: engine_config, io: STDOUT
+).run
