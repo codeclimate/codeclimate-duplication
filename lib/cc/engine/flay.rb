@@ -4,7 +4,7 @@ require 'json'
 module CC
   module Engine
     class Flay
-      def initialize(directory: ,engine_config: ,io:)
+      def initialize(directory:, engine_config:, io:)
         @directory = directory
         @engine_config = engine_config || {}
         @io = io
