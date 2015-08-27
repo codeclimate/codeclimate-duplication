@@ -6,16 +6,16 @@ module CC
     class Flay
       def initialize(directory: ,engine_config: ,io:)
         @directory = directory
-        @engine_config = engine_config
+        @engine_config = engine_config || {}
         @io = io
       end
 
       def run
-        files = ::Flay.filter_files(::Flay.expand_dirs_to_files(directory))
+        files = filter_files(::Flay.expand_dirs_to_files(directory))
         flay.process(*files)
 
         flay.report(StringIO.new).each do |issue|
-          puts "#{new_violation(issue).to_json}\n"
+          puts "#{new_violation(issue).to_json}\0"
         end
       end
 
@@ -39,6 +39,11 @@ module CC
 
       def name(issue)
         issue.identical? ? 'Identical code' : 'Similar code'
+      end
+
+      def filter_files(files)
+        return files if engine_config["exclude_paths"].nil?
+        files.reject { |file| engine_config["exclude_paths"].include?(file) }
       end
 
       def locations(issue)
