@@ -27,7 +27,7 @@ module CC::Engine
           end
         EORUBY
 
-        assert_equal run_engine, "{\"type\":\"issue\",\"check_name\":\"Similar code\",\"description\":\"Duplication found in iter\",\"categories\":[\"Duplication\"],\"location\":[{\"path\":\"" + @code + "/foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},{\"path\":\"" + @code + "/foo.rb\",\"lines\":{\"begin\":9,\"end\":9}}]}\n"
+        assert_equal run_engine, "{\"type\":\"issue\",\"check_name\":\"Similar code\",\"description\":\"Duplication found in iter\",\"categories\":[\"Duplication\"],\"location\":[{\"path\":\"" + @code + "/foo.rb\",\"lines\":{\"begin\":1,\"end\":1}},{\"path\":\"" + @code + "/foo.rb\",\"lines\":{\"begin\":9,\"end\":9}}]}\0\n"
       end
 
       def create_source_file(path, content)
