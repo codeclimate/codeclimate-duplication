@@ -24,7 +24,7 @@ module CC
       attr_reader :directory, :engine_config, :io
 
       def flay
-        @flay ||= ::Flay.new
+        @flay ||= ::Flay.new(options)
       end
 
       def new_violation(issue)
@@ -56,6 +56,24 @@ module CC
             }
           }
         end
+      end
+
+      def options
+        {
+          diff: false,
+          mass: dup_size,
+          summary: false,
+          verbose: false,
+          number: true,
+          timeout: 10,
+          liberal: false,
+          fuzzy: false,
+          only: nil
+        }
+      end
+
+      def dup_size
+        engine_config[:duplication_warning_size] || 16
       end
     end
   end
