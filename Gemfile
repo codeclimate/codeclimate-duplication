@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'flay'
+gem 'pry'
 
 group :test do
   gem "rake"
