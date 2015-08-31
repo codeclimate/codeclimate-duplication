@@ -15,7 +15,7 @@ module CC
         flay.process(*files)
 
         flay.report(StringIO.new).each do |issue|
-          puts "#{new_violation(issue).to_json}\0"
+          issue.locations.each { |location| puts "#{new_violation(issue, location).to_json}\0" }
         end
       end
 
@@ -27,13 +27,13 @@ module CC
         @flay ||= ::Flay.new(options)
       end
 
-      def new_violation(issue)
+      def new_violation(issue, location)
         {
           "type": "issue",
           "check_name": name(issue),
           "description": "Duplication found in #{issue.name}",
           "categories": ["Duplication"],
-          "location": locations(issue)
+          "location": format_location(location)
         }
       end
 
@@ -46,16 +46,14 @@ module CC
         files.reject { |file| engine_config["exclude_paths"].include?(file) }
       end
 
-      def locations(issue)
-        issue.locations.map do |loc|
-          {
-            "path": loc.file,
-            "lines": {
-              "begin": loc.line,
-              "end": loc.line
-            }
+      def format_location(location)
+        {
+          "path": location.file,
+          "lines": {
+            "begin": location.line,
+            "end": location.line
           }
-        end
+        }
       end
 
       def options
