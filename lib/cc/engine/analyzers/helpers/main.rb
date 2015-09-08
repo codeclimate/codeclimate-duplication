@@ -1,3 +1,5 @@
+require 'pathname'
+
 module CC
   module Engine
     module Analyzers
