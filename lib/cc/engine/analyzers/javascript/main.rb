@@ -36,8 +36,7 @@ module CC
           end
 
           def mass_threshold
-            mass = engine_config.fetch('config', {}).fetch('javascript', {}).fetch('mass_threshold', {})
-            mass.is_a?(Integer) ? mass : 2
+            engine_config.fetch('config', {}).fetch('javascript', {}).fetch('mass_threshold', 10)
           end
 
           def start_flay(s_expressions)

@@ -38,8 +38,7 @@ module CC
           end
 
           def mass_threshold
-            mass = engine_config.fetch('config', {}).fetch('ruby', {}).fetch('mass_threshold', {})
-            mass.empty? ? 10 : mass
+            engine_config.fetch('config', {}).fetch('ruby', {}).fetch('mass_threshold', 10)
           end
 
           def analyzed_files
