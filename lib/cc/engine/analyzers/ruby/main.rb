@@ -1,7 +1,6 @@
 require 'flay'
 require 'json'
 require 'cc/engine/analyzers/helpers/main'
-require 'pry'
 
 module CC
   module Engine

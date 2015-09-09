@@ -2,12 +2,12 @@ require 'cc/engine/analyzers/ruby/main'
 require 'cc/engine/analyzers/javascript/main'
 require 'flay'
 require 'json'
-require 'pry'
 
 module CC
   module Engine
     class Duplication
       SUPPORTED_LANGUAGES = ['ruby', 'javascript'].freeze
+      ENABLED_BY_DEFAULT = ['ruby'].freeze
 
       def initialize(directory:, engine_config:, io:)
         @directory = directory
@@ -34,8 +34,7 @@ module CC
       end
 
       def languages
-        SUPPORTED_LANGUAGES
-        # engine_config['languages'] || {}
+        engine_config['languages'] || ENABLED_BY_DEFAULT
       end
 
       def language_supported?(lang)
