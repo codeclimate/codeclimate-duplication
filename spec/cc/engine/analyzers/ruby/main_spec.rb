@@ -44,11 +44,11 @@ module CC::Engine::Analyzers::Ruby
       end
 
       def first_issue
-        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"#{@code}/foo.rb","lines":{"begin":1,"end":1}},"other_locations":[{"path":"#{@code}/foo.rb","lines":{"begin":9,"end":9}}]}
+        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"#{@code}/foo.rb","lines":{"begin":1,"end":1}},"other_locations":[{"path":"#{@code}/foo.rb","lines":{"begin":9,"end":9}}], "content": {"body": read_up}}
       end
 
       def second_issue
-        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"#{@code}/foo.rb","lines":{"begin":9,"end":9}},"other_locations":[{"path":"#{@code}/foo.rb","lines":{"begin":1,"end":1}}]}
+        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"#{@code}/foo.rb","lines":{"begin":9,"end":9}},"other_locations":[{"path":"#{@code}/foo.rb","lines":{"begin":1,"end":1}}], "content": {"body": read_up}}
       end
 
       def printed_issues
