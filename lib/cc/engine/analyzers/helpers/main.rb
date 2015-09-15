@@ -15,7 +15,8 @@ module CC
             "description": "Duplication found in #{issue.name}",
             "categories": ["Duplication"],
             "location": format_location(location),
-            "other_locations": format_locations(other)
+            "other_locations": format_locations(other),
+            "content": content_body
           }
         end
 
@@ -66,6 +67,11 @@ module CC
         def excluded_files
           return [] if engine_config["exclude_paths"].nil?
           engine_config["exclude_paths"].map { |path| Dir.glob("#{directory}/path") }.flatten
+        end
+
+        def content_body
+          read_up = File.read('config/contents/duplicated_code.md')
+          { "body": read_up }
         end
       end
     end
