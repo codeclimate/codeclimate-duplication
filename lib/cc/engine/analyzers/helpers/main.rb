@@ -7,7 +7,7 @@ module CC
         BASE_POINTS = 10_000
 
         def flay
-          @flay ||= ::Flay.new(options)
+          @flay ||= ::Flay.new(flay_options)
         end
 
         def new_violation(issue, location, other)
@@ -49,7 +49,7 @@ module CC
           other.map { |location| format_location(location) }
         end
 
-        def options
+        def flay_options
           {
             diff: false,
             mass: mass_threshold,

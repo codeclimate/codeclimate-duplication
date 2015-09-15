@@ -5,7 +5,6 @@ gem 'pry'
 gem 'posix-spawn'
 gem 'sexp_processor'
 gem 'json'
-gem 'mocha'
 
 group :test do
   gem 'rake'

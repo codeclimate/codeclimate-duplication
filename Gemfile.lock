@@ -8,7 +8,6 @@ GEM
       ruby_parser (~> 3.0)
       sexp_processor (~> 4.0)
     json (1.8.3)
-    metaclass (0.0.4)
     method_source (0.8.2)
     minitest (5.8.0)
     minitest-reporters (1.0.20)
@@ -16,8 +15,6 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    mocha (1.1.0)
-      metaclass (~> 0.0.1)
     posix-spawn (0.3.11)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -38,7 +35,6 @@ DEPENDENCIES
   json
   minitest
   minitest-reporters
-  mocha
   posix-spawn
   pry
   rake
