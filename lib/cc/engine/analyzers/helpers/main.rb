@@ -4,6 +4,8 @@ module CC
   module Engine
     module Analyzers
       module Helpers
+        BASE_POINTS = 10_000
+
         def flay
           @flay ||= ::Flay.new(options)
         end
@@ -15,6 +17,7 @@ module CC
             "description": "Duplication found in #{issue.name}",
             "categories": ["Duplication"],
             "location": format_location(location),
+            "remediation_points": calculate_points(issue),
             "other_locations": format_locations(other),
             "content": content_body
           }
@@ -22,6 +25,10 @@ module CC
 
         def name(issue)
           issue.identical? ? 'Identical code' : 'Similar code'
+        end
+
+        def calculate_points(issue)
+          BASE_POINTS * issue.mass
         end
 
         def find_other_locations(all_locations, current)

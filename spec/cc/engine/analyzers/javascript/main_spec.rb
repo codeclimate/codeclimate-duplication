@@ -33,15 +33,15 @@ module CC::Engine::Analyzers::Javascript
       end
 
       def first_issue
-        {"type":"issue","check_name":"Identical code","description":"Duplication found in expression_statement","categories":["Duplication"],"location":{"path":"#{@code}/foo.js","lines":{"begin":1,"end":1}},"other_locations":[{"path":"#{@code}/foo.js","lines":{"begin":2,"end":2}},{"path":"#{@code}/foo.js","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
+        {"type":"issue","check_name":"Identical code","description":"Duplication found in expression_statement","categories":["Duplication"],"location":{"path":"#{@code}/foo.js","lines":{"begin":1,"end":1}},"remediation_points":450000, "other_locations":[{"path":"#{@code}/foo.js","lines":{"begin":2,"end":2}},{"path":"#{@code}/foo.js","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
       end
 
       def second_issue
-        {"type":"issue","check_name":"Identical code","description":"Duplication found in expression_statement","categories":["Duplication"],"location":{"path":"#{@code}/foo.js","lines":{"begin":2,"end":2}},"other_locations":[{"path":"#{@code}/foo.js","lines":{"begin":1,"end":1}},{"path":"#{@code}/foo.js","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
+        {"type":"issue","check_name":"Identical code","description":"Duplication found in expression_statement","categories":["Duplication"],"location":{"path":"#{@code}/foo.js","lines":{"begin":2,"end":2}},"remediation_points":450000, "other_locations":[{"path":"#{@code}/foo.js","lines":{"begin":1,"end":1}},{"path":"#{@code}/foo.js","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
       end
 
       def third_issue
-        {"type":"issue","check_name":"Identical code","description":"Duplication found in expression_statement","categories":["Duplication"],"location":{"path":"#{@code}/foo.js","lines":{"begin":3,"end":3}},"other_locations":[{"path":"#{@code}/foo.js","lines":{"begin":1,"end":1}},{"path":"#{@code}/foo.js","lines":{"begin":2,"end":2}}], "content":{"body": read_up}}
+        {"type":"issue","check_name":"Identical code","description":"Duplication found in expression_statement","categories":["Duplication"],"location":{"path":"#{@code}/foo.js","lines":{"begin":3,"end":3}},"remediation_points":450000,"other_locations":[{"path":"#{@code}/foo.js","lines":{"begin":1,"end":1}},{"path":"#{@code}/foo.js","lines":{"begin":2,"end":2}}], "content":{"body": read_up}}
       end
 
       def printed_issues
