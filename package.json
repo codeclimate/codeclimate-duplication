@@ -1,0 +1,13 @@
+{
+  "name": "codeclimate-duplication",
+  "version": "0.0.1",
+  "description": "Find similar structures in your code",
+  "license" : "TODO Add actual license",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:codeclimate/codeclimate-duplication.git"
+  },
+  "dependencies": {
+    "esprima": "2.6.0"
+  }
+}
