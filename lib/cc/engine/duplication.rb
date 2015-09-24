@@ -1,12 +1,13 @@
 require 'cc/engine/analyzers/ruby/main'
 require 'cc/engine/analyzers/javascript/main'
+require 'cc/engine/analyzers/php/main'
 require 'flay'
 require 'json'
 
 module CC
   module Engine
     class Duplication
-      SUPPORTED_LANGUAGES = ['ruby', 'javascript'].freeze
+      SUPPORTED_LANGUAGES = ['ruby', 'javascript', 'php'].freeze
       ENABLED_BY_DEFAULT = ['ruby'].freeze
 
       def initialize(directory:, engine_config:, io:)
