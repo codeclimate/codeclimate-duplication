@@ -6,10 +6,6 @@ module CC
       module Helpers
         BASE_POINTS = 10_000
 
-        def flay
-          @flay ||= ::Flay.new(flay_options)
-        end
-
         def new_violation(issue, location, other)
           {
             "type": "issue",
