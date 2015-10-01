@@ -1,13 +1,14 @@
 require 'cc/engine/analyzers/ruby/main'
 require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/php/main'
+require 'cc/engine/analyzers/python/main'
 require 'flay'
 require 'json'
 
 module CC
   module Engine
     class Duplication
-      SUPPORTED_LANGUAGES = ['ruby', 'javascript', 'php'].freeze
+      SUPPORTED_LANGUAGES = ['ruby', 'javascript', 'php', 'python'].freeze
       ENABLED_BY_DEFAULT = ['ruby'].freeze
 
       def initialize(directory:, engine_config:, io:)
@@ -22,7 +23,9 @@ module CC
         languages.each do |lang|
           next unless language_supported?(lang)
           klass = "::CC::Engine::Analyzers::#{lang.capitalize}::Main"
-          Object.const_get(klass).new(directory: directory, engine_config: engine_config, io: io).run
+          engine = Object.const_get(klass).new(directory: directory, engine_config: engine_config, io: io)
+          engine.run
+          engine.report
         end
       end
 

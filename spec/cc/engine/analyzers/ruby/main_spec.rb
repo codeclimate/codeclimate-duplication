@@ -39,20 +39,17 @@ module CC::Engine::Analyzers::Ruby
 
         flay = ::CC::Engine::Analyzers::Ruby::Main.new(directory: @code, engine_config: config, io: io)
         flay.run
+        flay.report
 
         io.string
       end
 
       def first_issue
-        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"#{@code}/foo.rb","lines":{"begin":1,"end":1}},"remediation_points": 360000, "other_locations":[{"path":"#{@code}/foo.rb","lines":{"begin":9,"end":9}}], "content": {"body": read_up}}
-      end
-
-      def second_issue
-        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"#{@code}/foo.rb","lines":{"begin":9,"end":9}},"remediation_points": 360000, "other_locations":[{"path":"#{@code}/foo.rb","lines":{"begin":1,"end":1}}], "content": {"body": read_up}}
+        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"foo.rb","lines":{"begin":1,"end":5}},"remediation_points": 360000, "other_locations":[{"path":"foo.rb","lines":{"begin":9,"end":13}}], "content": {"body": read_up}}
       end
 
       def printed_issues
-        first_issue.to_json + "\0\n" + second_issue.to_json + "\0\n"
+        first_issue.to_json + "\0\n"
       end
     end
   end

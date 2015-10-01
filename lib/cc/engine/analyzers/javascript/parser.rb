@@ -23,6 +23,8 @@ module CC
           def on_success(output)
             parsed_json = JSON.parse(output, max_nesting: false)
             parsed_json.delete('sourceType')
+
+
             @syntax_tree = CC::Engine::Analyzers::Javascript::AST.json_to_ast(parsed_json, filename)
           end
 

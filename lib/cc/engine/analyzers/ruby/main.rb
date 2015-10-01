@@ -18,15 +18,6 @@ module CC
           def run
             flay = ::Flay.new(flay_options)
             flay.process(*analyzed_files)
-
-            flay.report(StringIO.new).each do |issue|
-              all_locations = issue.locations
-
-              all_locations.each do |location|
-                other_locations = find_other_locations(all_locations, location)
-                io.puts "#{new_violation(issue, location, other_locations).to_json}\0"
-              end
-            end
           end
 
           private

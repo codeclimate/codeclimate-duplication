@@ -9,6 +9,8 @@ else
   engine_config = {}
 end
 
+directory = ARGV[0] || "/code"
+
 CC::Engine::Duplication.new(
-  directory: "/code", engine_config: engine_config, io: STDOUT
+  directory: directory, engine_config: engine_config, io: STDOUT
 ).run

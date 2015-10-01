@@ -39,6 +39,3 @@ DEPENDENCIES
   pry
   rake
   sexp_processor
-
-BUNDLED WITH
-   1.10.6

@@ -42,15 +42,6 @@ module CC
           def start_flay(s_expressions)
             flay = ::Flay.new(flay_options)
             flay.process_sexp(s_expressions)
-
-            flay.report(StringIO.new).each do |issue|
-              all_locations = issue.locations
-
-              all_locations.each do |location|
-                other_locations = find_other_locations(all_locations, location)
-                io.puts "#{new_violation(issue, location, other_locations).to_json}\0"
-              end
-            end
           end
 
           def analyzed_files
