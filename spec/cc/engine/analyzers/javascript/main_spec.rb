@@ -49,7 +49,7 @@ module CC::Engine::Analyzers::Javascript
       end
 
       def engine_conf
-        { 'config' => { 'javascript' => { 'mass_threshold' => 4 } } }
+        { 'config' => { 'javascript' => { 'mass_threshold' => 2 } } }
       end
     end
   end
