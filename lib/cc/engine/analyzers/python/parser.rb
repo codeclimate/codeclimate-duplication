@@ -15,7 +15,7 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new(python_env, self)
+            runner = CommandLineRunner.new(python_command, self)
             runner.run(code) do |ast|
               json_ast = JSON.parse(ast)
               @syntax_tree = json_ast
@@ -24,7 +24,7 @@ module CC
             self
           end
 
-          def python_env
+          def python_command
             file = File.expand_path(File.dirname(__FILE__)) + '/parser.py'
             "python #{file}"
           end

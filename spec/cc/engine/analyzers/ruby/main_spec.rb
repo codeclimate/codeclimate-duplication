@@ -37,9 +37,10 @@ module CC::Engine::Analyzers::Ruby
       def run_engine(config = nil)
         io = StringIO.new
 
-        flay = ::CC::Engine::Analyzers::Ruby::Main.new(directory: @code, engine_config: config, io: io)
-        flay.run
-        flay.report
+        engine = ::CC::Engine::Analyzers::Ruby::Main.new(directory: @code, engine_config: config)
+        reporter = ::CC::Engine::Analyzers::Reporter.new(@code, engine, io)
+
+        reporter.run
 
         io.string
       end

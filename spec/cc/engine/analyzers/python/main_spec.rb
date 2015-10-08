@@ -1,7 +1,7 @@
-require 'spec_helper'
-require 'cc/engine/analyzers/python/main'
-require 'flay'
-require 'tmpdir'
+require "spec_helper"
+require "cc/engine/analyzers/python/main"
+require "flay"
+require "tmpdir"
 
 module CC::Engine::Analyzers::Python
   describe Main do
@@ -26,9 +26,10 @@ print("Hello", "python")
       def run_engine(config = nil)
         io = StringIO.new
 
-        flay = ::CC::Engine::Analyzers::Python::Main.new(directory: @code, engine_config: config, io: io)
-        flay.run
-        flay.report
+        engine = ::CC::Engine::Analyzers::Python::Main.new(directory: @code, engine_config: config)
+        reporter = ::CC::Engine::Analyzers::Reporter.new(@code, engine, io)
+
+        reporter.run
 
         io.string
       end
@@ -39,7 +40,7 @@ print("Hello", "python")
       end
 
       def engine_conf
-        { 'config' => { 'python' => { 'mass_threshold' => 4 } } }
+        { "config" => { "python" => { "mass_threshold" => 4 } } }
       end
     end
   end

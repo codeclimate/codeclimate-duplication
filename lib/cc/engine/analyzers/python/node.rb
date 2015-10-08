@@ -49,7 +49,7 @@ module CC
 
           def valid_properties
             @node.reject do |key, value|
-              value_empty = value == nil || value == {} || value == []
+              value_empty = [nil, {}, []].include?(value)
               SCRUB_PROPERTIES.include?(key) || value_empty
             end
           end

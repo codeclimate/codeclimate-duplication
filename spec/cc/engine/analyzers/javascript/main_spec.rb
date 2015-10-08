@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'cc/engine/analyzers/javascript/main'
+require 'cc/engine/analyzers/reporter'
 require 'flay'
 require 'tmpdir'
 
@@ -26,9 +27,10 @@ module CC::Engine::Analyzers::Javascript
       def run_engine(config = nil)
         io = StringIO.new
 
-        flay = ::CC::Engine::Analyzers::Javascript::Main.new(directory: @code, engine_config: config, io: io)
-        flay.run
-        flay.report
+        engine = ::CC::Engine::Analyzers::Javascript::Main.new(directory: @code, engine_config: config)
+        reporter = ::CC::Engine::Analyzers::Reporter.new(@code, engine, io)
+
+        reporter.run
 
         io.string
       end
@@ -39,7 +41,7 @@ module CC::Engine::Analyzers::Javascript
       end
 
       def engine_conf
-        { 'config' => { 'javascript' => { 'mass_threshold' => 4 } } }
+        { 'config' => { 'javascript' => { 'mass_threshold' => 1 } } }
       end
     end
   end
