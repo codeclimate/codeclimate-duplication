@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# Simple smoke test of ./parser.php
+#
+###
+input() {
+  cat <<EOF
+<?php
+  class Foo {
+    public function foo() {
+      baz();
+    }
+  }
+EOF
+}
+
+expected_output() {
+  cat <<EOF
+  [{
+    "endLine": 6,
+    "extends": null,
+    "implements": [],
+    "name": "Foo",
+    "nodeType": "Stmt_Class",
+    "startLine": 2,
+    "stmts": [{
+      "byRef": false,
+      "endLine": 5,
+      "name": "foo",
+      "nodeType": "Stmt_ClassMethod",
+      "params": [],
+      "startLine": 3,
+      "stmts": [{
+        "args": [],
+        "endLine": 4,
+        "name": {
+          "endLine": 4,
+          "nodeType": "Name",
+          "parts": ["baz"],
+          "startLine": 4
+        },
+        "nodeType": "Expr_FuncCall",
+        "startLine": 4
+      }],
+      "type": 1
+    }],
+    "type": 0
+  }]
+EOF
+}
+
+pretty() { python -m json.tool; }
+
+echo <(input | php ./parser.php | pretty)

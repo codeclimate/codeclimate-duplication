@@ -16,6 +16,7 @@ module CC
           end
 
           def run
+            flay = ::Flay.new(flay_options)
             flay.process(*analyzed_files)
 
             flay.report(StringIO.new).each do |issue|
