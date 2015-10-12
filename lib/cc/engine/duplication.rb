@@ -42,7 +42,11 @@ module CC
       end
 
       def languages
-        Array(engine_config['languages'] || DEFAULT_LANGUAGE)
+        config_languages = engine_config.
+          fetch("config", {}).
+          fetch("languages", DEFAULT_LANGUAGE)
+
+        Array(config_languages)
       end
     end
   end
