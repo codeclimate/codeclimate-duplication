@@ -14,6 +14,7 @@ module CC
             "**/*.module"
           ]
           DEFAULT_MASS_THRESHOLD = 10
+          BASE_POINTS = 4_000
 
           attr_reader :directory, :engine_config, :io
 
@@ -30,6 +31,10 @@ module CC
 
           def mass_threshold
             engine_config.fetch('config', {}).fetch('php', {}).fetch('mass_threshold', DEFAULT_MASS_THRESHOLD)
+          end
+
+          def base_points
+            BASE_POINTS
           end
 
           private

@@ -11,7 +11,10 @@ module CC
         class Main
           LANGUAGE = "python"
           DEFAULT_PATHS = ["**/*.py"]
-          DEFAULT_MASS_THRESHOLD = 50
+          DEFAULT_MASS_THRESHOLD = 40
+          BASE_POINTS = 1000
+          LANGUAGE = "python"
+          DEFAULT_PATHS = ["**/*.py"]
 
           def initialize(directory:, engine_config:)
             @directory = directory
@@ -26,6 +29,10 @@ module CC
 
           def mass_threshold
             engine_config.fetch("config", {}).fetch("python", {}).fetch("mass_threshold", DEFAULT_MASS_THRESHOLD)
+          end
+
+          def base_points
+            BASE_POINTS
           end
 
           private

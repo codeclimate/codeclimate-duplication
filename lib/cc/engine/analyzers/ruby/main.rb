@@ -17,6 +17,7 @@ module CC
 
           ]
           DEFAULT_MASS_THRESHOLD = 10
+          BASE_POINTS = 10_000
           TIMEOUT = 10
 
           def initialize(directory:, engine_config:)
@@ -32,6 +33,10 @@ module CC
 
           def mass_threshold
             engine_config.fetch("config", {}).fetch("ruby", {}).fetch("mass_threshold", DEFAULT_MASS_THRESHOLD)
+          end
+
+          def base_points
+            BASE_POINTS
           end
 
           private

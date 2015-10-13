@@ -49,7 +49,7 @@ module CC::Engine::Analyzers::Php
       end
 
       def printed_issue
-        issue = {"type":"issue","check_name":"Identical code","description":"Duplication found in function","categories":["Duplication"],"location":{"path":"foo.php","lines":{"begin":2,"end":6}},"remediation_points":440000,"other_locations":[{"path":"foo.php","lines":{"begin":10,"end":14}}],"content":{"body": read_up}}
+        issue = {"type":"issue","check_name":"Identical code","description":"Duplication found in function","categories":["Duplication"],"location":{"path":"foo.php","lines":{"begin":2,"end":6}},"remediation_points":176000,"other_locations":[{"path":"foo.php","lines":{"begin":10,"end":14}}],"content":{"body": read_up}}
         issue.to_json + "\0\n"
       end
 

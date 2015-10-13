@@ -15,6 +15,7 @@ module CC
             "**/*.jsx"
           ]
           DEFAULT_MASS_THRESHOLD = 40
+          BASE_POINTS = 3000
 
           def initialize(engine_config:, directory:)
             @engine_config = engine_config
@@ -29,6 +30,10 @@ module CC
 
           def mass_threshold
             engine_config.fetch("config", {}).fetch("javascript", {}).fetch("mass_threshold", DEFAULT_MASS_THRESHOLD)
+          end
+
+          def base_points
+            BASE_POINTS
           end
 
           private

@@ -5,7 +5,7 @@ module CC
     module Analyzers
       module Python
         class Node < CC::Engine::Analyzers::Node
-          SCRUB_PROPERTIES = ["_type", "attributes"].freeze
+          SCRUB_PROPERTIES = %w[_type attributes ctx].freeze
 
           private
 

@@ -2,11 +2,10 @@ module CC
   module Engine
     module Analyzers
       class Violation
-        BASE_POINTS = 10_000
-
         attr_reader :issue
 
-        def initialize(issue, hashes, directory)
+        def initialize(base_points, issue, hashes, directory)
+          @base_points = base_points
           @issue = issue
           @hashes = hashes
           @directory = directory
@@ -27,7 +26,7 @@ module CC
 
         private
 
-        attr_reader :hashes, :directory
+        attr_reader :base_points, :hashes, :directory
 
         def current_sexp
           @location ||= hashes.first
@@ -46,7 +45,7 @@ module CC
         end
 
         def calculate_points
-          BASE_POINTS * issue.mass
+          base_points * issue.mass
         end
 
         def format_location

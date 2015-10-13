@@ -5,7 +5,7 @@ module CC
     module Analyzers
       module Javascript
         class Node < CC::Engine::Analyzers::Node
-          SCRUB_PROPERTIES = ["type", "start", "end"]
+          SCRUB_PROPERTIES = %w[type start end]
 
           private
 
