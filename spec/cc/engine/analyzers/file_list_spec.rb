@@ -41,6 +41,23 @@ module CC::Engine::Analyzers
 
         assert_equal file_list.files, ["#{@tmp_dir}/foo.ex"]
       end
+
+      it "returns files from default_paths when languages is an array" do
+        file_list = ::CC::Engine::Analyzers::FileList.new(
+          directory: @tmp_dir,
+          engine_config: {
+            "config" => {
+              "languages" => [
+                "elixir"
+              ],
+            },
+          },
+          default_paths: ["**/*.js", "**/*.jsx"],
+          language: "javascript",
+        )
+
+        assert_equal file_list.files, ["#{@tmp_dir}/foo.js", "#{@tmp_dir}/foo.jsx"]
+      end
     end
   end
 end

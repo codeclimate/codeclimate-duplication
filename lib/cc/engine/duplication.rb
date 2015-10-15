@@ -47,7 +47,11 @@ module CC
           fetch("config", {}).
           fetch("languages", DEFAULT_LANGUAGE)
 
-        Array(config_languages)
+        if config_languages.is_a?(Hash)
+          config_languages.keys
+        else
+          Array(config_languages)
+        end
       end
     end
   end
