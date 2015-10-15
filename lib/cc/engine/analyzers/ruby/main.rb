@@ -7,6 +7,15 @@ module CC
     module Analyzers
       module Ruby
         class Main
+          LANGUAGE = "ruby"
+          DEFAULT_PATHS = [
+            "**/*.rb",
+            "**/*.rake",
+            "**/Rakefile",
+            "**/Gemfile",
+            "**/*.gemspec"
+
+          ]
           DEFAULT_MASS_THRESHOLD = 10
           TIMEOUT = 10
 
@@ -37,7 +46,8 @@ module CC
             ::CC::Engine::Analyzers::FileList.new(
               directory: directory,
               engine_config: engine_config,
-              extension: "rb",
+              default_paths: DEFAULT_PATHS,
+              language: LANGUAGE
             ).files
           end
         end

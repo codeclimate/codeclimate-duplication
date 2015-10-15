@@ -6,7 +6,6 @@ module CC
       module Php
         module Nodes
           class Node < OpenStruct
-
             def accept(visitor)
               visit_method = :"visit_#{node_type}Node"
 

@@ -7,6 +7,12 @@ module CC
     module Analyzers
       module Php
         class Main
+          LANGUAGE = "php"
+          DEFAULT_PATHS = [
+            "**/*.php",
+            "**/*.inc",
+            "**/*.module"
+          ]
           DEFAULT_MASS_THRESHOLD = 10
 
           attr_reader :directory, :engine_config, :io
@@ -50,7 +56,8 @@ module CC
             ::CC::Engine::Analyzers::FileList.new(
               directory: directory,
               engine_config: engine_config,
-              extension: "php",
+              default_paths: DEFAULT_PATHS,
+              language: LANGUAGE
             ).files
           end
         end

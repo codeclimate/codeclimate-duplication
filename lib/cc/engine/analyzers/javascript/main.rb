@@ -9,6 +9,11 @@ module CC
     module Analyzers
       module Javascript
         class Main
+          LANGUAGE = "javascript"
+          DEFAULT_PATHS = [
+            "**/*.js",
+            "**/*.jsx"
+          ]
           DEFAULT_MASS_THRESHOLD = 40
 
           def initialize(engine_config:, directory:)
@@ -42,7 +47,8 @@ module CC
             ::CC::Engine::Analyzers::FileList.new(
               directory: directory,
               engine_config: engine_config,
-              extension: "js",
+              default_paths: DEFAULT_PATHS,
+              language: LANGUAGE
             ).files
           end
         end

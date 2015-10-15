@@ -2,23 +2,43 @@ module CC
   module Engine
     module Analyzers
       class FileList
-        def initialize(directory:, engine_config:, extension:)
+        def initialize(directory:, engine_config:, default_paths:, language:)
           @directory = directory
           @engine_config = engine_config
-          @extension = extension
+          @default_paths = default_paths
+          @language = language
         end
 
         def files
-          matching_files = Dir.glob("#{directory}/**/*.#{extension}").reject do |f|
-            File.directory?(f)
-          end
-
           matching_files - excluded_files
         end
 
         private
 
-        attr_reader :directory, :engine_config, :extension
+        attr_reader :directory, :engine_config, :default_paths, :language
+
+        def matching_files
+          paths.map do |glob|
+            Dir.glob("#{directory}/#{glob}").reject do |f|
+              File.directory?(f)
+            end
+          end.flatten
+        end
+
+        def paths
+          engine_paths || default_paths
+        end
+
+        def engine_paths
+          engine_language =  engine_config.
+            fetch("config", {}).
+            fetch("languages", {}).
+            fetch(language, {})
+
+          if engine_language.is_a?(Hash)
+            engine_language["paths"]
+          end
+        end
 
         def excluded_files
           excluded_paths.map { |path| Dir.glob("#{directory}/path") }.flatten

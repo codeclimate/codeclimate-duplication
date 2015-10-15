@@ -9,6 +9,8 @@ module CC
     module Analyzers
       module Python
         class Main
+          LANGUAGE = "python"
+          DEFAULT_PATHS = ["**/*.py"]
           DEFAULT_MASS_THRESHOLD = 50
 
           def initialize(directory:, engine_config:)
@@ -38,7 +40,8 @@ module CC
             ::CC::Engine::Analyzers::FileList.new(
               directory: directory,
               engine_config: engine_config,
-              extension: "py",
+              default_paths: DEFAULT_PATHS,
+              language: LANGUAGE
             ).files
           end
         end
