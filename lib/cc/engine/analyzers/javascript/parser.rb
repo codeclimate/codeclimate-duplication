@@ -1,6 +1,5 @@
 require 'posix/spawn'
 require 'timeout'
-require 'cc/engine/analyzers/javascript/ast'
 
 module CC
   module Engine
@@ -15,21 +14,18 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new(js_env, self)
-            runner.run(strip_shebang(code))
+            runner = CommandLineRunner.new(js_command, self)
+            runner.run(strip_shebang(code)) do |ast|
+              json_ast = JSON.parse(ast)
+              @syntax_tree = json_ast
+            end
+
             self
-          end
-
-          def on_success(output)
-            parsed_json = JSON.parse(output, max_nesting: false)
-            parsed_json.delete('sourceType')
-
-            @syntax_tree = CC::Engine::Analyzers::Javascript::AST.json_to_ast(parsed_json, filename)
           end
 
           private
 
-          def js_env
+          def js_command
             file = File.expand_path(File.dirname(__FILE__)) + '/parser.js'
             "node #{file}"
           end
@@ -63,12 +59,10 @@ module CC
             Timeout.timeout(timeout) do
               child = ::POSIX::Spawn::Child.new(command, input: input, timeout: timeout)
               if child.status.success?
-                output = block_given? ? yield(child.out) : child.out
-                delegate.on_success(output)
+                yield child.out if block_given?
               end
 
             end
-          rescue *EXCEPTIONS
           end
         end
       end

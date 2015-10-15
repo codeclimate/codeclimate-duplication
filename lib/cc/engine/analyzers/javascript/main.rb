@@ -1,4 +1,5 @@
 require "cc/engine/analyzers/javascript/parser"
+require "cc/engine/analyzers/javascript/node"
 require "cc/engine/analyzers/file_list"
 require "flay"
 require "json"
@@ -8,7 +9,7 @@ module CC
     module Analyzers
       module Javascript
         class Main
-          DEFAULT_MASS_THRESHOLD = 10
+          DEFAULT_MASS_THRESHOLD = 40
 
           def initialize(engine_config:, directory:)
             @engine_config = engine_config
@@ -30,13 +31,7 @@ module CC
           attr_reader :engine_config, :directory
 
           def process_file(path)
-            code = File.read(path)
-            parser = js_parser.new(code, path).parse
-            syntax_tree = parser.syntax_tree
-
-            if syntax_tree
-              syntax_tree.to_sexp
-            end
+            Node.new(js_parser.new(File.read(path), path).parse.syntax_tree, path).format
           end
 
           def js_parser

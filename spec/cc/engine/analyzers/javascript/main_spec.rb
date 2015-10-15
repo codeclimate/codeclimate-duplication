@@ -36,7 +36,7 @@ module CC::Engine::Analyzers::Javascript
       end
 
       def printed_issue
-        issue = {"type":"issue","check_name":"Identical code","description":"Duplication found in expression_statement","categories":["Duplication"],"location":{"path":"foo.js","lines":{"begin":1,"end":1}},"remediation_points":450000, "other_locations":[{"path":"foo.js","lines":{"begin":2,"end":2}},{"path":"foo.js","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
+        issue = {"type":"issue","check_name":"Identical code","description":"Duplication found in ExpressionStatement","categories":["Duplication"],"location":{"path":"foo.js","lines":{"begin":1,"end":1}},"remediation_points":1260000, "other_locations":[{"path":"foo.js","lines":{"begin":2,"end":2}},{"path":"foo.js","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
         issue.to_json + "\0\n"
       end
 

@@ -65,7 +65,7 @@ module CC
             "path": relative_path,
             "lines": {
               "begin": sexp.line,
-              "end": sexp_max_line(sexp, sexp.line)
+              "end": sexp.end_line || sexp_max_line(sexp, sexp.line)
             }
           }
         end
