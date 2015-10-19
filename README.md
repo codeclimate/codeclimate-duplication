@@ -14,6 +14,7 @@ Climate CLI, or on our [hosted analysis platform][codeclimate].
 3. You're ready to analyze! Browse into your project's folder and run
   `codeclimate analyze`.
 
+[flay]: https://github.com/seattlerb/flay
 [cli]: https://github.com/codeclimate/codeclimate
 
 ## Configuring
@@ -57,7 +58,7 @@ and lower numbers needing less mass.
 
 For example you could tell the engine to check only very large blocks of code:
 
-```
+```yaml
 engines:
   duplication:
     enabled: true
