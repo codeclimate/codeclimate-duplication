@@ -3,6 +3,7 @@ require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/php/main'
 require 'cc/engine/analyzers/python/main'
 require 'cc/engine/analyzers/reporter'
+require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/sexp'
 require 'flay'
 require 'json'
@@ -10,7 +11,7 @@ require 'json'
 module CC
   module Engine
     class Duplication
-      DEFAULT_LANGUAGE = ['ruby'].freeze
+      DEFAULT_LANGUAGE = 'ruby'.freeze
       LANGUAGES = {
         "ruby"       => ::CC::Engine::Analyzers::Ruby::Main,
         "javascript" => ::CC::Engine::Analyzers::Javascript::Main,
@@ -20,7 +21,7 @@ module CC
 
       def initialize(directory:, engine_config:, io:)
         @directory = directory
-        @engine_config = engine_config || {}
+        @engine_config = CC::Engine::Analyzers::EngineConfig.new(engine_config || {})
         @io = io
       end
 
@@ -43,14 +44,12 @@ module CC
       end
 
       def languages
-        config_languages = engine_config.
-          fetch("config", {}).
-          fetch("languages", DEFAULT_LANGUAGE)
+        languages = engine_config.languages.keys
 
-        if config_languages.is_a?(Hash)
-          config_languages.keys
+        if languages.empty?
+          Array(DEFAULT_LANGUAGE)
         else
-          Array(config_languages)
+          languages
         end
       end
     end

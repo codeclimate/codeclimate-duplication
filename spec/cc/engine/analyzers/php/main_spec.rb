@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'cc/engine/analyzers/php/main'
 require 'cc/engine/analyzers/reporter'
+require 'cc/engine/analyzers/engine_config'
 require 'flay'
 require 'tmpdir'
 
@@ -54,7 +55,15 @@ module CC::Engine::Analyzers::Php
       end
 
       def engine_conf
-        { 'config' => { 'php' => { 'mass_threshold' => 5 } } }
+        CC::Engine::Analyzers::EngineConfig.new({
+          'config' => {
+            'languages' => {
+              'php' => {
+                'mass_threshold' => 5
+              }
+            }
+          }
+        })
       end
     end
   end

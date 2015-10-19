@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/reporter'
+require 'cc/engine/analyzers/engine_config'
 require 'flay'
 require 'tmpdir'
 
@@ -41,7 +42,15 @@ module CC::Engine::Analyzers::Javascript
       end
 
       def engine_conf
-        { 'config' => { 'javascript' => { 'mass_threshold' => 1 } } }
+        CC::Engine::Analyzers::EngineConfig.new({
+          'config' => {
+            'languages' => {
+                'javascript' => {
+                  'mass_threshold' => 1
+                }
+            }
+          }
+        })
       end
     end
   end

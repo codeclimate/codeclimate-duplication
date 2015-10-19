@@ -30,21 +30,7 @@ module CC
         end
 
         def engine_paths
-          if current_language.is_a?(Hash)
-            current_language["paths"]
-          end
-        end
-
-        def current_language
-          if engine_languages.is_a?(Hash)
-            @current_language ||= engine_languages.fetch(language, {})
-          end
-        end
-
-        def engine_languages
-          @engine_language ||= engine_config.
-            fetch("config", {}).
-            fetch("languages", {})
+          @engine_config.paths_for(language)
         end
 
         def excluded_files
@@ -52,7 +38,7 @@ module CC
         end
 
         def excluded_paths
-          Array(engine_config["exclude_paths"])
+          engine_config.exclude_paths
         end
       end
     end

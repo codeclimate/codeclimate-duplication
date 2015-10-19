@@ -32,7 +32,7 @@ module CC
           end
 
           def mass_threshold
-            engine_config.fetch("config", {}).fetch("ruby", {}).fetch("mass_threshold", DEFAULT_MASS_THRESHOLD)
+            engine_config.mass_threshold_for(LANGUAGE) || DEFAULT_MASS_THRESHOLD
           end
 
           def base_points

@@ -34,9 +34,10 @@ module CC::Engine::Analyzers::Ruby
         File.write(File.join(@code, path), content)
       end
 
-      def run_engine(config = nil)
+      def run_engine(config = {})
         io = StringIO.new
 
+        config = CC::Engine::Analyzers::EngineConfig.new(config)
         engine = ::CC::Engine::Analyzers::Ruby::Main.new(directory: @code, engine_config: config)
         reporter = ::CC::Engine::Analyzers::Reporter.new(@code, engine, io)
 

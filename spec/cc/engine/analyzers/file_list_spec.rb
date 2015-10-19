@@ -1,5 +1,6 @@
 require "spec_helper"
 require "cc/engine/analyzers/file_list"
+require "cc/engine/analyzers/engine_config"
 
 module CC::Engine::Analyzers
   describe FileList do
@@ -15,7 +16,7 @@ module CC::Engine::Analyzers
       it "returns files from default_paths when language is missing paths" do
         file_list = ::CC::Engine::Analyzers::FileList.new(
           directory: @tmp_dir,
-          engine_config: {},
+          engine_config: EngineConfig.new({}),
           default_paths: ["**/*.js", "**/*.jsx"],
           language: "javascript",
         )
@@ -26,7 +27,7 @@ module CC::Engine::Analyzers
       it "returns files from engine config defined paths when present" do
         file_list = ::CC::Engine::Analyzers::FileList.new(
           directory: @tmp_dir,
-          engine_config: {
+          engine_config: EngineConfig.new({
             "config" => {
               "languages" => {
                 "elixir" => {
@@ -34,7 +35,7 @@ module CC::Engine::Analyzers
                 }
               }
             }
-          },
+          }),
           default_paths: ["**/*.js", "**/*.jsx"],
           language: "elixir",
         )
@@ -45,13 +46,13 @@ module CC::Engine::Analyzers
       it "returns files from default_paths when languages is an array" do
         file_list = ::CC::Engine::Analyzers::FileList.new(
           directory: @tmp_dir,
-          engine_config: {
+          engine_config: EngineConfig.new({
             "config" => {
               "languages" => [
                 "elixir"
               ],
             },
-          },
+          }),
           default_paths: ["**/*.js", "**/*.jsx"],
           language: "javascript",
         )
