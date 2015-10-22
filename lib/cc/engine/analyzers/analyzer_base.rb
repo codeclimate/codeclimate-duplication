@@ -9,7 +9,12 @@ module CC
 
         def run
           files.map do |file|
-            process_file(file)
+            begin
+              process_file(file)
+            rescue => e
+              $stderr.puts "Skipping file #{file} due to exception"
+              $stderr.puts "(#{ex.class}) #{ex.message} #{ex.backtrace.join("\n")}"
+            end
           end
         end
 
