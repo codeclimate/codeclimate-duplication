@@ -56,6 +56,18 @@ module CC::Engine::Analyzers
 
         assert_equal engine_config.paths_for("elixir"), ["/", "/etc"]
       end
+
+      it "returns nil if language is an empty key" do
+        engine_config = EngineConfig.new({
+          "config" => {
+            "languages" => {
+              "EliXiR" => ""
+            }
+          }
+        })
+
+        assert_equal engine_config.paths_for("elixir"), nil
+      end
     end
 
     describe "mass_threshold_for" do

@@ -19,7 +19,11 @@ module CC
         end
 
         def paths_for(language)
-          fetch_language(language).fetch("paths", nil)
+          selected_language = fetch_language(language)
+
+          if selected_language.is_a? Hash
+            selected_language.fetch("paths", nil)
+          end
         end
 
         private
