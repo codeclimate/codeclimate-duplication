@@ -15,7 +15,7 @@ module CC
           {
             "type": "issue",
             "check_name": name,
-            "description": "Duplication found in #{issue.name}",
+            "description": description,
             "categories": ["Duplication"],
             "location": format_location,
             "remediation_points": calculate_points,
@@ -82,6 +82,16 @@ module CC
         def content_body
           read_up = File.read('config/contents/duplicated_code.md')
           { "body": read_up }
+        end
+
+        def description
+          description = "*Similar code* found in #{occurrences} other location"
+          description += "s" if occurrences > 1
+          description
+        end
+
+        def occurrences
+          other_sexps.count
         end
       end
     end
