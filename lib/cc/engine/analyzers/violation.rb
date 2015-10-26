@@ -85,7 +85,7 @@ module CC
         end
 
         def description
-          description = "*Similar code* found in #{occurrences} other location"
+          description = "Similar code found in #{occurrences} other location"
           description += "s" if occurrences > 1
           description
         end
