@@ -47,7 +47,7 @@ module CC::Engine::Analyzers::Ruby
       end
 
       def first_issue
-        {"type":"issue","check_name":"Similar code","description":"Duplication found in iter","categories":["Duplication"],"location":{"path":"foo.rb","lines":{"begin":1,"end":5}},"remediation_points": 360000, "other_locations":[{"path":"foo.rb","lines":{"begin":9,"end":13}}], "content": {"body": read_up}}
+        {"type":"issue","check_name":"Similar code","description":"*Similar code* found in 1 other location","categories":["Duplication"],"location":{"path":"foo.rb","lines":{"begin":1,"end":5}},"remediation_points": 360000, "other_locations":[{"path":"foo.rb","lines":{"begin":9,"end":13}}], "content": {"body": read_up}}
       end
 
       def printed_issues
