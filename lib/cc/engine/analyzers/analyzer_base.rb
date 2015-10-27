@@ -11,7 +11,7 @@ module CC
           files.map do |file|
             begin
               process_file(file)
-            rescue => e
+            rescue => ex
               $stderr.puts "Skipping file #{file} due to exception"
               $stderr.puts "(#{ex.class}) #{ex.message} #{ex.backtrace.join("\n")}"
             end
