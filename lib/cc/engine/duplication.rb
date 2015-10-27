@@ -11,7 +11,8 @@ require 'json'
 module CC
   module Engine
     class Duplication
-      DEFAULT_LANGUAGE = 'ruby'.freeze
+      EmptyLanguagesError = Class.new(StandardError)
+
       LANGUAGES = {
         "ruby"       => ::CC::Engine::Analyzers::Ruby::Main,
         "javascript" => ::CC::Engine::Analyzers::Javascript::Main,
@@ -47,7 +48,9 @@ module CC
         languages = engine_config.languages.keys
 
         if languages.empty?
-          Array(DEFAULT_LANGUAGE)
+          message = "Config Error: Unable to run the duplication engine without any languages enabled."
+          $stderr.puts message
+          raise EmptyLanguagesError, message
         else
           languages
         end
