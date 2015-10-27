@@ -34,7 +34,7 @@ module CC
         end
 
         def excluded_files
-          excluded_paths.map { |path| Dir.glob("#{directory}/path") }.flatten
+          @_excluded_files ||= excluded_paths.map { |path| Dir.glob("#{directory}/#{path}") }.flatten
         end
 
         def excluded_paths

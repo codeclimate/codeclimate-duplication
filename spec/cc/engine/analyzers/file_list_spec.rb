@@ -59,6 +59,24 @@ module CC::Engine::Analyzers
 
         assert_equal file_list.files, ["#{@tmp_dir}/foo.js", "#{@tmp_dir}/foo.jsx"]
       end
+
+      it "excludes files from paths in exclude_files" do
+        file_list = ::CC::Engine::Analyzers::FileList.new(
+          directory: @tmp_dir,
+          engine_config: EngineConfig.new({
+            "exclude_paths" => ["**/*.js"],
+            "config" => {
+              "languages" => [
+                "elixir"
+              ],
+            },
+          }),
+          default_paths: ["**/*.js", "**/*.jsx"],
+          language: "javascript",
+        )
+
+        assert_equal file_list.files, ["#{@tmp_dir}/foo.jsx"]
+      end
     end
   end
 end
