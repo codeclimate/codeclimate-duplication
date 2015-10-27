@@ -30,6 +30,18 @@ module CC::Engine::Analyzers::Ruby
         assert_equal run_engine, printed_issues
       end
 
+      it "skips unparsable files" do
+        create_source_file("foo.rb", <<-EORUBY)
+        ---
+        EORUBY
+
+        _, stderr = capture_io do
+          run_engine.must_equal("")
+        end
+
+        stderr.must_match("Skipping file")
+      end
+
       def create_source_file(path, content)
         File.write(File.join(@code, path), content)
       end
