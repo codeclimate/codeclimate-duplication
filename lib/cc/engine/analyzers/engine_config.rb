@@ -15,7 +15,11 @@ module CC
         end
 
         def mass_threshold_for(language)
-          fetch_language(language).fetch("mass_threshold", nil)
+          threshold = fetch_language(language).fetch("mass_threshold", nil)
+
+          if threshold
+            threshold.to_i
+          end
         end
 
         def paths_for(language)

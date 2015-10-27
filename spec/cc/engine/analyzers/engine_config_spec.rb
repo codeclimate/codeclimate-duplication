@@ -72,12 +72,12 @@ module CC::Engine::Analyzers
     end
 
     describe "mass_threshold_for" do
-      it "returns empty hash if language is not present" do
+      it "returns configured mass threshold as integer" do
         engine_config = EngineConfig.new({
           "config" => {
             "languages" => {
               "EliXiR" => {
-                "mass_threshold" => 13
+                "mass_threshold" => "13"
               }
             }
           }
