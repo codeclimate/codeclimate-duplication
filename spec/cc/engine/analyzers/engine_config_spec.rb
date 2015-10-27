@@ -1,5 +1,6 @@
 require "spec_helper"
 require "cc/engine/analyzers/engine_config"
+require "cc/engine/analyzers/ruby/main"
 
 module CC::Engine::Analyzers
   describe EngineConfig do
@@ -83,6 +84,18 @@ module CC::Engine::Analyzers
         })
 
         assert_equal engine_config.mass_threshold_for("elixir"), 13
+      end
+
+      it "returns nil when language is empty" do
+        engine_config = EngineConfig.new({
+          "config" => {
+            "languages" => {
+              "ruby" => "",
+            }
+          }
+        })
+
+        assert_equal engine_config.mass_threshold_for("ruby"), nil
       end
     end
 

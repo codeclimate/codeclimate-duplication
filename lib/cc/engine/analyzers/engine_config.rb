@@ -19,11 +19,7 @@ module CC
         end
 
         def paths_for(language)
-          selected_language = fetch_language(language)
-
-          if selected_language.is_a? Hash
-            selected_language.fetch("paths", nil)
-          end
+          fetch_language(language).fetch("paths", nil)
         end
 
         private
@@ -31,9 +27,15 @@ module CC
         attr_reader :config
 
         def fetch_language(language)
-          config.
+          language = config.
             fetch("languages", {}).
             fetch(language, {})
+
+          if language.is_a? Hash
+            language
+          else
+            {}
+          end
         end
 
         def normalize(hash)
