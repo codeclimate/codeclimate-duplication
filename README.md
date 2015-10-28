@@ -1,26 +1,25 @@
 # codeclimate-duplication
 
 `codeclimate-duplication` is an engine that wraps [flay] and supports Ruby,
-Python, JavaScript, and PHP. You can run it in the command line using the Code
-Climate CLI, or on our [hosted analysis platform][codeclimate].
-
-[codeclimate]: https://codeclimate.com/dashboard
+Python, JavaScript, and PHP. You can run it on the command line using the Code
+Climate CLI or on our [hosted analysis platform][codeclimate].
 
 ## Installation
 
-1. If you haven't already, [install the Code Climate CLI][cli]
-2. Run `codeclimate engines:enable duplication`. This command both installs the
-  engine and enables it in your `.codeclimate.yml` file.
-3. You're ready to analyze! Browse into your project's folder and run
-  `codeclimate analyze`.
-
-[flay]: https://github.com/seattlerb/flay
-[cli]: https://github.com/codeclimate/codeclimate
+1. Install the [Code Climate CLI][cli], if you haven't already.
+2. Run `codeclimate engines:enable duplication`. This command installs the
+   engine and enables it in your `.codeclimate.yml` file.
+3. You're ready to analyze! `cd` into your project's folder and run `codeclimate
+   analyze`.
 
 ## Configuring
 
-You can add the following to your `.codeclimate.yml` to get started with the
-duplication engine.
+### Languages
+
+By enabling the duplication engine with the Code Climate CLI, all supported
+languages are configured by default, but we recommend adjusting this
+configuration to enable only the languages you care about. If you have a project
+with Ruby and JavaScript files, you might want the following configuration:
 
 ```yaml
 engines:
@@ -28,14 +27,25 @@ engines:
     enabled: true
     config:
       languages:
-        YOUR_LANGUAGE:
+      - ruby
+      - javascript
 ```
 
-This will tell Code Climate to run the duplication engine with `YOUR_LANGUAGE`.
-You can also specify a `paths` array under `YOUR_LANGUAGE` which use Ruby's
-[`Dir.glob`][glob] format.
+This will tell the duplication engine to analyze Ruby and JavaScript files.
 
-For example, all JavaScript and JSX files:
+### Threshold
+
+We set useful threshold defaults for the languages we support but you may want
+to adjust these settings based on your project guidelines.
+
+The threshold configuration represents the minimum "mass" a code block must have
+to be analyzed for duplication. If the engine is too easily reporting
+duplication, try raising the threshold. If you suspect that the engine isn't
+catching enough duplication, try lowering the threshold. The best setting tends
+to differ from language to language.
+
+To adjust this setting, add a `mass_threshold` key with your preferred value for
+an enabled language:
 
 ```yaml
 engines:
@@ -43,27 +53,14 @@ engines:
     enabled: true
     config:
       languages:
+        ruby:
+          mass_threshold: 20
         javascript:
-          paths:
-            - "**/*.js"
-            - "**/*.jsx"
 ```
 
-[glob]: http://ruby-doc.org/core-1.9.3/Dir.html#method-c-glob
+Note that you have the update the YAML structure under the `langauges` key to
+the Hash type to support extra configuration.
 
-You can also specify the mass threshold which is what determines how much "mass"
-a block of code needs before it's checked for duplication. This varies from
-language to language with higher numbers needing more mass to trigger a check
-and lower numbers needing less mass.
-
-For example you could tell the engine to check only very large blocks of code:
-
-```yaml
-engines:
-  duplication:
-    enabled: true
-    config:
-      languages:
-        javascript:
-          mass_threshold: 300
-```
+[codeclimate]: https://codeclimate.com/dashboard
+[flay]: https://github.com/seattlerb/flay
+[cli]: https://github.com/codeclimate/codeclimate
