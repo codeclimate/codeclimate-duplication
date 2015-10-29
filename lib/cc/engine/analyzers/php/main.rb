@@ -20,7 +20,7 @@ module CC
           private
 
           def process_file(path)
-            code = File.read(path)
+            code = File.binread(path)
             parser = php_parser.new(code, path).parse
             syntax_tree = parser.syntax_tree
 

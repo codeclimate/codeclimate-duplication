@@ -2,9 +2,8 @@ module CC
   module Engine
     module Analyzers
       class Base
-        def initialize(engine_config:, directory:)
+        def initialize(engine_config:)
           @engine_config = engine_config
-          @directory = directory
         end
 
         def run
@@ -28,7 +27,7 @@ module CC
 
         private
 
-        attr_reader :engine_config, :directory
+        attr_reader :engine_config
 
         def process_file(path)
           raise NoMethodError.new("Subclass must implement `process_file`")
@@ -36,7 +35,6 @@ module CC
 
         def files
           ::CC::Engine::Analyzers::FileList.new(
-            directory: directory,
             engine_config: engine_config,
             default_paths: self.class::DEFAULT_PATHS,
             language: self.class::LANGUAGE

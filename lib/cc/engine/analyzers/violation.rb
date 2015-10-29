@@ -4,11 +4,10 @@ module CC
       class Violation
         attr_reader :issue
 
-        def initialize(base_points, issue, hashes, directory)
+        def initialize(base_points, issue, hashes)
           @base_points = base_points
           @issue = issue
           @hashes = hashes
-          @directory = directory
         end
 
         def format
@@ -26,7 +25,7 @@ module CC
 
         private
 
-        attr_reader :base_points, :hashes, :directory
+        attr_reader :base_points, :hashes
 
         def current_sexp
           @location ||= hashes.first
@@ -59,9 +58,8 @@ module CC
         end
 
         def format_sexp(sexp)
-          relative_path = sexp.file.gsub(/^#{directory}\//, "")
           {
-            "path": relative_path,
+            "path": sexp.file.gsub(%r(^./), ""),
             "lines": {
               "begin": sexp.line,
               "end": sexp.end_line || sexp_max_line(sexp, sexp.line)
@@ -80,8 +78,14 @@ module CC
         end
 
         def content_body
-          read_up = File.read('config/contents/duplicated_code.md')
-          { "body": read_up }
+          @_content_body ||= { "body": File.read(read_up_path) }
+        end
+
+        def read_up_path
+          relative_path = "../../../../config/contents/duplicated_code.md"
+          File.expand_path(
+            File.join(File.dirname(__FILE__), relative_path)
+          )
         end
 
         def description

@@ -21,22 +21,22 @@ module CC
       }.freeze
 
       def initialize(directory:, engine_config:, io:)
-        @directory = directory
+        Dir.chdir(directory)
         @engine_config = CC::Engine::Analyzers::EngineConfig.new(engine_config || {})
         @io = io
       end
 
       def run
         languages_to_analyze.each do |language|
-          engine = LANGUAGES[language].new(directory: directory, engine_config: engine_config)
-          reporter = CC::Engine::Analyzers::Reporter.new(directory, engine, io)
+          engine = LANGUAGES[language].new(engine_config: engine_config)
+          reporter = CC::Engine::Analyzers::Reporter.new(engine, io)
           reporter.run
         end
       end
 
       private
 
-      attr_reader :directory, :engine_config, :io
+      attr_reader :engine_config, :io
 
       def languages_to_analyze
         languages.select do |language|

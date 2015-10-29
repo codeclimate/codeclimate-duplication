@@ -2,8 +2,7 @@ module CC
   module Engine
     module Analyzers
       class FileList
-        def initialize(directory:, engine_config:, default_paths:, language:)
-          @directory = directory
+        def initialize(engine_config:, default_paths:, language:)
           @engine_config = engine_config
           @default_paths = default_paths
           @language = language
@@ -15,11 +14,11 @@ module CC
 
         private
 
-        attr_reader :directory, :engine_config, :default_paths, :language
+        attr_reader :engine_config, :default_paths, :language
 
         def matching_files
           paths.map do |glob|
-            Dir.glob("#{directory}/#{glob}").reject do |f|
+            Dir.glob("./#{glob}").reject do |f|
               File.directory?(f)
             end
           end.flatten
@@ -34,7 +33,7 @@ module CC
         end
 
         def excluded_files
-          @_excluded_files ||= excluded_paths.map { |path| Dir.glob("#{directory}/#{path}") }.flatten
+          @_excluded_files ||= excluded_paths.map { |path| Dir.glob("./#{path}") }.flatten
         end
 
         def excluded_paths

@@ -2,12 +2,20 @@ require 'spec_helper'
 require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/reporter'
 require 'cc/engine/analyzers/engine_config'
+require 'cc/engine/analyzers/file_list'
 require 'flay'
 require 'tmpdir'
 
 module CC::Engine::Analyzers::Javascript
   describe Main do
-    before { @code = Dir.mktmpdir }
+    before do
+      @code = Dir.mktmpdir
+      Dir.chdir(@code)
+    end
+
+    after do
+      FileUtils.rm_rf(@code)
+    end
 
     describe "#run" do
       it "prints an issue" do
@@ -28,8 +36,8 @@ module CC::Engine::Analyzers::Javascript
       def run_engine(config = nil)
         io = StringIO.new
 
-        engine = ::CC::Engine::Analyzers::Javascript::Main.new(directory: @code, engine_config: config)
-        reporter = ::CC::Engine::Analyzers::Reporter.new(@code, engine, io)
+        engine = ::CC::Engine::Analyzers::Javascript::Main.new(engine_config: config)
+        reporter = ::CC::Engine::Analyzers::Reporter.new(engine, io)
 
         reporter.run
 

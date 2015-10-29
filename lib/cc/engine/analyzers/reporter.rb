@@ -5,8 +5,7 @@ module CC
     module Analyzers
       class Reporter
         TIMEOUT = 10
-        def initialize(directory, language_strategy, io)
-          @directory = directory
+        def initialize(language_strategy, io)
           @language_strategy = language_strategy
           @io = io
         end
@@ -38,7 +37,7 @@ module CC
           @flay ||= Flay.new(flay_options)
         end
 
-        attr_reader :language_strategy, :directory, :io
+        attr_reader :language_strategy, :io
 
         def mass_threshold
           @mass_threshold ||= language_strategy.mass_threshold
@@ -46,7 +45,7 @@ module CC
 
         def new_violation(issue)
           hashes = flay.hashes[issue.structural_hash]
-          Violation.new(language_strategy.base_points, issue, hashes, directory).format
+          Violation.new(language_strategy.base_points, issue, hashes).format
         end
 
         def flay_options
