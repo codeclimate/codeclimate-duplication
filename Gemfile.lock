@@ -1,27 +1,32 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    ansi (1.5.0)
-    builder (3.2.2)
     coderay (1.1.0)
+    diff-lcs (1.2.5)
     flay (2.6.1)
       ruby_parser (~> 3.0)
       sexp_processor (~> 4.0)
     json (1.8.3)
     method_source (0.8.2)
-    minitest (5.8.0)
-    minitest-reporters (1.0.20)
-      ansi
-      builder
-      minitest (>= 5.0)
-      ruby-progressbar
     posix-spawn (0.3.11)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rake (10.4.2)
-    ruby-progressbar (1.7.5)
+    rspec (3.3.0)
+      rspec-core (~> 3.3.0)
+      rspec-expectations (~> 3.3.0)
+      rspec-mocks (~> 3.3.0)
+    rspec-core (3.3.2)
+      rspec-support (~> 3.3.0)
+    rspec-expectations (3.3.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-mocks (3.3.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.3.0)
+    rspec-support (3.3.0)
     ruby_parser (3.7.1)
       sexp_processor (~> 4.1)
     sexp_processor (4.6.0)
@@ -33,9 +38,11 @@ PLATFORMS
 DEPENDENCIES
   flay
   json
-  minitest
-  minitest-reporters
   posix-spawn
   pry
   rake
+  rspec
   sexp_processor
+
+BUNDLED WITH
+   1.10.6

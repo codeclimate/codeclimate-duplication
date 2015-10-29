@@ -1,16 +1,18 @@
-require 'minitest/spec'
-require 'minitest/autorun'
-require 'minitest/reporters'
-require 'minitest/unit'
-Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
+require 'tmpdir'
 
-def read_up
-  File.read(read_up_path)
-end
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
 
-def read_up_path
-  relative_path = "../config/contents/duplicated_code.md"
-  File.expand_path(
-    File.join(File.dirname(__FILE__), relative_path)
-  )
+RSpec.configure do |config|
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
+
+  config.mock_with :rspec do |mocks|
+    mocks.verify_partial_doubles = true
+  end
+
+  config.order = :random
+  config.disable_monkey_patching!
+
+  config.include ReadUpHelpers
 end
