@@ -104,12 +104,12 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
   end
 
   describe "exlude_paths" do
-    it "returns given exclude paths" do
+    it "returns given include paths" do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
-        "exclude_paths" => ["/tmp"]
+        "include_paths" => ["/tmp"]
       })
 
-      expect(engine_config.exclude_paths).to eq(["/tmp"])
+      expect(engine_config.include_paths).to eq(["/tmp"])
     end
   end
 end

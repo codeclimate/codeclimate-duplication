@@ -1,3 +1,5 @@
+require "pathname"
+
 module CC
   module Engine
     module Analyzers
@@ -9,7 +11,7 @@ module CC
         end
 
         def files
-          matching_files - excluded_files
+          Array(matching_files) & Array(included_files)
         end
 
         private
@@ -18,8 +20,8 @@ module CC
 
         def matching_files
           paths.map do |glob|
-            Dir.glob("./#{glob}").reject do |f|
-              File.directory?(f)
+            Dir.glob("./#{glob}").reject do |path|
+              File.directory?(path)
             end
           end.flatten
         end
@@ -32,12 +34,33 @@ module CC
           @engine_config.paths_for(language)
         end
 
-        def excluded_files
-          @_excluded_files ||= excluded_paths.map { |path| Dir.glob("./#{path}") }.flatten
+        def included_files
+          include_paths.
+            map { |path| make_relative(path) }.
+            map { |path| collect_files(path) }.flatten.compact
         end
 
-        def excluded_paths
-          engine_config.exclude_paths
+        def collect_files(path)
+          if File.directory?(path)
+            Dir.entries(path).map do |new_path|
+              next if [".", ".."].include?(new_path)
+              collect_files File.join(path, new_path)
+            end
+          else
+            path
+          end
+        end
+
+        def make_relative(path)
+          if path.match(%r(^\./))
+            path
+          else
+            "./#{path}"
+          end
+        end
+
+        def include_paths
+          engine_config.include_paths
         end
       end
     end

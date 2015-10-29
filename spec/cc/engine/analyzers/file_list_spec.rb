@@ -8,6 +8,9 @@ RSpec.describe CC::Engine::Analyzers::FileList do
       @tmp_dir = directory
 
       Dir.chdir(@tmp_dir) do
+        Dir.mkdir("nested")
+        File.write(File.join(@tmp_dir, "nested", "nest.hs"), "")
+
         File.write(File.join(@tmp_dir, "foo.js"), "")
         File.write(File.join(@tmp_dir, "foo.jsx"), "")
         File.write(File.join(@tmp_dir, "foo.ex"), "")
@@ -62,21 +65,21 @@ RSpec.describe CC::Engine::Analyzers::FileList do
       expect(file_list.files).to eq(["./foo.js", "./foo.jsx"])
     end
 
-    it "excludes files from paths in exclude_files" do
+    it "excludes files not in include_paths" do
       file_list = ::CC::Engine::Analyzers::FileList.new(
         engine_config: CC::Engine::Analyzers::EngineConfig.new({
-          "exclude_paths" => ["**/*.js"],
+          "include_paths" => ["foo.jsx", "nested"],
           "config" => {
             "languages" => [
               "elixir"
             ],
           },
         }),
-        default_paths: ["**/*.js", "**/*.jsx"],
+        default_paths: ["**/*.js", "**/*.jsx", "**/*.hs"],
         language: "javascript",
       )
 
-      expect(file_list.files).to eq(["./foo.jsx"])
+      expect(file_list.files).to eq(["./foo.jsx", "./nested/nest.hs"])
     end
   end
 end

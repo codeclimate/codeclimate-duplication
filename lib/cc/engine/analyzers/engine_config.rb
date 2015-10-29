@@ -6,8 +6,8 @@ module CC
           @config = normalize(hash)
         end
 
-        def exclude_paths
-          config.fetch("exclude_paths", [])
+        def include_paths
+          config.fetch("include_paths", ["./"])
         end
 
         def languages
