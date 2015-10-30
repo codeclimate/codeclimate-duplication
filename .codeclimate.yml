@@ -1,0 +1,21 @@
+---
+engines:
+  rubocop:
+    enabled: true
+  eslint:
+    enabled: true
+  bundler-audit:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+ratings:
+  paths:
+  - "**.rb"
+  - Gemfile.lock
+exclude_paths:
+- config/**/*
+- spec/**/*
+- vendor/**/*
