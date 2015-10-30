@@ -29,6 +29,18 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
     end
   end
 
+  it "does not flag duplicate comments" do
+      create_source_file("foo.js", <<-EOJS)
+        // A comment.
+        // A comment.
+
+        /* A comment. */
+        /* A comment. */
+      EOJS
+
+      expect(run_engine(engine_conf)).to be_empty
+  end
+
   def create_source_file(path, content)
     File.write(File.join(@code, path), content)
   end
