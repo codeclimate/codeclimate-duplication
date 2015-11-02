@@ -38,7 +38,23 @@ RSpec.describe CC::Engine::Analyzers::Php::Main do
           }
       EOPHP
 
-      expect(run_engine(engine_conf)).to eq(printed_issue)
+      result = run_engine(engine_conf).strip
+      json = JSON.parse(result)
+
+      expect(json["type"]).to eq("issue")
+      expect(json["check_name"]).to eq("Identical code")
+      expect(json["description"]).to eq("Similar code found in 1 other location")
+      expect(json["categories"]).to eq(["Duplication"])
+      expect(json["location"]).to eq({
+        "path" => "foo.php",
+        "lines" => { "begin" => 2, "end" => 6 },
+      })
+      expect(json["remediation_points"]).to eq(176000)
+      expect(json["other_locations"]).to eq([
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+      ])
+      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["fingerprint"]).to eq("667da0e2bab866aa2fe9d014a65d57d9")
     end
   end
 

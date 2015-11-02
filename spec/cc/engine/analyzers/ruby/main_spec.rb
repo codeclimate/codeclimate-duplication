@@ -35,7 +35,23 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main do
           end
       EORUBY
 
-      expect(run_engine).to eq(printed_issues)
+      result = run_engine.strip
+      json = JSON.parse(result)
+
+      expect(json["type"]).to eq("issue")
+      expect(json["check_name"]).to eq("Similar code")
+      expect(json["description"]).to eq("Similar code found in 1 other location")
+      expect(json["categories"]).to eq(["Duplication"])
+      expect(json["location"]).to eq({
+        "path" => "foo.rb",
+        "lines" => { "begin" => 1, "end" => 5 },
+      })
+      expect(json["remediation_points"]).to eq(360000)
+      expect(json["other_locations"]).to eq([
+        {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
+      ])
+      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["fingerprint"]).to eq("f21b75bbd135ec3ae6638364d5c73762")
     end
 
     it "skips unparsable files" do
@@ -63,13 +79,5 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main do
     reporter.run
 
     io.string
-  end
-
-  def first_issue
-    {"type":"issue","check_name":"Similar code","description":"Similar code found in 1 other location","categories":["Duplication"],"location":{"path":"foo.rb","lines":{"begin":1,"end":5}},"remediation_points": 360000, "other_locations":[{"path":"foo.rb","lines":{"begin":9,"end":13}}], "content": {"body": read_up}}
-  end
-
-  def printed_issues
-    first_issue.to_json + "\0\n"
   end
 end

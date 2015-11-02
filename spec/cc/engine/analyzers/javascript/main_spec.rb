@@ -25,7 +25,24 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
           console.log("hello JS!");
       EOJS
 
-      expect(run_engine(engine_conf)).to eq(printed_issue)
+      result = run_engine(engine_conf).strip
+      json = JSON.parse(result)
+
+      expect(json["type"]).to eq("issue")
+      expect(json["check_name"]).to eq("Identical code")
+      expect(json["description"]).to eq("Similar code found in 2 other locations")
+      expect(json["categories"]).to eq(["Duplication"])
+      expect(json["location"]).to eq({
+        "path" => "foo.js",
+        "lines" => { "begin" => 1, "end" => 1 },
+      })
+      expect(json["remediation_points"]).to eq(378000)
+      expect(json["other_locations"]).to eq([
+        {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
+        {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }
+      ])
+      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["fingerprint"]).to eq("c3828ce5cdcd85a5dc0108ebad4219ed")
     end
   end
 
@@ -54,11 +71,6 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
     reporter.run
 
     io.string
-  end
-
-  def printed_issue
-    issue = {"type":"issue","check_name":"Identical code","description":"Similar code found in 2 other locations","categories":["Duplication"],"location":{"path":"foo.js","lines":{"begin":1,"end":1}},"remediation_points":378000, "other_locations":[{"path":"foo.js","lines":{"begin":2,"end":2}},{"path":"foo.js","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
-    issue.to_json + "\0\n"
   end
 
   def engine_conf

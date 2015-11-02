@@ -25,7 +25,24 @@ print("Hello", "python")
 print("Hello", "python")
       EOJS
 
-      expect(run_engine(engine_conf)).to eq(printed_issue)
+      result = run_engine(engine_conf).strip
+      json = JSON.parse(result)
+
+      expect(json["type"]).to eq("issue")
+      expect(json["check_name"]).to eq("Identical code")
+      expect(json["description"]).to eq("Similar code found in 2 other locations")
+      expect(json["categories"]).to eq(["Duplication"])
+      expect(json["location"]).to eq({
+        "path" => "foo.py",
+        "lines" => { "begin" => 1, "end" => 1 },
+      })
+      expect(json["remediation_points"]).to eq(81000)
+      expect(json["other_locations"]).to eq([
+        {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
+        {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
+      ])
+      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["fingerprint"]).to eq("f62657986e3b81235ed8638aac833886")
     end
   end
 
@@ -42,11 +59,6 @@ print("Hello", "python")
     reporter.run
 
     io.string
-  end
-
-  def printed_issue
-    issue = {"type":"issue","check_name":"Identical code","description":"Similar code found in 2 other locations","categories":["Duplication"],"location":{"path":"foo.py","lines":{"begin":1,"end":1}},"remediation_points":81000, "other_locations":[{"path":"foo.py","lines":{"begin":2,"end":2}},{"path":"foo.py","lines":{"begin":3,"end":3}}], "content":{"body": read_up}}
-    issue.to_json + "\0\n"
   end
 
   def engine_conf

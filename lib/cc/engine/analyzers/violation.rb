@@ -1,3 +1,5 @@
+require "digest"
+
 module CC
   module Engine
     module Analyzers
@@ -19,7 +21,8 @@ module CC
             "location": format_location,
             "remediation_points": calculate_points,
             "other_locations": format_other_locations,
-            "content": content_body
+            "content": content_body,
+            "fingerprint": fingerprint
           }
         end
 
@@ -28,7 +31,11 @@ module CC
         attr_reader :base_points, :hashes
 
         def current_sexp
-          @location ||= hashes.first
+          @location ||= sorted_hashes.first
+        end
+
+        def sorted_hashes
+          @_sorted_hashes ||= hashes.sort_by(&:file)
         end
 
         def other_sexps
@@ -86,6 +93,16 @@ module CC
           File.expand_path(
             File.join(File.dirname(__FILE__), relative_path)
           )
+        end
+
+        def fingerprint
+          digest = Digest::MD5.new
+          digest << current_sexp.file
+          digest << "-"
+          digest << current_sexp.mass.to_s
+          digest << "-"
+          digest << occurrences.to_s
+          digest.to_s
         end
 
         def description
