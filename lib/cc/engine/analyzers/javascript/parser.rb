@@ -1,4 +1,3 @@
-require 'posix/spawn'
 require 'timeout'
 
 module CC
@@ -46,7 +45,6 @@ module CC
           EXCEPTIONS = [
             StandardError,
             Timeout::Error,
-            POSIX::Spawn::TimeoutExceeded,
             SystemStackError
           ]
 
@@ -57,11 +55,15 @@ module CC
 
           def run(input, timeout = DEFAULT_TIMEOUT)
             Timeout.timeout(timeout) do
-              child = ::POSIX::Spawn::Child.new(command, input: input, timeout: timeout)
-              if child.status.success?
-                yield child.out if block_given?
-              end
+              IO.popen command, 'r+' do |io|
+                io.puts input
+                io.close_write
 
+                output = io.gets
+                io.close
+
+                yield output if $?.to_i == 0
+              end
             end
           end
         end

@@ -1,5 +1,4 @@
-
-FROM alpine:edge
+FROM jruby:9.0.3-jdk
 
 WORKDIR /usr/src/app/
 
@@ -9,19 +8,19 @@ COPY Gemfile.lock /usr/src/app/
 COPY vendor/php-parser/composer.json /usr/src/app/vendor/php-parser/
 COPY vendor/php-parser/composer.lock /usr/src/app/vendor/php-parser/
 
-RUN apk --update add openssh git python nodejs php-cli php-json php-phar php-openssl php-xml curl\
-    ruby ruby-io-console ruby-dev build-base && \
-    gem install bundler --no-ri --no-rdoc && \
+RUN curl --silent --location https://deb.nodesource.com/setup_5.x | bash -
+RUN apt-get install -y nodejs python openssh-client php5-cli php5-json
+RUN gem install bundler --no-ri --no-rdoc && \
     bundle install -j 4 && \
-    apk del build-base && rm -fr /usr/share/ri && \
     curl -sS https://getcomposer.org/installer | php
 
 RUN mv composer.phar /usr/local/bin/composer
 RUN cd /usr/src/app/vendor/php-parser/ && composer install --prefer-source --no-interaction
 
-RUN adduser -u 9000 -D app
+RUN adduser app -u 9000
 
 COPY . /usr/src/app
+run chown -R app .
 RUN npm install
 
 USER app

@@ -1,4 +1,3 @@
-require 'posix/spawn'
 require 'cc/engine/analyzers/php/ast'
 require 'cc/engine/analyzers/php/nodes'
 
@@ -15,16 +14,17 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new("php #{parser_path}", self)
-            runner.run(code) { |output| JSON.parse(output, max_nesting: false) }
-            self
-          end
+            runner = CommandLineRunner.new("php #{parser_path}")
+            runner.run(code) do |output|
+              json = JSON.parse(output)
 
-          def on_success(output)
-            @syntax_tree = CC::Engine::Analyzers::Php::Nodes::Node.new.tap do |node|
-              node.stmts = CC::Engine::Analyzers::Php::AST.json_to_ast(output, filename)
-              node.node_type = "AST"
+              @syntax_tree = CC::Engine::Analyzers::Php::Nodes::Node.new.tap do |node|
+                node.stmts = CC::Engine::Analyzers::Php::AST.json_to_ast(json, filename)
+                node.node_type = "AST"
+              end
             end
+
+            self
           end
 
         private
@@ -40,16 +40,23 @@ module CC
         class CommandLineRunner
           attr_reader :command, :delegate
 
-          def initialize(command, delegate)
+          DEFAULT_TIMEOUT = 20
+
+          def initialize(command)
             @command = command
-            @delegate = delegate
           end
 
-          def run(input)
-            child = ::POSIX::Spawn::Child.new(command, input: input)
-            if child.status.success?
-              output = block_given? ? yield(child.out) : child.out
-              delegate.on_success(output)
+          def run(input, timeout = DEFAULT_TIMEOUT)
+            Timeout.timeout(timeout) do
+              IO.popen command, 'r+' do |io|
+                io.puts input
+                io.close_write
+
+                output = io.gets
+                io.close
+
+                yield output if $?.to_i == 0
+              end
             end
           end
         end
