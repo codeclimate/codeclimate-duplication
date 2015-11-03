@@ -36,13 +36,13 @@ print("Hello", "python")
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(81000)
+      expect(json["remediation_points"]).to eq(54000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
       expect(json["content"]).to eq({ "body" => read_up })
-      expect(json["fingerprint"]).to eq("f62657986e3b81235ed8638aac833886")
+      expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
     end
   end
 

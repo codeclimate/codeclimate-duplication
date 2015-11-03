@@ -45,7 +45,7 @@ module CC
             elsif  value.is_a?(Hash)
               create_sexp(key.to_sym, self.class.new(value, @file, @line).format)
             else
-              create_sexp(key.to_sym, value)
+              value.to_s.to_sym
             end
           end
         end

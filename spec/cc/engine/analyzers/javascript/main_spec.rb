@@ -36,13 +36,13 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(378000)
+      expect(json["remediation_points"]).to eq(297000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }
       ])
       expect(json["content"]).to eq({ "body" => read_up })
-      expect(json["fingerprint"]).to eq("c3828ce5cdcd85a5dc0108ebad4219ed")
+      expect(json["fingerprint"]).to eq("55ae5d0990647ef496e9e0d315f9727d")
     end
   end
 
