@@ -1,15 +1,19 @@
+GIT
+  remote: https://github.com/codeclimate/flay.git
+  revision: e6e472e064dc459277f8bd57167789f8fed77f56
+  specs:
+    flay (2.6.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
     coderay (1.1.0)
+    concurrent-ruby (1.0.0.pre4)
     diff-lcs (1.2.5)
-    flay (2.6.1)
-      ruby_parser (~> 3.0)
-      sexp_processor (~> 4.0)
     json (1.8.3)
     method_source (0.8.2)
     posix-spawn (0.3.11)
-    pry (0.10.1)
+    pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
@@ -27,7 +31,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
-    ruby_parser (3.7.1)
+    ruby_parser (3.7.2)
       sexp_processor (~> 4.1)
     sexp_processor (4.6.0)
     slop (3.6.0)
@@ -36,12 +40,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  flay
+  concurrent-ruby (~> 1.0.0.pre4)
+  flay!
   json
   posix-spawn
   pry
   rake
   rspec
+  ruby_parser
   sexp_processor
 
 BUNDLED WITH

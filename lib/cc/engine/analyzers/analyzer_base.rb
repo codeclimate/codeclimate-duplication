@@ -6,15 +6,15 @@ module CC
           @engine_config = engine_config
         end
 
-        def run
-          files.map do |file|
-            begin
-              process_file(file)
-            rescue => ex
-              $stderr.puts "Skipping file #{file} due to exception"
-              $stderr.puts "(#{ex.class}) #{ex.message} #{ex.backtrace.join("\n")}"
-            end
-          end
+        def run(file)
+          process_file(file)
+        rescue => ex
+          $stderr.puts "Skipping file #{file} due to exception"
+          $stderr.puts "(#{ex.class}) #{ex.message} #{ex.backtrace.join("\n")}"
+        end
+
+        def files
+          file_list.files
         end
 
         def mass_threshold
@@ -33,12 +33,12 @@ module CC
           raise NoMethodError.new("Subclass must implement `process_file`")
         end
 
-        def files
-          ::CC::Engine::Analyzers::FileList.new(
+        def file_list
+          @_file_list ||= ::CC::Engine::Analyzers::FileList.new(
             engine_config: engine_config,
             default_paths: self.class::DEFAULT_PATHS,
             language: self.class::LANGUAGE
-          ).files
+          )
         end
       end
     end

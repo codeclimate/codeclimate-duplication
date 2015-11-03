@@ -1,23 +1,36 @@
 require 'cc/engine/analyzers/violation'
+require 'cc/engine/analyzers/file_thread_pool'
+require 'thread'
 
 module CC
   module Engine
     module Analyzers
       class Reporter
         TIMEOUT = 10
-        def initialize(language_strategy, io)
+
+        def initialize(engine_config, language_strategy, io)
+          @engine_config = engine_config
           @language_strategy = language_strategy
           @io = io
         end
 
         def run
-          sexps = language_strategy.run
+          process_files
+          report
+        end
 
-          sexps.each do |sexp|
+        def process_files
+          pool = FileThreadPool.new(
+            language_strategy.files,
+            concurrency: engine_config.concurrency
+          )
+
+          pool.run do |file|
+            sexp = language_strategy.run(file)
             process_sexp(sexp)
           end
 
-          report
+          pool.join
         end
 
         def report
@@ -37,7 +50,7 @@ module CC
           @flay ||= Flay.new(flay_options)
         end
 
-        attr_reader :language_strategy, :io
+        attr_reader :engine_config, :language_strategy, :io
 
         def mass_threshold
           @mass_threshold ||= language_strategy.mass_threshold

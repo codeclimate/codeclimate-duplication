@@ -66,7 +66,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
     io = StringIO.new
 
     engine = ::CC::Engine::Analyzers::Javascript::Main.new(engine_config: config)
-    reporter = ::CC::Engine::Analyzers::Reporter.new(engine, io)
+    reporter = ::CC::Engine::Analyzers::Reporter.new(double(concurrency: 2), engine, io)
 
     reporter.run
 

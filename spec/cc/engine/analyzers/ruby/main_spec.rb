@@ -74,7 +74,7 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main do
 
     config = CC::Engine::Analyzers::EngineConfig.new(config)
     engine = ::CC::Engine::Analyzers::Ruby::Main.new(engine_config: config)
-    reporter = ::CC::Engine::Analyzers::Reporter.new(engine, io)
+    reporter = ::CC::Engine::Analyzers::Reporter.new(double(concurrency: 2), engine, io)
 
     reporter.run
 

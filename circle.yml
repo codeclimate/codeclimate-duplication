@@ -5,9 +5,13 @@ machine:
     CLOUDSDK_CORE_DISABLE_PROMPTS: 1
     PRIVATE_REGISTRY: us.gcr.io/code_climate
 
+dependencies:
+  override:
+    - docker info
+    - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
+
 test:
   override:
-    - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
     - docker run $PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM bundle exec rake
 
 deployment:

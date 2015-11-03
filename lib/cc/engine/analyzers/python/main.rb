@@ -15,7 +15,7 @@ module CC
           DEFAULT_MASS_THRESHOLD = 40
           BASE_POINTS = 1000
 
-          attr_reader :directory, :engine_config
+          private
 
           def process_file(path)
             Node.new(::CC::Engine::Analyzers::Python::Parser.new(File.binread(path), path).parse.syntax_tree, path).format

@@ -23,8 +23,6 @@ module CC
 
           private
 
-          attr_reader :directory, :engine_config
-
           def process_file(file)
             RubyParser.new.process(File.binread(file), file, TIMEOUT)
           end
@@ -33,4 +31,3 @@ module CC
     end
   end
 end
-

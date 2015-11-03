@@ -18,7 +18,6 @@ module CC
           DEFAULT_MASS_THRESHOLD = 40
           BASE_POINTS = 3000
 
-
           private
 
           def process_file(path)

@@ -29,7 +29,7 @@ module CC
       def run
         languages_to_analyze.each do |language|
           engine = LANGUAGES[language].new(engine_config: engine_config)
-          reporter = CC::Engine::Analyzers::Reporter.new(engine, io)
+          reporter = CC::Engine::Analyzers::Reporter.new(engine_config, engine, io)
           reporter.run
         end
       end

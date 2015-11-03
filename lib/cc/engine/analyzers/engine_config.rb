@@ -14,6 +14,10 @@ module CC
           config.fetch("languages", {})
         end
 
+        def concurrency
+          config.fetch("concurrency", 2)
+        end
+
         def mass_threshold_for(language)
           threshold = fetch_language(language).fetch("mass_threshold", nil)
 

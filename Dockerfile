@@ -1,3 +1,4 @@
+
 FROM alpine:edge
 
 WORKDIR /usr/src/app/
@@ -8,8 +9,9 @@ COPY Gemfile.lock /usr/src/app/
 COPY vendor/php-parser/composer.json /usr/src/app/vendor/php-parser/
 COPY vendor/php-parser/composer.lock /usr/src/app/vendor/php-parser/
 
-RUN apk --update add git python nodejs php-cli php-json php-phar php-openssl php-xml curl\
-    ruby ruby-io-console ruby-dev ruby-bundler build-base && \
+RUN apk --update add openssh git python nodejs php-cli php-json php-phar php-openssl php-xml curl\
+    ruby ruby-io-console ruby-dev build-base && \
+    gem install bundler --no-ri --no-rdoc && \
     bundle install -j 4 && \
     apk del build-base && rm -fr /usr/share/ri && \
     curl -sS https://getcomposer.org/installer | php
