@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'cc/engine/analyzers/ruby/main'
 require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/php/main'
