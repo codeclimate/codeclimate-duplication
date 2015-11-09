@@ -12,6 +12,7 @@ module CC
           @engine_config = engine_config
           @language_strategy = language_strategy
           @io = io
+          @reports = Set.new
         end
 
         def run
@@ -35,7 +36,12 @@ module CC
 
         def report
           flay.report(StringIO.new).each do |issue|
-            io.puts "#{new_violation(issue).to_json}\0"
+            violation = new_violation(issue)
+
+            unless reports.include?(violation.report_name)
+              reports.add(violation.report_name)
+              io.puts "#{violation.format.to_json}\0"
+            end
           end
         end
 
@@ -45,6 +51,8 @@ module CC
         end
 
         private
+
+        attr_reader :reports
 
         def flay
           @flay ||= Flay.new(flay_options)
@@ -58,7 +66,7 @@ module CC
 
         def new_violation(issue)
           hashes = flay.hashes[issue.structural_hash]
-          Violation.new(language_strategy.base_points, issue, hashes).format
+          Violation.new(language_strategy.base_points, issue, hashes)
         end
 
         def flay_options
