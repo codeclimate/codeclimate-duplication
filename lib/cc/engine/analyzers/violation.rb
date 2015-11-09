@@ -26,6 +26,10 @@ module CC
           }
         end
 
+        def report_name
+          "#{current_sexp.file}-#{current_sexp.line}"
+        end
+
         private
 
         attr_reader :base_points, :hashes
