@@ -65,11 +65,6 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
 
     result = run_engine(engine_conf).strip
     issues = result.split("\0")
-
-    first_issue = issues.first
-    json = JSON.parse(first_issue)
-
-    expect(json["other_locations"].length).to eq(0)
     expect(issues.length).to eq 1
   end
 
