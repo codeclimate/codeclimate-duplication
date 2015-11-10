@@ -6,10 +6,11 @@ module CC
       class Violation
         attr_reader :issue
 
-        def initialize(base_points, issue, hashes)
+        def initialize(base_points, issue, hashes, reports)
           @base_points = base_points
           @issue = issue
           @hashes = hashes
+          @reports = reports
         end
 
         def format
@@ -32,7 +33,7 @@ module CC
 
         private
 
-        attr_reader :base_points, :hashes
+        attr_reader :base_points, :hashes, :reports
 
         def current_sexp
           @location ||= sorted_hashes.first
@@ -43,7 +44,12 @@ module CC
         end
 
         def other_sexps
-          @other_locations ||= hashes.drop(1)
+          @_other_sexps ||= hashes.drop(1).reject do |hash|
+            report_name = "#{hash.file}-#{hash.line}"
+            reports.include?(report_name).tap do
+              reports.add(report_name)
+            end
+          end
         end
 
         def name

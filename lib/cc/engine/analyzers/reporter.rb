@@ -66,7 +66,7 @@ module CC
 
         def new_violation(issue)
           hashes = flay.hashes[issue.structural_hash]
-          Violation.new(language_strategy.base_points, issue, hashes)
+          Violation.new(language_strategy.base_points, issue, hashes, reports)
         end
 
         def flay_options
