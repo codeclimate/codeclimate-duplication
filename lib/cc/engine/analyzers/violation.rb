@@ -43,7 +43,7 @@ module CC
         end
 
         def other_sexps
-          @other_locations ||= hashes.drop(1)
+          @other_locations ||= sorted_hashes.drop(1)
         end
 
         def name
