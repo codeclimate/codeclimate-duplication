@@ -8,6 +8,6 @@
     "url": "git@github.com:codeclimate/codeclimate-duplication.git"
   },
   "dependencies": {
-    "babel": "^5.8.23"
+    "babylon": "^6.1.2"
   }
 }
