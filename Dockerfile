@@ -25,4 +25,6 @@ RUN npm install
 
 USER app
 
+ENV JAVA_OPTS="-Xms384m -Xmx384m"
+
 CMD ["/usr/src/app/bin/duplication"]
