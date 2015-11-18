@@ -1,7 +1,5 @@
-#!/usr/bin/env ruby
+#!/bin/sh
+set -ex
 
-module_path = File.expand_path('../../node_modules/esprima', __FILE__)
-
-print `npm install esprima` unless File.directory?(module_path)
-
-print `script -q /dev/null bundle exec rake `
+docker build -t codeclimate/codeclimate-duplication .
+docker run codeclimate/codeclimate-duplication bundle exec rake
