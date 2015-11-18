@@ -86,7 +86,6 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main, in_tmpdir: true do
         "similar_mass_threshold" => 20,
       }))
       result = run_engine(config).strip
-      puts "result is #{result}\n\n\n"
       json = JSON.parse(result)
 
       expect(json["check_name"]).to eq "Identical code"

@@ -19,14 +19,6 @@ module CC
         end
 
         def identical_mass_threshold_for(language)
-          threshold = fetch_language(language).fetch("mass_threshold", nil)
-
-          if threshold
-            threshold.to_i
-          end
-        end
-
-        def identical_mass_threshold_for(language)
           mass_threshold_with_fallback(language, "identical_mass_threshold")
         end
 
