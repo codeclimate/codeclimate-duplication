@@ -18,12 +18,20 @@ module CC
           config.fetch("concurrency", 2)
         end
 
-        def mass_threshold_for(language)
+        def identical_mass_threshold_for(language)
           threshold = fetch_language(language).fetch("mass_threshold", nil)
 
           if threshold
             threshold.to_i
           end
+        end
+
+        def identical_mass_threshold_for(language)
+          mass_threshold_with_fallback(language, "identical_mass_threshold")
+        end
+
+        def similar_mass_threshold_for(language)
+          mass_threshold_with_fallback(language, "similar_mass_threshold")
         end
 
         def paths_for(language)
@@ -65,6 +73,15 @@ module CC
           else
             {}
           end
+        end
+
+        def mass_threshold_with_fallback(language, key)
+          language_hash = fetch_language(language)
+          threshold = language_hash.fetch(key) do |key|
+            language_hash.fetch("mass_threshold", nil)
+          end
+
+          threshold.to_i if threshold
         end
       end
     end

@@ -70,13 +70,26 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
           }
         }
       })
-
       expect(engine_config.paths_for("elixir")).to be_nil
     end
   end
 
-  describe "mass_threshold_for" do
+  shared_examples "mass_threshold examples" do
     it "returns configured mass threshold as integer" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "EliXiR" => {
+              specific_mass_threshold_key => "13"
+            }
+          }
+        }
+      })
+
+      expect(engine_config.send(tested_method, "elixir")).to eq(13)
+    end
+
+    it "returns fallback mass threshold as integer" do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
         "config" => {
           "languages" => {
@@ -87,7 +100,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         }
       })
 
-      expect(engine_config.mass_threshold_for("elixir")).to eq(13)
+      expect(engine_config.send(tested_method, "elixir")).to eq(13)
     end
 
     it "returns nil when language is empty" do
@@ -99,7 +112,21 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         }
       })
 
-      expect(engine_config.mass_threshold_for("ruby")).to be_nil
+      expect(engine_config.send(tested_method, "ruby")).to be_nil
+    end
+  end
+
+  describe "similar_mass_threshold_for" do
+    include_examples "mass_threshold examples" do
+      let(:specific_mass_threshold_key) { "similar_mass_threshold" }
+      let(:tested_method) { :similar_mass_threshold_for }
+    end
+  end
+
+  describe "identical_mass_threshold_for" do
+    include_examples "mass_threshold examples" do
+      let(:specific_mass_threshold_key) { "identical_mass_threshold" }
+      let(:tested_method) { :identical_mass_threshold_for }
     end
   end
 
