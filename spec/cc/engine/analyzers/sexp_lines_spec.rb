@@ -16,7 +16,7 @@ module CC::Engine::Analyzers
         SOURCE
         flay = Flay.new({
           diff: false,
-          mass: CC::Engine::Analyzers::Ruby::Main::DEFAULT_MASS_THRESHOLD,
+          mass: CC::Engine::Analyzers::Ruby::Main::DEFAULT_MASS_THRESHOLDS.fetch(:identical),
           summary: false,
           verbose: false,
           number: true,

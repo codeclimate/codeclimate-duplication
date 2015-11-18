@@ -39,14 +39,8 @@ print("Hello", "python")
   end
 
   def engine_conf
-    CC::Engine::Analyzers::EngineConfig.new({
-      "config" => {
-        "languages" => {
-          "python" => {
-            "mass_threshold" => 4
-          }
-        }
-      }
-    })
+    CC::Engine::Analyzers::EngineConfig.new(engine_config_for_language({
+      "mass_threshold" => 4,
+    }))
   end
 end
