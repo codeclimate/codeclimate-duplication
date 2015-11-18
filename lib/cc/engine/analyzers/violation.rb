@@ -1,3 +1,5 @@
+require "cc/engine/analyzers/sexp_lines"
+require "cc/engine/analyzers/violation_read_up"
 require "digest"
 
 module CC
@@ -80,14 +82,7 @@ module CC
         end
 
         def content_body
-          @_content_body ||= { "body": File.read(read_up_path) }
-        end
-
-        def read_up_path
-          relative_path = "../../../../config/contents/duplicated_code.md"
-          File.expand_path(
-            File.join(File.dirname(__FILE__), relative_path)
-          )
+          @_content_body ||= { "body": ViolationReadUp.new(issue).contents }
         end
 
         def fingerprint

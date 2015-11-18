@@ -41,7 +41,7 @@ print("Hello", "python")
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["content"]["body"]).to match /This issue has a mass of `54`/
       expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
     end
   end

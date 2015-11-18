@@ -41,7 +41,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["content"]["body"]).to match /This issue has a mass of `99`/
       expect(json["fingerprint"]).to eq("55ae5d0990647ef496e9e0d315f9727d")
     end
   end
