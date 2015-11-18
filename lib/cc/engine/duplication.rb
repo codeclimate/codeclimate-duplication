@@ -6,6 +6,7 @@ require 'cc/engine/analyzers/python/main'
 require 'cc/engine/analyzers/reporter'
 require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/sexp'
+require 'cc/engine/analyzers/sexp_lines'
 require 'flay'
 require 'json'
 
