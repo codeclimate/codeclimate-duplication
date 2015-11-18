@@ -12,6 +12,16 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  config.around(:example, :in_tmpdir) do |example|
+    Dir.mktmpdir do |directory|
+      @code = directory
+
+      Dir.chdir(directory) do
+        example.run
+      end
+    end
+  end
+
   config.order = :random
   config.disable_monkey_patching!
 end

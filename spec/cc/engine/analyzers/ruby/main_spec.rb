@@ -4,16 +4,8 @@ require 'cc/engine/analyzers/file_list'
 require 'flay'
 require 'tmpdir'
 
-RSpec.describe CC::Engine::Analyzers::Ruby::Main do
-  around do |example|
-    Dir.mktmpdir do |directory|
-      @code = directory
-
-      Dir.chdir(directory) do
-        example.run
-      end
-    end
-  end
+RSpec.describe CC::Engine::Analyzers::Ruby::Main, in_tmpdir: true do
+  include AnalyzerSpecHelpers
 
   describe "#run" do
     it "prints an issue" do
@@ -35,7 +27,7 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main do
           end
       EORUBY
 
-      result = run_engine.strip
+      result = run_engine(engine_conf).strip
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -60,24 +52,12 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main do
       EORUBY
 
       expect {
-        expect(run_engine).to eq("")
+        expect(run_engine(engine_conf)).to eq("")
       }.to output(/Skipping file/).to_stderr
     end
   end
 
-  def create_source_file(path, content)
-    File.write(File.join(@code, path), content)
-  end
-
-  def run_engine(config = {})
-    io = StringIO.new
-
-    config = CC::Engine::Analyzers::EngineConfig.new(config)
-    engine = ::CC::Engine::Analyzers::Ruby::Main.new(engine_config: config)
-    reporter = ::CC::Engine::Analyzers::Reporter.new(double(concurrency: 2), engine, io)
-
-    reporter.run
-
-    io.string
+  def engine_conf
+    CC::Engine::Analyzers::EngineConfig.new({})
   end
 end
