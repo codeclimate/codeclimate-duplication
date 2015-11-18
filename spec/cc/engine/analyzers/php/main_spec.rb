@@ -53,7 +53,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main do
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
       ])
-      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["content"]["body"]).to match /This issue has a mass of `44`/
       expect(json["fingerprint"]).to eq("667da0e2bab866aa2fe9d014a65d57d9")
     end
   end

@@ -50,7 +50,7 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main do
       expect(json["other_locations"]).to eq([
         {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
       ])
-      expect(json["content"]).to eq({ "body" => read_up })
+      expect(json["content"]["body"]).to match /This issue has a mass of `36`/
       expect(json["fingerprint"]).to eq("f21b75bbd135ec3ae6638364d5c73762")
     end
 
