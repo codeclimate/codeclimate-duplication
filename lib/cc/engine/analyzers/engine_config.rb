@@ -69,7 +69,7 @@ module CC
 
         def mass_threshold_with_fallback(language, key)
           language_hash = fetch_language(language)
-          threshold = language_hash.fetch(key) do |key|
+          threshold = language_hash.fetch(key) do
             language_hash.fetch("mass_threshold", nil)
           end
 
