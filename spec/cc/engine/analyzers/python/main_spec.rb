@@ -5,16 +5,8 @@ require 'cc/engine/analyzers/file_list'
 require "flay"
 require "tmpdir"
 
-RSpec.describe CC::Engine::Analyzers::Python::Main do
-  around do |example|
-    Dir.mktmpdir do |directory|
-      @code = directory
-
-      Dir.chdir(directory) do
-        example.run
-      end
-    end
-  end
+RSpec.describe CC::Engine::Analyzers::Python::Main, in_tmpdir: true do
+  include AnalyzerSpecHelpers
 
   describe "#run" do
     it "prints an issue" do
@@ -44,21 +36,6 @@ print("Hello", "python")
       expect(json["content"]["body"]).to match /This issue has a mass of `54`/
       expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
     end
-  end
-
-  def create_source_file(path, content)
-    File.write(File.join(@code, path), content)
-  end
-
-  def run_engine(config = nil)
-    io = StringIO.new
-
-    engine = ::CC::Engine::Analyzers::Python::Main.new(engine_config: config)
-    reporter = ::CC::Engine::Analyzers::Reporter.new(double(concurrency: 2), engine, io)
-
-    reporter.run
-
-    io.string
   end
 
   def engine_conf

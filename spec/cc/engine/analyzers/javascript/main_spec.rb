@@ -5,16 +5,8 @@ require 'cc/engine/analyzers/file_list'
 require 'flay'
 require 'tmpdir'
 
-RSpec.describe CC::Engine::Analyzers::Javascript::Main do
-  around do |example|
-    Dir.mktmpdir do |directory|
-      @code = directory
-
-      Dir.chdir(directory) do
-        example.run
-      end
-    end
-  end
+RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
+  include AnalyzerSpecHelpers
 
   describe "#run" do
     it "prints an issue" do
@@ -66,21 +58,6 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main do
     result = run_engine(engine_conf).strip
     issues = result.split("\0")
     expect(issues.length).to eq 1
-  end
-
-  def create_source_file(path, content)
-    File.write(File.join(@code, path), content)
-  end
-
-  def run_engine(config = nil)
-    io = StringIO.new
-
-    engine = ::CC::Engine::Analyzers::Javascript::Main.new(engine_config: config)
-    reporter = ::CC::Engine::Analyzers::Reporter.new(double(concurrency: 2), engine, io)
-
-    reporter.run
-
-    io.string
   end
 
   def engine_conf
