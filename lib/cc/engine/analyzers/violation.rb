@@ -69,23 +69,14 @@ module CC
         end
 
         def format_sexp(sexp)
+          lines = SexpLines.new(sexp)
           {
             "path": sexp.file.gsub(%r(^./), ""),
             "lines": {
-              "begin": sexp.line,
-              "end": sexp.end_line || sexp_max_line(sexp, sexp.line)
-            }
+              "begin": lines.begin_line,
+              "end": lines.end_line,
+            },
           }
-        end
-
-        def sexp_max_line(sexp_tree, default)
-          max = default
-
-          sexp_tree.deep_each do |sexp|
-            max = sexp.line if sexp.line > max
-          end
-
-          max
         end
 
         def content_body
