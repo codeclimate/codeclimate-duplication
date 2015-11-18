@@ -1,4 +1,4 @@
-## Duplicated code
+## Duplicated Code
 
 Duplicated code can lead to software that is hard to understand and difficult to change. The Don't Repeat Yourself (DRY) principle states:
 
