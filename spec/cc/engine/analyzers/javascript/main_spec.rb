@@ -61,14 +61,8 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
   end
 
   def engine_conf
-    CC::Engine::Analyzers::EngineConfig.new({
-      'config' => {
-        'languages' => {
-          'javascript' => {
-            'mass_threshold' => 1
-          }
-        }
-      }
-    })
+    CC::Engine::Analyzers::EngineConfig.new(engine_config_for_language({
+      "mass_threshold" => 1,
+    }))
   end
 end

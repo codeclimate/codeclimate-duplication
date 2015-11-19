@@ -17,8 +17,15 @@ module CC
           file_list.files
         end
 
-        def mass_threshold
-          engine_config.mass_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_MASS_THRESHOLD
+        def mass_threshold_for_check(type)
+          case type
+          when :identical
+            engine_config.identical_mass_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_MASS_THRESHOLDS.fetch(type)
+          when :similar
+            engine_config.similar_mass_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_MASS_THRESHOLDS.fetch(type)
+          else
+            raise ArgumentError.new("#{type} is not a valid check type")
+          end
         end
 
         def base_points

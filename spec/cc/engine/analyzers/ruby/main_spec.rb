@@ -55,9 +55,50 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main, in_tmpdir: true do
         expect(run_engine(engine_conf)).to eq("")
       }.to output(/Skipping file/).to_stderr
     end
+
+    it "respects different check type thresholds" do
+      create_source_file("foo.rb", <<-EORUBY)
+        def identical
+          puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
+          puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
+          puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
+        end
+
+        describe 'similar1' do
+          before { subject.type = 'js' }
+
+          it 'returns true' do
+            expect(subject.ruby?).to be true
+          end
+        end
+
+        describe 'similar2' do
+          before { subject.type = 'js' }
+
+          it 'returns true' do
+            expect(subject.js?).to be true
+          end
+        end
+      EORUBY
+
+      config = CC::Engine::Analyzers::EngineConfig.new(engine_config_for_language({
+        "identical_mass_threshold" => 5,
+        "similar_mass_threshold" => 20,
+      }))
+      result = run_engine(config).strip
+      json = JSON.parse(result)
+
+      expect(json["check_name"]).to eq "Identical code"
+      expect(json["location"]).to eq({
+        "path" => "foo.rb",
+        "lines" => { "begin" => 2, "end" => 2 },
+      })
+    end
   end
 
   def engine_conf
-    CC::Engine::Analyzers::EngineConfig.new({})
+    CC::Engine::Analyzers::EngineConfig.new(engine_config_for_language({
+      "mass_threshold" => described_class::DEFAULT_MASS_THRESHOLDS.fetch(:identical),
+    }))
   end
 end

@@ -17,7 +17,7 @@ module CC
             "**/*.gemspec"
 
           ]
-          DEFAULT_MASS_THRESHOLD = 18
+          DEFAULT_MASS_THRESHOLDS = {identical: 18, similar: 36}.freeze
           BASE_POINTS = 10_000
           TIMEOUT = 10
 

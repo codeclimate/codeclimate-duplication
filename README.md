@@ -46,7 +46,12 @@ duplication, try raising the threshold. If you suspect that the engine isn't
 catching enough duplication, try lowering the threshold. The best setting tends
 to differ from language to language.
 
-To adjust this setting, add a `mass_threshold` key with your preferred value for
+You can set thresholds for the two different types of duplication this engine
+reports: blocks that are identical to each other, and blocks that are
+structurally similar but differ in content.
+
+To adjust these thresholds, you can add `identical_mass_threshold` and
+`similar_mass_threshold` keys with your preferred value for
 an enabled language:
 
 ```yaml
@@ -56,11 +61,15 @@ engines:
     config:
       languages:
         ruby:
-          mass_threshold: 20
+          identical_mass_threshold: 20
+          similar_mass_threshold: 30
         javascript:
 ```
 
-Note that you have the update the YAML structure under the `langauges` key to
+If you would like to use the same threshold for both identical & similar issues,
+you can just set the `mass_threshold` key.
+
+Note that you have to update the YAML structure under the `langauges` key to
 the Hash type to support extra configuration.
 
 [codeclimate]: https://codeclimate.com/dashboard

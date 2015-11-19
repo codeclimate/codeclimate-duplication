@@ -56,14 +56,8 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
   end
 
   def engine_conf
-    CC::Engine::Analyzers::EngineConfig.new({
-      'config' => {
-        'languages' => {
-          'php' => {
-            'mass_threshold' => 5
-          }
-        }
-      }
-    })
+    CC::Engine::Analyzers::EngineConfig.new(engine_config_for_language({
+      "mass_threshold" => 5,
+    }))
   end
 end

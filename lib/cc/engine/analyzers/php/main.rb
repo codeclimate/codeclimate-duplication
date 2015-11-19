@@ -14,7 +14,7 @@ module CC
             "**/*.inc",
             "**/*.module"
           ]
-          DEFAULT_MASS_THRESHOLD = 10
+          DEFAULT_MASS_THRESHOLDS = {identical: 10, similar: 20}.freeze
           BASE_POINTS = 4_000
 
           private

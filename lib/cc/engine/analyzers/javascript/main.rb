@@ -15,7 +15,7 @@ module CC
             "**/*.jsx"
           ]
           LANGUAGE = "javascript"
-          DEFAULT_MASS_THRESHOLD = 40
+          DEFAULT_MASS_THRESHOLDS = {identical: 40, similar: 80}.freeze
           BASE_POINTS = 3000
 
           private

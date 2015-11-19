@@ -36,6 +36,7 @@ module CC
 
         def report
           flay.report(StringIO.new).each do |issue|
+            next unless issue_above_threshold?(issue)
             violation = new_violation(issue)
 
             unless reports.include?(violation.report_name)
@@ -61,7 +62,19 @@ module CC
         attr_reader :engine_config, :language_strategy, :io
 
         def mass_threshold
-          @mass_threshold ||= language_strategy.mass_threshold
+          @mass_threshold ||= [
+            language_strategy.mass_threshold_for_check(:identical),
+            language_strategy.mass_threshold_for_check(:similar),
+          ].min
+        end
+
+        def issue_above_threshold?(issue)
+          base_mass = issue.mass / issue.locations.count
+          if issue.identical?
+            base_mass >= language_strategy.mass_threshold_for_check(:identical)
+          else
+            base_mass >= language_strategy.mass_threshold_for_check(:similar)
+          end
         end
 
         def new_violation(issue)
