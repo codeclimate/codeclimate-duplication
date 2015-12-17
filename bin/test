@@ -1,5 +1,0 @@
-#!/bin/sh
-set -ex
-
-docker build -t codeclimate/codeclimate-duplication .
-docker run codeclimate/codeclimate-duplication bundle exec rake
