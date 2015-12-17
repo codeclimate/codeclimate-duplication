@@ -7,7 +7,6 @@ module CC
         RESCUABLE_ERRORS = [
           ::CC::Engine::Analyzers::ParserError,
           ::Racc::ParseError,
-          ::Timeout::Error,
         ]
 
         def initialize(engine_config:)

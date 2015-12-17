@@ -5,7 +5,7 @@ module CC
   module Engine
     module Analyzers
       class CommandLineRunner
-        DEFAULT_TIMEOUT = 20
+        DEFAULT_TIMEOUT = 300
 
         def initialize(command, timeout = DEFAULT_TIMEOUT)
           @command = command

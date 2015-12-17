@@ -19,7 +19,7 @@ module CC
           ]
           DEFAULT_MASS_THRESHOLD = 18
           BASE_POINTS = 10_000
-          TIMEOUT = 10
+          TIMEOUT = 300
 
           private
 
