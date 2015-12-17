@@ -1,16 +1,27 @@
+require "cc/engine/analyzers/parser_error"
+
 module CC
   module Engine
     module Analyzers
       class Base
+        RESCUABLE_ERRORS = [
+          ::CC::Engine::Analyzers::ParserError,
+          ::Racc::ParseError,
+          ::Timeout::Error,
+        ]
+
         def initialize(engine_config:)
           @engine_config = engine_config
         end
 
         def run(file)
           process_file(file)
+        rescue *RESCUABLE_ERRORS => ex
+          $stderr.puts("Skipping file #{file} due to exception:")
+          $stderr.puts("(#{ex.class}) #{ex.message} #{ex.backtrace.join("\n")}")
         rescue => ex
-          $stderr.puts "Skipping file #{file} due to exception"
-          $stderr.puts "(#{ex.class}) #{ex.message} #{ex.backtrace.join("\n")}"
+          $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
+          raise ex
         end
 
         def files

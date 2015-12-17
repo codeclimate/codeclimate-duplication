@@ -36,6 +36,16 @@ print("Hello", "python")
       expect(json["content"]["body"]).to match /This issue has a mass of `54`/
       expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
     end
+
+    it "skips unparsable files" do
+      create_source_file("foo.py", <<-EOPY)
+        ---
+      EOPY
+
+      expect {
+        expect(run_engine(engine_conf)).to eq("")
+      }.to output(/Skipping file/).to_stderr
+    end
   end
 
   def engine_conf

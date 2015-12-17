@@ -36,6 +36,16 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       expect(json["content"]["body"]).to match /This issue has a mass of `99`/
       expect(json["fingerprint"]).to eq("55ae5d0990647ef496e9e0d315f9727d")
     end
+
+    it "skips unparsable files" do
+      create_source_file("foo.js", <<-EOJS)
+        function () { do(); // missing closing brace
+      EOJS
+
+      expect {
+        expect(run_engine(engine_conf)).to eq("")
+      }.to output(/Skipping file/).to_stderr
+    end
   end
 
   it "does not flag duplicate comments" do

@@ -48,6 +48,16 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["content"]["body"]).to match /This issue has a mass of `44`/
       expect(json["fingerprint"]).to eq("667da0e2bab866aa2fe9d014a65d57d9")
     end
+
+    it "skips unparsable files" do
+      create_source_file("foo.php", <<-EOPHP)
+        <?php blorb &; "fee
+      EOPHP
+
+      expect {
+        expect(run_engine(engine_conf)).to eq("")
+      }.to output(/Skipping file/).to_stderr
+    end
   end
 
   def printed_issue
