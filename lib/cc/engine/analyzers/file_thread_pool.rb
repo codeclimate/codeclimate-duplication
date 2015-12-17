@@ -17,11 +17,8 @@ module CC
 
           @workers = thread_count.times.map do
             Thread.new do
-              begin 
-                while item = queue.pop(true)
-                  yield item
-                end
-              rescue ThreadError
+              while !queue.empty? && (item = queue.pop(true))
+                yield item
               end
             end
           end
