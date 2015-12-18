@@ -6,6 +6,7 @@ module CC
       class Base
         RESCUABLE_ERRORS = [
           ::CC::Engine::Analyzers::ParserError,
+          ::Errno::ENOENT,
           ::Racc::ParseError,
         ]
 
