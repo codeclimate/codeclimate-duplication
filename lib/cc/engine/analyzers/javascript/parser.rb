@@ -1,4 +1,4 @@
-require 'timeout'
+require "cc/engine/analyzers/command_line_runner"
 
 module CC
   module Engine
@@ -13,7 +13,7 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new(js_command, self)
+            runner = CommandLineRunner.new(js_command)
             runner.run(strip_shebang(code)) do |ast|
               json_ast = JSON.parse(ast)
               @syntax_tree = json_ast
@@ -34,36 +34,6 @@ module CC
               code.lines.drop(1).join
             else
               code
-            end
-          end
-        end
-
-        class CommandLineRunner
-          attr_reader :command, :delegate
-
-          DEFAULT_TIMEOUT = 20
-          EXCEPTIONS = [
-            StandardError,
-            Timeout::Error,
-            SystemStackError
-          ]
-
-          def initialize(command, delegate)
-            @command = command
-            @delegate = delegate
-          end
-
-          def run(input, timeout = DEFAULT_TIMEOUT)
-            Timeout.timeout(timeout) do
-              IO.popen command, 'r+' do |io|
-                io.puts input
-                io.close_write
-
-                output = io.gets
-                io.close
-
-                yield output if $?.to_i == 0
-              end
             end
           end
         end

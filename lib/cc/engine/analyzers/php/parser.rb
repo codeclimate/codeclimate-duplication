@@ -1,5 +1,6 @@
-require 'cc/engine/analyzers/php/ast'
-require 'cc/engine/analyzers/php/nodes'
+require "cc/engine/analyzers/command_line_runner"
+require "cc/engine/analyzers/php/ast"
+require "cc/engine/analyzers/php/nodes"
 
 module CC
   module Engine
@@ -34,30 +35,6 @@ module CC
             File.expand_path(
               File.join(File.dirname(__FILE__), relative_path)
             )
-          end
-        end
-
-        class CommandLineRunner
-          attr_reader :command, :delegate
-
-          DEFAULT_TIMEOUT = 20
-
-          def initialize(command)
-            @command = command
-          end
-
-          def run(input, timeout = DEFAULT_TIMEOUT)
-            Timeout.timeout(timeout) do
-              IO.popen command, 'r+' do |io|
-                io.puts input
-                io.close_write
-
-                output = io.gets
-                io.close
-
-                yield output if $?.to_i == 0
-              end
-            end
           end
         end
       end
