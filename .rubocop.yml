@@ -51,6 +51,11 @@ Style/GlobalVars:
   - "$mongo"
   - "$rollout"
 
+# Allow $! in config/initializers
+Style/SpecialGlobalVars:
+  Exclude:
+  - config/initializers/**/*
+
 # We have common cases where has_ and have_ make sense
 Style/PredicateName:
   Enabled: true
@@ -62,6 +67,17 @@ Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     "%w": []
     "%W": []
+
+# Allow "trivial" accessors when defined as a predicate? method
+Style/TrivialAccessors:
+  AllowPredicates: true
+
+Style/Next:
+  Enabled: false
+
+# We think it's OK to use the "extend self" module pattern
+Style/ModuleFunction:
+  Enabled: false
 
 ################################################################################
 # Rails - disable things because we're primarily non-rails
@@ -90,9 +106,5 @@ Style/ClassAndModuleChildren:
   - spec/**/*
 
 Style/BlockDelimiters:
-  Exclude:
-  - spec/**/*
-
-Style/Blocks:
   Exclude:
   - spec/**/*
