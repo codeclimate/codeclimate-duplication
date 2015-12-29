@@ -15,8 +15,6 @@ module CC
             "**/*.jsx"
           ]
           LANGUAGE = "javascript"
-          DEFAULT_MASS_THRESHOLD = 40
-          BASE_POINTS = 3000
 
           private
 

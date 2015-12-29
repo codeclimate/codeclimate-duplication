@@ -28,7 +28,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(297000)
+      expect(json["remediation_points"]).to eq(6400000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }

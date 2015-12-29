@@ -8,8 +8,12 @@ module CC
       class Violation
         attr_reader :issue
 
-        def initialize(base_points, issue, hashes)
-          @base_points = base_points
+        DEFAULT_POINTS = 1_500_000
+
+        def initialize(language, issue, hashes)
+          @base_points = language.base_points
+          @points_per = language.points_per
+          @threshold = language.mass_threshold
           @issue = issue
           @hashes = hashes
         end
@@ -32,9 +36,17 @@ module CC
           "#{current_sexp.file}-#{current_sexp.line}"
         end
 
+        def calculate_points
+          if issue.mass >= threshold
+            base_points + (overage * points_per)
+          else
+            DEFAULT_POINTS
+          end
+        end
+
         private
 
-        attr_reader :base_points, :hashes
+        attr_reader :base_points, :points_per, :threshold, :hashes
 
         def current_sexp
           @location ||= sorted_hashes.first
@@ -56,8 +68,8 @@ module CC
           end
         end
 
-        def calculate_points
-          base_points * issue.mass
+        def overage
+          issue.mass - threshold
         end
 
         def format_location

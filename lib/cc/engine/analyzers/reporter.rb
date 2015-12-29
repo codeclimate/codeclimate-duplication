@@ -60,19 +60,15 @@ module CC
 
         attr_reader :engine_config, :language_strategy, :io
 
-        def mass_threshold
-          @mass_threshold ||= language_strategy.mass_threshold
-        end
-
         def new_violation(issue)
           hashes = flay.hashes[issue.structural_hash]
-          Violation.new(language_strategy.base_points, issue, hashes)
+          Violation.new(language_strategy, issue, hashes)
         end
 
         def flay_options
           {
             diff: false,
-            mass: mass_threshold,
+            mass: language_strategy.mass_threshold,
             summary: false,
             verbose: false,
             number: true,
