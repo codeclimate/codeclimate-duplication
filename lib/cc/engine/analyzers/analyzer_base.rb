@@ -18,8 +18,7 @@ module CC
         def run(file)
           process_file(file)
         rescue *RESCUABLE_ERRORS => ex
-          $stderr.puts("Skipping file #{file} due to exception:")
-          $stderr.puts("(#{ex.class}) #{ex.message} #{ex.backtrace.join("\n")}")
+          $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
         rescue => ex
           $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
           raise ex
