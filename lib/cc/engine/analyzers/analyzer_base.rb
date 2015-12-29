@@ -8,6 +8,7 @@ module CC
           ::CC::Engine::Analyzers::ParserError,
           ::Errno::ENOENT,
           ::Racc::ParseError,
+          ::RubyParser::SyntaxError,
         ]
 
         def initialize(engine_config:)
