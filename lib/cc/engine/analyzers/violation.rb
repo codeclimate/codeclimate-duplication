@@ -8,8 +8,8 @@ module CC
       class Violation
         attr_reader :issue
 
-        def initialize(base_points, issue, hashes)
-          @base_points = base_points
+        def initialize(language_strategy, issue, hashes)
+          @language_strategy = language_strategy
           @issue = issue
           @hashes = hashes
         end
@@ -34,7 +34,7 @@ module CC
 
         private
 
-        attr_reader :base_points, :hashes
+        attr_reader :language_strategy, :hashes
 
         def current_sexp
           @location ||= sorted_hashes.first
@@ -57,7 +57,7 @@ module CC
         end
 
         def calculate_points
-          base_points * issue.mass
+          language_strategy.calculate_points(issue)
         end
 
         def format_location

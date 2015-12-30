@@ -35,8 +35,8 @@ module CC
           engine_config.mass_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_MASS_THRESHOLD
         end
 
-        def base_points
-          self.class::BASE_POINTS
+        def calculate_points(issue)
+          self.class::BASE_POINTS * issue.mass
         end
 
         private
