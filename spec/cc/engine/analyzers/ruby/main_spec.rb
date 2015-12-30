@@ -38,7 +38,7 @@ RSpec.describe CC::Engine::Analyzers::Ruby::Main, in_tmpdir: true do
         "path" => "foo.rb",
         "lines" => { "begin" => 1, "end" => 5 },
       })
-      expect(json["remediation_points"]).to eq(360000)
+      expect(json["remediation_points"]).to eq(3300000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
       ])

@@ -12,6 +12,10 @@ module CC
           ::RuntimeError,
         ].freeze
 
+        DEFAULT_MASS_THRESHOLD = 28
+        BASE_POINTS = 1_500_000
+        POINTS_PER_OVERAGE = 50_000
+
         def initialize(engine_config:)
           @engine_config = engine_config
         end
@@ -37,6 +41,10 @@ module CC
 
         def base_points
           self.class::BASE_POINTS
+        end
+
+        def points_per_overage
+          self.class::POINTS_PER_OVERAGE
         end
 
         private

@@ -14,8 +14,6 @@ module CC
             "**/*.inc",
             "**/*.module"
           ]
-          DEFAULT_MASS_THRESHOLD = 10
-          BASE_POINTS = 4_000
 
           private
 

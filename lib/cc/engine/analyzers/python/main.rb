@@ -12,8 +12,6 @@ module CC
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "python"
           DEFAULT_PATHS = ["**/*.py"]
-          DEFAULT_MASS_THRESHOLD = 40
-          BASE_POINTS = 1000
 
           private
 

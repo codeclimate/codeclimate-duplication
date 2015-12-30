@@ -41,7 +41,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 6 },
       })
-      expect(json["remediation_points"]).to eq(176000)
+      expect(json["remediation_points"]).to eq(3450000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
       ])
@@ -61,7 +61,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
   end
 
   def printed_issue
-    issue = {"type":"issue","check_name":"Identical code","description":"Similar code found in 1 other location","categories":["Duplication"],"location":{"path":"foo.php","lines":{"begin":2,"end":6}},"remediation_points":176000,"other_locations":[{"path":"foo.php","lines":{"begin":10,"end":14}}],"content":{"body": read_up}}
+    issue = {"type":"issue","check_name":"Identical code","description":"Similar code found in 1 other location","categories":["Duplication"],"location":{"path":"foo.php","lines":{"begin":2,"end":6}},"remediation_points":3450000,"other_locations":[{"path":"foo.php","lines":{"begin":10,"end":14}}],"content":{"body": read_up}}
     issue.to_json + "\0\n"
   end
 
