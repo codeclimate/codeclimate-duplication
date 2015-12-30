@@ -11,9 +11,7 @@ module CC
         DEFAULT_POINTS = 1_500_000
 
         def initialize(language, issue, hashes)
-          @base_points = language.base_points
-          @points_per = language.points_per
-          @threshold = language.mass_threshold
+          @language = language
           @issue = issue
           @hashes = hashes
         end
@@ -38,7 +36,7 @@ module CC
 
         def calculate_points
           if issue.mass >= threshold
-            base_points + (overage * points_per)
+            base_points + (overage * points_per_overage)
           else
             DEFAULT_POINTS
           end
@@ -46,7 +44,19 @@ module CC
 
         private
 
-        attr_reader :base_points, :points_per, :threshold, :hashes
+        attr_reader :language, :hashes
+
+        def base_points
+          language.base_points
+        end
+
+        def points_per_overage
+          language.points_per_overage
+        end
+
+        def threshold
+          language.mass_threshold
+        end
 
         def current_sexp
           @location ||= sorted_hashes.first

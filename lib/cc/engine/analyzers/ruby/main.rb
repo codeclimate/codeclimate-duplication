@@ -18,7 +18,7 @@ module CC
 
           ]
           DEFAULT_MASS_THRESHOLD = 18
-          POINTS_PER = 100_000
+          POINTS_PER_OVERAGE = 100_000
           TIMEOUT = 300
 
           private

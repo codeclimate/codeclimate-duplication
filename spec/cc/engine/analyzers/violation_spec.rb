@@ -4,7 +4,7 @@ RSpec.describe CC::Engine::Analyzers::Violation, in_tmpdir: true do
   describe "#calculate_points" do
     context "when issue mass exceeds threshold" do
       it "calculates mass overage points" do
-        language = stub_language(base_points: 100, points_per: 5, mass_threshold: 10)
+        language = double(:language, base_points: 100, points_per_overage: 5, mass_threshold: 10)
         issue = double(:issue, mass: 15)
         hashes = []
 
@@ -19,7 +19,7 @@ RSpec.describe CC::Engine::Analyzers::Violation, in_tmpdir: true do
 
     context "when issue mass is less than threshold" do
       it "uses default" do
-        language = stub_language(base_points: 100, points_per: 5, mass_threshold: 18)
+        language = double(:language, base_points: 100, points_per_overage: 5, mass_threshold: 18)
         issue = double(:issue, mass: 15)
         hashes = []
 
@@ -34,7 +34,7 @@ RSpec.describe CC::Engine::Analyzers::Violation, in_tmpdir: true do
 
     context "when issue mass equals threshold" do
       it "calculates remediation points" do
-        language = stub_language(base_points: 100, points_per: 5, mass_threshold: 18)
+        language = double(:language, base_points: 100, points_per_overage: 5, mass_threshold: 18)
         issue = double(:issue, mass: language.mass_threshold)
         hashes = []
 
@@ -45,15 +45,6 @@ RSpec.describe CC::Engine::Analyzers::Violation, in_tmpdir: true do
 
         expect(points).to eq(expected_points)
       end
-    end
-
-    def stub_language(args)
-      double(
-        :language,
-        base_points: args[:base_points],
-        points_per: args[:points_per],
-        mass_threshold: args[:mass_threshold]
-      )
     end
   end
 end
