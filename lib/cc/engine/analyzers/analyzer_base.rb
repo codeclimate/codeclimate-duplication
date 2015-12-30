@@ -9,7 +9,8 @@ module CC
           ::Errno::ENOENT,
           ::Racc::ParseError,
           ::RubyParser::SyntaxError,
-        ]
+          ::RuntimeError,
+        ].freeze
 
         def initialize(engine_config:)
           @engine_config = engine_config
