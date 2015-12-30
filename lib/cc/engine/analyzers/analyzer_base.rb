@@ -9,7 +9,8 @@ module CC
           ::Errno::ENOENT,
           ::Racc::ParseError,
           ::RubyParser::SyntaxError,
-        ]
+          ::RuntimeError,
+        ].freeze
 
         def initialize(engine_config:)
           @engine_config = engine_config
@@ -17,11 +18,13 @@ module CC
 
         def run(file)
           process_file(file)
-        rescue *RESCUABLE_ERRORS => ex
-          $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
         rescue => ex
-          $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
-          raise ex
+          if RESCUABLE_ERRORS.map { |klass| ex.instance_of?(klass) }.include?(true)
+            $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
+          else
+            $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
+            raise ex
+          end
         end
 
         def files
