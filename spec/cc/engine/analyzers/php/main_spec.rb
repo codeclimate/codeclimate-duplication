@@ -49,6 +49,13 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["fingerprint"]).to eq("667da0e2bab866aa2fe9d014a65d57d9")
     end
 
+    it "runs against complex files" do
+      FileUtils.cp(fixture_path("symfony_configuration.php"), File.join(@code, "configuration.php"))
+      result = run_engine(engine_conf).strip
+
+      expect(result).to match "\"type\":\"issue\""
+    end
+
     it "skips unparsable files" do
       create_source_file("foo.php", <<-EOPHP)
         <?php blorb &; "fee

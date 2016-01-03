@@ -6,7 +6,7 @@ module CC
   module Engine
     module Analyzers
       module Php
-        class Parser
+        class Parser < ParserBase
           attr_reader :code, :filename, :syntax_tree
 
           def initialize(code, filename)
@@ -17,7 +17,7 @@ module CC
           def parse
             runner = CommandLineRunner.new("php #{parser_path}")
             runner.run(code) do |output|
-              json = JSON.parse(output)
+              json = parse_json(output)
 
               @syntax_tree = CC::Engine::Analyzers::Php::Nodes::Node.new.tap do |node|
                 node.stmts = CC::Engine::Analyzers::Php::AST.json_to_ast(json, filename)

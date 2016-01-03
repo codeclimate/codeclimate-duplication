@@ -6,7 +6,7 @@ module CC
   module Engine
     module Analyzers
       module Python
-        class Parser
+        class Parser < ParserBase
           attr_reader :code, :filename, :syntax_tree
 
           def initialize(code, filename)
@@ -17,8 +17,7 @@ module CC
           def parse
             runner = CommandLineRunner.new(python_command)
             runner.run(code) do |ast|
-              json_ast = JSON.parse(ast)
-              @syntax_tree = json_ast
+              @syntax_tree = parse_json(ast)
             end
 
             self
