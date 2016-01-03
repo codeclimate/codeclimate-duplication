@@ -14,10 +14,11 @@ module CC
 
         def run(&block)
           queue = build_queue
+          lock = Mutex.new
 
           @workers = thread_count.times.map do
             Thread.new do
-              while !queue.empty? && (item = queue.pop(true))
+              while (item = next_item(queue, lock))
                 yield item
               end
             end
@@ -31,6 +32,10 @@ module CC
         private
 
         attr_reader :files, :concurrency, :workers
+
+        def next_item(queue, lock)
+          lock.synchronize { queue.pop(true) unless queue.empty? }
+        end
 
         def build_queue
           Queue.new.tap do |queue|
