@@ -29,7 +29,11 @@ class JSON implements Serializer
           }
 
           foreach ($node as $name => $subNode) {
-            if (is_string($subNode)) {
+            if (INF === $subNode) {
+              $doc[$name] = "_PHP:CONST:INF";
+            } elseif (NaN === $subNode) {
+              $doc[$name] = "_PHP:CONST:NaN";
+            } elseif (is_string($subNode)) {
               $doc[$name] = utf8_encode($subNode);
             } elseif (is_int($subNode)) {
               $doc[$name] = $subNode;
