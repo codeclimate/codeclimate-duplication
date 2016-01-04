@@ -13,8 +13,13 @@ try {
 
   $serializer = new PhpParser\Serializer\JSON;
   $nodes = $serializer->serialize($stmts);
-  echo json_encode($nodes);
-
+  $json = json_encode($nodes);
+  if (false === $json) {
+    fwrite(STDERR, "Parse Error: JSON encoding failed: ".json_last_error_msg()."\n");
+    exit(1);
+  } else {
+    echo $json;
+  }
 } catch (PHPParser\Error $e) {
   fwrite(STDERR, "Parse Error: ".$e->getMessage()."\n");
   exit(1);
