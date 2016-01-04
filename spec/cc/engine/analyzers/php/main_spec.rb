@@ -56,6 +56,31 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(result).to match "\"type\":\"issue\""
     end
 
+    it "handles INF & NAN constants" do
+      create_source_file("foo.php", <<-EOPHP)
+          <?php
+          function f1($name) {
+            // the php-parser lib turns this into INF, but writing INF directly gets emitted differently
+            if (empty($name)) {
+              return 646e444;
+            } else {
+              return 0;
+            }
+          }
+
+          function f2($name) {
+            if (empty($name)) {
+              return 646e444;
+            } else {
+              return 0;
+            }
+          }
+      EOPHP
+
+      result = run_engine(engine_conf).strip
+      expect(result).to match "\"type\":\"issue\""
+    end
+
     it "skips unparsable files" do
       create_source_file("foo.php", <<-EOPHP)
         <?php blorb &; "fee
