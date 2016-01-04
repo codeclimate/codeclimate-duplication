@@ -4,7 +4,7 @@ module CC
   module Engine
     module Analyzers
       module Javascript
-        class Parser
+        class Parser < ParserBase
           attr_reader :code, :filename, :syntax_tree
 
           def initialize(code, filename)
@@ -15,8 +15,7 @@ module CC
           def parse
             runner = CommandLineRunner.new(js_command)
             runner.run(strip_shebang(code)) do |ast|
-              json_ast = JSON.parse(ast)
-              @syntax_tree = json_ast
+              @syntax_tree = parse_json(ast)
             end
 
             self

@@ -1,4 +1,5 @@
 require "cc/engine/analyzers/parser_error"
+require "cc/engine/analyzers/parser_base"
 
 module CC
   module Engine
