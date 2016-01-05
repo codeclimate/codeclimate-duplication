@@ -10,7 +10,6 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
   describe "#run" do
     it "prints an issue" do
-
       create_source_file("foo.php", <<-EOPHP)
           <?php
           function hello($name) {
