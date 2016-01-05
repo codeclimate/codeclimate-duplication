@@ -10,7 +10,6 @@ RSpec.describe CC::Engine::Analyzers::Python::Main, in_tmpdir: true do
 
   describe "#run" do
     it "prints an issue" do
-
       create_source_file("foo.py", <<-EOJS)
 print("Hello", "python")
 print("Hello", "python")

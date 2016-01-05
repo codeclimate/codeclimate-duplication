@@ -10,7 +10,6 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
   describe "#run" do
     it "prints an issue" do
-
       create_source_file("foo.js", <<-EOJS)
           console.log("hello JS!");
           console.log("hello JS!");
