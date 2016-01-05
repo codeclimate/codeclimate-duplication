@@ -20,7 +20,7 @@ RUN cd /usr/src/app/vendor/php-parser/ && composer install --prefer-source --no-
 RUN adduser app -u 9000
 
 COPY . /usr/src/app
-run chown -R app .
+RUN chown -R app .
 RUN npm install
 
 USER app
