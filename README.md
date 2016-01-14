@@ -60,7 +60,7 @@ engines:
         javascript:
 ```
 
-Note that you have the update the YAML structure under the `langauges` key to
+Note that you have the update the YAML structure under the `languages` key to
 the Hash type to support extra configuration.
 
 [codeclimate]: https://codeclimate.com/dashboard
