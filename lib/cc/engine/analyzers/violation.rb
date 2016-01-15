@@ -98,7 +98,7 @@ module CC
         def description
           description = "#{check_name} found in #{occurrences} other location"
           description += "s" if occurrences > 1
-          description
+          description += " (mass = #{issue.mass})"
         end
 
         def occurrences

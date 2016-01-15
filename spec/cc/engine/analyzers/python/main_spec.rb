@@ -21,7 +21,7 @@ print("Hello", "python")
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Identical code")
-      expect(json["description"]).to eq("Identical code found in 2 other locations")
+      expect(json["description"]).to eq("Identical code found in 2 other locations (mass = 54)")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.py",
@@ -48,7 +48,7 @@ print("Hello from the other side", "python")
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Similar code")
-      expect(json["description"]).to eq("Similar code found in 2 other locations")
+      expect(json["description"]).to eq("Similar code found in 2 other locations (mass = 18)")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.py",
