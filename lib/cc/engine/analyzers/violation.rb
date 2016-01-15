@@ -17,7 +17,7 @@ module CC
         def format
           {
             "type": "issue",
-            "check_name": name,
+            "check_name": check_name,
             "description": description,
             "categories": ["Duplication"],
             "location": format_location,
@@ -48,7 +48,7 @@ module CC
           @other_locations ||= sorted_hashes.drop(1)
         end
 
-        def name
+        def check_name
           if issue.identical?
             "Identical code"
           else
@@ -96,7 +96,7 @@ module CC
         end
 
         def description
-          description = "Similar code found in #{occurrences} other location"
+          description = "#{check_name} found in #{occurrences} other location"
           description += "s" if occurrences > 1
           description
         end
