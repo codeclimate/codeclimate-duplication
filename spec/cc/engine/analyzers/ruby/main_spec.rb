@@ -1,8 +1,7 @@
+require 'spec_helper'
 require 'cc/engine/analyzers/ruby/main'
 require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/file_list'
-require 'flay'
-require 'tmpdir'
 
 module CC::Engine::Analyzers
   RSpec.describe Ruby::Main, in_tmpdir: true do
@@ -28,7 +27,9 @@ module CC::Engine::Analyzers
             end
         EORUBY
 
-        result = run_engine(engine_conf).strip
+        issues = run_engine(engine_conf).strip.split("\0")
+        result = issues.first.strip
+
         json = JSON.parse(result)
 
         expect(json["type"]).to eq("issue")
@@ -39,12 +40,44 @@ module CC::Engine::Analyzers
           "path" => "foo.rb",
           "lines" => { "begin" => 1, "end" => 5 },
         })
-        expect(json["remediation_points"]).to eq(3300000)
+        expect(json["remediation_points"]).to eq(1_500_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
         ])
-        expect(json["content"]["body"]).to match /This issue has a mass of `36`/
-        expect(json["fingerprint"]).to eq("f21b75bbd135ec3ae6638364d5c73762")
+        expect(json["content"]["body"]).to match /This issue has a mass of `18`/
+        expect(json["fingerprint"]).to eq("b7e46d8f5164922678e48942e26100f2")
+      end
+
+      it "creates an issue for each occurrence of the duplicated code" do
+        create_source_file("foo.rb", <<-EORUBY)
+            describe '#ruby?' do
+              before { subject.type = 'ruby' }
+
+              it 'returns true' do
+                expect(subject.ruby?).to be true
+              end
+            end
+
+            describe '#js?' do
+              before { subject.type = 'js' }
+
+              it 'returns true' do
+                expect(subject.js?).to be true
+              end
+            end
+
+            describe '#whaddup?' do
+              before { subject.type = 'js' }
+
+              it 'returns true' do
+                expect(subject.js?).to be true
+              end
+            end
+        EORUBY
+
+        issues = run_engine(engine_conf).strip.split("\0")
+
+        expect(issues.length).to eq(3)
       end
 
       it "skips unparsable files" do
@@ -58,43 +91,43 @@ module CC::Engine::Analyzers
       end
     end
 
-    describe "#calculate_points(issue)" do
+    describe "#calculate_points(mass)" do
       let(:analyzer) { Ruby::Main.new(engine_config: engine_conf) }
       let(:base_points) { Ruby::Main::BASE_POINTS }
       let(:points_per) { Ruby::Main::POINTS_PER_OVERAGE }
       let(:threshold) { Ruby::Main::DEFAULT_MASS_THRESHOLD }
 
-      context "when issue mass exceeds threshold" do
+      context "when mass exceeds threshold" do
         it "calculates mass overage points" do
-          issue = double(:issue, mass: threshold + 10)
-          overage = issue.mass - threshold
+          mass = threshold + 10
+          overage = mass - threshold
 
           expected_points = base_points + overage * points_per
-          points = analyzer.calculate_points(issue)
+          points = analyzer.calculate_points(mass)
 
           expect(points).to eq(expected_points)
         end
       end
 
-      context "when issue mass is less than threshold" do
+      context "when mass is less than threshold" do
         it "calculates mass overage points" do
-          issue = double(:issue, mass: threshold - 5)
-          overage = issue.mass - threshold
+          mass = threshold - 5
+          overage = mass - threshold
 
           expected_points = base_points + overage * points_per
-          points = analyzer.calculate_points(issue)
+          points = analyzer.calculate_points(mass)
 
           expect(points).to eq(expected_points)
         end
       end
 
-      context "when issue mass equals threshold" do
+      context "when mass equals threshold" do
         it "calculates mass overage points" do
-          issue = double(:issue, mass: threshold)
-          overage = issue.mass - threshold
+          mass = threshold
+          overage = mass - threshold
 
           expected_points = base_points + overage * points_per
-          points = analyzer.calculate_points(issue)
+          points = analyzer.calculate_points(mass)
 
           expect(points).to eq(expected_points)
         end

@@ -38,9 +38,11 @@ module CC
           flay.report(StringIO.new).each do |issue|
             violation = new_violation(issue)
 
-            unless reports.include?(violation.report_name)
-              reports.add(violation.report_name)
-              io.puts "#{violation.format.to_json}\0"
+            violation.occurrences.each do |occurrence|
+              unless reports.include?(occurrence.report_name)
+                reports.add(occurrence.report_name)
+                io.puts "#{occurrence.format.to_json}\0"
+              end
             end
           end
         end

@@ -1,9 +1,8 @@
+require 'spec_helper'
 require 'cc/engine/analyzers/php/main'
 require 'cc/engine/analyzers/reporter'
 require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/file_list'
-require 'flay'
-require 'tmpdir'
 
 RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
   include AnalyzerSpecHelpers
@@ -29,7 +28,9 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
           }
       EOPHP
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
+
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -40,17 +41,18 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 6 },
       })
-      expect(json["remediation_points"]).to eq(176000)
+      expect(json["remediation_points"]).to eq(44_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of `44`/
-      expect(json["fingerprint"]).to eq("667da0e2bab866aa2fe9d014a65d57d9")
+      expect(json["content"]["body"]).to match /This issue has a mass of `11`/
+      expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
     end
 
     it "runs against complex files" do
       FileUtils.cp(fixture_path("symfony_configuration.php"), File.join(@code, "configuration.php"))
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
 
       expect(result).to match "\"type\":\"issue\""
     end
@@ -89,11 +91,6 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         expect(run_engine(engine_conf)).to eq("")
       }.to output(/Skipping file/).to_stderr
     end
-  end
-
-  def printed_issue
-    issue = {"type":"issue","check_name":"Identical code","description":"Similar code found in 1 other location","categories":["Duplication"],"location":{"path":"foo.php","lines":{"begin":2,"end":6}},"remediation_points":176000,"other_locations":[{"path":"foo.php","lines":{"begin":10,"end":14}}],"content":{"body": read_up}}
-    issue.to_json + "\0\n"
   end
 
   def engine_conf

@@ -1,9 +1,8 @@
+require 'spec_helper'
 require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/reporter'
 require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/file_list'
-require 'flay'
-require 'tmpdir'
 
 RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
   include AnalyzerSpecHelpers
@@ -16,7 +15,9 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
           console.log("hello JS!");
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
+
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -27,13 +28,13 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(297000)
+      expect(json["remediation_points"]).to eq(33_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of `99`/
-      expect(json["fingerprint"]).to eq("55ae5d0990647ef496e9e0d315f9727d")
+      expect(json["content"]["body"]).to match /This issue has a mass of `11`/
+      expect(json["fingerprint"]).to eq("c4d29200c20d02297c6f550ad2c87c15")
     end
 
     it "prints an issue for similar code" do
@@ -43,7 +44,9 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
           console.log("helllllllllllllllllo JS!");
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
+
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -54,13 +57,13 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(99000)
+      expect(json["remediation_points"]).to eq(33_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of `33`/
-      expect(json["fingerprint"]).to eq("55ae5d0990647ef496e9e0d315f9727d")
+      expect(json["content"]["body"]).to match /This issue has a mass of `11`/
+      expect(json["fingerprint"]).to eq("d9dab8e4607e2a74da3b9eefb49eacec")
     end
 
     it "skips unparsable files" do
@@ -91,8 +94,8 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
           <a className='button button-primary full' href='#' onClick={this.onSubmit.bind(this)}>Login</a>
     EOJSX
 
-    result = run_engine(engine_conf).strip
-    issues = result.split("\0")
+    issues = run_engine(engine_conf).strip.split("\0")
+
     expect(issues.length).to eq 1
   end
 
