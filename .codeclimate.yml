@@ -8,6 +8,8 @@ engines:
     enabled: true
   duplication:
     enabled: true
+    exclude_fingerprints:
+    - b2dc8dbd27916d8321e298f59fc2f431 # Erubis < ::Erubis::Eruby
     config:
       languages:
       - ruby
