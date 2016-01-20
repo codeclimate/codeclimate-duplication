@@ -11,7 +11,7 @@ machine:
 dependencies:
   override:
     - docker info
-    - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
+    - docker build --rm -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
 
 test:
   override:
