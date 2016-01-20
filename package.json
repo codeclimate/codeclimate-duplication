@@ -2,7 +2,7 @@
   "name": "codeclimate-duplication",
   "version": "0.0.1",
   "description": "Find similar structures in your code",
-  "license": "TODO Add actual license",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git@github.com:codeclimate/codeclimate-duplication.git"
