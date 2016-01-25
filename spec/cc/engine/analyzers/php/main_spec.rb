@@ -29,7 +29,8 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
           }
       EOPHP
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -50,7 +51,8 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
     it "runs against complex files" do
       FileUtils.cp(fixture_path("symfony_configuration.php"), File.join(@code, "configuration.php"))
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
 
       expect(result).to match "\"type\":\"issue\""
     end

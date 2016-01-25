@@ -16,7 +16,8 @@ print("Hello", "python")
 print("Hello", "python")
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -43,7 +44,8 @@ print("Hello It's me", "python")
 print("Hello from the other side", "python")
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")

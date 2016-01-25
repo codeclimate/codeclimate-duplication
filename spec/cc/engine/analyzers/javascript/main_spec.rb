@@ -16,7 +16,8 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
           console.log("hello JS!");
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -43,7 +44,8 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
           console.log("helllllllllllllllllo JS!");
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")

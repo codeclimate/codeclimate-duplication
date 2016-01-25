@@ -8,10 +8,11 @@ module CC
       class Violation
         attr_reader :issue
 
-        def initialize(language_strategy, issue, hashes)
+        def initialize(language_strategy:, issue:, current_sexp:, other_sexps:)
           @language_strategy = language_strategy
           @issue = issue
-          @hashes = hashes
+          @current_sexp = current_sexp
+          @other_sexps = other_sexps
         end
 
         def format
@@ -34,19 +35,7 @@ module CC
 
         private
 
-        attr_reader :language_strategy, :hashes
-
-        def current_sexp
-          @location ||= sorted_hashes.first
-        end
-
-        def sorted_hashes
-          @_sorted_hashes ||= hashes.sort_by(&:file)
-        end
-
-        def other_sexps
-          @other_locations ||= sorted_hashes.drop(1)
-        end
+        attr_reader :language_strategy, :other_sexps, :current_sexp
 
         def check_name
           if issue.identical?

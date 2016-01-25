@@ -1,4 +1,4 @@
-require 'cc/engine/analyzers/violation'
+require 'cc/engine/analyzers/violations'
 require 'cc/engine/analyzers/file_thread_pool'
 require 'thread'
 
@@ -36,11 +36,13 @@ module CC
 
         def report
           flay.report(StringIO.new).each do |issue|
-            violation = new_violation(issue)
+            violations = new_violations(issue)
 
-            unless reports.include?(violation.report_name)
-              reports.add(violation.report_name)
-              io.puts "#{violation.format.to_json}\0"
+            violations.each do |violation|
+              unless reports.include?(violation.report_name)
+                reports.add(violation.report_name)
+                io.puts "#{violation.format.to_json}\0"
+              end
             end
           end
         end
@@ -60,9 +62,9 @@ module CC
 
         attr_reader :engine_config, :language_strategy, :io
 
-        def new_violation(issue)
+        def new_violations(issue)
           hashes = flay.hashes[issue.structural_hash]
-          Violation.new(language_strategy, issue, hashes)
+          Violations.new(language_strategy, issue, hashes)
         end
 
         def flay_options
