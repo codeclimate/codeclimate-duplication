@@ -1,9 +1,7 @@
-require "spec_helper"
-require "cc/engine/analyzers/python/main"
+require 'spec_helper'
+require 'cc/engine/analyzers/python/main'
 require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/file_list'
-require "flay"
-require "tmpdir"
 
 RSpec.describe CC::Engine::Analyzers::Python::Main, in_tmpdir: true do
   include AnalyzerSpecHelpers
@@ -16,7 +14,9 @@ print("Hello", "python")
 print("Hello", "python")
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
+
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -27,13 +27,13 @@ print("Hello", "python")
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(54000)
+      expect(json["remediation_points"]).to eq(1_600_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of `54`/
-      expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
+      expect(json["content"]["body"]).to match /This issue has a mass of `6`/
+      expect(json["fingerprint"]).to eq("3f3d34361bcaef98839d9da6ca9fcee4")
     end
 
     it "prints an issue for similar code" do
@@ -43,7 +43,9 @@ print("Hello It's me", "python")
 print("Hello from the other side", "python")
       EOJS
 
-      result = run_engine(engine_conf).strip
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
+
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
@@ -54,13 +56,13 @@ print("Hello from the other side", "python")
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(18000)
+      expect(json["remediation_points"]).to eq(1_600_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of `18`/
-      expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
+      expect(json["content"]["body"]).to match /This issue has a mass of `6`/
+      expect(json["fingerprint"]).to eq("019118ceed60bf40b35aad581aae1b02")
     end
 
 

@@ -4,8 +4,8 @@ module CC
   module Engine
     module Analyzers
       class ViolationReadUp
-        def initialize(issue)
-          @issue = issue
+        def initialize(mass)
+          @mass = mass
         end
 
         def contents
@@ -14,7 +14,7 @@ module CC
 
         private
 
-        attr_reader :issue
+        attr_reader :mass
 
         TEMPLATE_REL_PATH = "../../../../config/contents/duplicated_code.md.erb"
 
