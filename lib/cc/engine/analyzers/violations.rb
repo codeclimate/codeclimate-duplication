@@ -15,7 +15,7 @@ module CC
             yield Violation.new(
               current_sexp: sexp,
               other_sexps: other_sexps(hashes.dup, i),
-              issue: issue,
+              identical: identical?,
               language_strategy: language_strategy,
             )
           end
@@ -28,6 +28,10 @@ module CC
         def other_sexps(members, i)
           members.delete_at(i)
           members.sort_by(&:file)
+        end
+
+        def identical?
+          issue.identical?
         end
       end
     end

@@ -6,11 +6,9 @@ module CC
   module Engine
     module Analyzers
       class Violation
-        attr_reader :issue
-
-        def initialize(language_strategy:, issue:, current_sexp:, other_sexps:)
+        def initialize(language_strategy:, identical:, current_sexp:, other_sexps:)
           @language_strategy = language_strategy
-          @issue = issue
+          @identical = identical
           @current_sexp = current_sexp
           @other_sexps = other_sexps
         end
@@ -33,20 +31,28 @@ module CC
           "#{current_sexp.file}-#{current_sexp.line}"
         end
 
+        def mass
+          current_sexp.mass
+        end
+
         private
 
         attr_reader :language_strategy, :other_sexps, :current_sexp
 
         def check_name
-          if issue.identical?
+          if identical?
             "Identical code"
           else
             "Similar code"
           end
         end
 
+        def identical?
+          @identical
+        end
+
         def calculate_points
-          language_strategy.calculate_points(issue)
+          language_strategy.calculate_points(mass)
         end
 
         def format_location
@@ -71,7 +77,7 @@ module CC
         end
 
         def content_body
-          @_content_body ||= { "body": ViolationReadUp.new(issue).contents }
+          @_content_body ||= { "body": ViolationReadUp.new(mass).contents }
         end
 
         def fingerprint
