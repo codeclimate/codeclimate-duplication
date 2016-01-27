@@ -34,7 +34,7 @@ module CC::Engine::Analyzers
 
         expect(json["type"]).to eq("issue")
         expect(json["check_name"]).to eq("Similar code")
-        expect(json["description"]).to eq("Similar code found in 1 other location")
+        expect(json["description"]).to eq("Similar code found in 1 other location (mass = 36)")
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
           "path" => "foo.rb",

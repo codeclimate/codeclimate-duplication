@@ -35,7 +35,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Identical code")
-      expect(json["description"]).to eq("Identical code found in 1 other location")
+      expect(json["description"]).to eq("Identical code found in 1 other location (mass = 44)")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
@@ -91,11 +91,6 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         expect(run_engine(engine_conf)).to eq("")
       }.to output(/Skipping file/).to_stderr
     end
-  end
-
-  def printed_issue
-    issue = {"type":"issue","check_name":"Identical code","description":"Similar code found in 1 other location","categories":["Duplication"],"location":{"path":"foo.php","lines":{"begin":2,"end":6}},"remediation_points":176000,"other_locations":[{"path":"foo.php","lines":{"begin":10,"end":14}}],"content":{"body": read_up}}
-    issue.to_json + "\0\n"
   end
 
   def engine_conf
