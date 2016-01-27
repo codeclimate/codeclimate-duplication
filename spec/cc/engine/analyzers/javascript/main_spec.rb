@@ -1,9 +1,8 @@
+require 'spec_helper'
 require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/reporter'
 require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/file_list'
-require 'flay'
-require 'tmpdir'
 
 RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
   include AnalyzerSpecHelpers
@@ -93,8 +92,8 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
           <a className='button button-primary full' href='#' onClick={this.onSubmit.bind(this)}>Login</a>
     EOJSX
 
-    result = run_engine(engine_conf).strip
-    issues = result.split("\0")
+    issues = run_engine(engine_conf).strip.split("\0")
+
     expect(issues.length).to eq 1
   end
 
