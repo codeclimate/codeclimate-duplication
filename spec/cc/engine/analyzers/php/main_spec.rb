@@ -35,7 +35,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Identical code")
-      expect(json["description"]).to eq("Identical code found in 1 other location")
+      expect(json["description"]).to eq("Identical code found in 1 other location (mass = 11)")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
