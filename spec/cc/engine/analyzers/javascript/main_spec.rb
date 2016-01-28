@@ -3,6 +3,7 @@ require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/reporter'
 require 'cc/engine/analyzers/engine_config'
 require 'cc/engine/analyzers/file_list'
+require 'erubis'
 
 RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
   include AnalyzerSpecHelpers
