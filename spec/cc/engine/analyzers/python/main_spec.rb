@@ -32,7 +32,7 @@ print("Hello", "python")
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of `6`/
-      expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
+      expect(json["fingerprint"]).to eq("3f3d34361bcaef98839d9da6ca9fcee4")
     end
 
     it "prints an issue for similar code" do
@@ -60,7 +60,7 @@ print("Hello from the other side", "python")
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of `6`/
-      expect(json["fingerprint"]).to eq("42b832387c997f54a2012efb2159aefc")
+      expect(json["fingerprint"]).to eq("019118ceed60bf40b35aad581aae1b02")
     end
 
 

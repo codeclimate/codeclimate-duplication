@@ -44,7 +44,7 @@ module CC::Engine::Analyzers
           {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
         ])
         expect(json["content"]["body"]).to match /This issue has a mass of `18`/
-        expect(json["fingerprint"]).to eq("f21b75bbd135ec3ae6638364d5c73762")
+        expect(json["fingerprint"]).to eq("b7e46d8f5164922678e48942e26100f2")
       end
 
       it "creates an issue for each occurrence of the duplicated code" do
