@@ -86,7 +86,7 @@ module CC
           digest << "-"
           digest << current_sexp.mass.to_s
           digest << "-"
-          digest << occurrences.to_s
+          digest << check_name
           digest.to_s
         end
 
