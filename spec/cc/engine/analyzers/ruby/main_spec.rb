@@ -88,45 +88,6 @@ module CC::Engine::Analyzers
           expect(run_engine(engine_conf)).to eq("")
         }.to output(/Skipping file/).to_stderr
       end
-
-      it "analyzes erb files" do
-        create_source_file("recipe.erb", <<-EOERB)
-<div class="container">
-  <h1>Select a Category</h1>
-  <ul>
-  <%categories.each do |category| %>
-  <li> <a href= "/category/<%=category.id%>"><%=category.name%> | <%=category.recipes.count%> Recipes </a></li>
-  <%end%>
-
-  <%categories.each do |category| %>
-    <li> <a href= "/category/<%=category.id%>"><%=category.name%> | <%=category.recipes.count%> Recipes </a></li>
-  <%end%>
-
-  <%categories.each do |category| %>
-    <li> <a href= "/category/<%=category.id%>"><%=category.name%> | <%=category.recipes.count%> Recipes </a></li>
-  <%end%>
-</ul>
-</div>
-        EOERB
-
-        issues = run_engine(engine_conf).strip.split("\0")
-        result = issues.first.strip
-        json = JSON.parse(result)
-
-        expect(json["type"]).to eq("issue")
-        expect(json["check_name"]).to eq("Similar code")
-        expect(json["description"]).to eq("Similar code found in 2 other locations (mass = 30)")
-        expect(json["categories"]).to eq(["Duplication"])
-        expect(json["location"]).to eq({
-          "path" => "recipe.erb",
-          "lines" => { "begin" => 4, "end" => 5 },
-        })
-        expect(json["remediation_points"]).to eq(2_700_000)
-        expect(json["other_locations"]).to eq([
-          {"path" => "recipe.erb", "lines" => { "begin" => 8, "end" => 9} },
-          {"path" => "recipe.erb", "lines" => { "begin" => 12, "end" => 13} }
-         ])
-      end
     end
 
     describe "#calculate_points(mass)" do
