@@ -16,7 +16,7 @@ module CC
           ]
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 40
-          BASE_POINTS = 3000
+          POINTS_PER_OVERAGE = 30_000
 
           private
 

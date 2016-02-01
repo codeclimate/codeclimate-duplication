@@ -18,19 +18,10 @@ module CC
 
           ]
           DEFAULT_MASS_THRESHOLD = 18
-          BASE_POINTS = 1_500_000
           POINTS_PER_OVERAGE = 100_000
           TIMEOUT = 300
 
-          def calculate_points(mass)
-            BASE_POINTS + (overage(mass) * POINTS_PER_OVERAGE)
-          end
-
           private
-
-          def overage(mass)
-            mass - mass_threshold
-          end
 
           def process_file(file)
             RubyParser.new.process(File.binread(file), file, TIMEOUT)

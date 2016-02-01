@@ -13,6 +13,8 @@ module CC
           ::RuntimeError,
         ].freeze
 
+        BASE_POINTS = 1_500_000
+
         def initialize(engine_config:)
           @engine_config = engine_config
         end
@@ -37,12 +39,21 @@ module CC
         end
 
         def calculate_points(mass)
-          self.class::BASE_POINTS * mass
+          overage = mass - mass_threshold
+          base_points + (overage * points_per_overage)
         end
 
         private
 
         attr_reader :engine_config
+
+        def base_points
+          self.class::BASE_POINTS
+        end
+
+        def points_per_overage
+          self.class::POINTS_PER_OVERAGE
+        end
 
         def process_file(path)
           raise NoMethodError.new("Subclass must implement `process_file`")
