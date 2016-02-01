@@ -26,6 +26,27 @@ module CC::Engine::Analyzers
 
         expect { runner.run("") }.to raise_error(Timeout::Error)
       end
+
+      context "when Open3 returns a nil status" do
+        it "accepts it if the output parses as JSON" do
+          runner = CommandLineRunner.new("")
+
+          allow(Open3).to receive(:capture3).and_return(["{\"type\":\"issue\"}", "", nil])
+
+          output = runner.run("") { |o| o }
+          expect(output).to eq "{\"type\":\"issue\"}"
+        end
+
+        it "raises if the output was not valid JSON" do
+          runner = CommandLineRunner.new("")
+
+          allow(Open3).to receive(:capture3).and_return(["", "error output", nil])
+
+          expect { runner.run("") }.to raise_error(
+            ParserError, /code 1:\nerror output/
+          )
+        end
+      end
     end
   end
 end
