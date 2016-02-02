@@ -15,7 +15,7 @@ module CC
             "**/*.module"
           ]
           DEFAULT_MASS_THRESHOLD = 10
-          BASE_POINTS = 4_000
+          POINTS_PER_OVERAGE = 100_000
 
           private
 
