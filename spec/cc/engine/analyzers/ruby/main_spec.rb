@@ -8,6 +8,19 @@ module CC::Engine::Analyzers
     include AnalyzerSpecHelpers
 
     describe "#run" do
+      it "handles escaped multibyte characters in regular expressions" do
+        create_source_file("foo.rb", <<-EORUBY)
+          class Helper
+            def self.sub_degrees(str)
+              str.gsub(/\\d+\\°\\s/, "")
+            end
+          end
+        EORUBY
+
+        pending "Potential lexing bug. Ask customer to remove escaping."
+        run_engine(engine_conf).strip.split("\0")
+      end
+
       it "prints an issue" do
         create_source_file("foo.rb", <<-EORUBY)
             describe '#ruby?' do
