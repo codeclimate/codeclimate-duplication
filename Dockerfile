@@ -25,7 +25,6 @@ RUN npm install
 
 USER app
 
-# starting heap, max heap
-ENV JAVA_OPTS="-Xms512m -Xmx1280m"
+ENV JAVA_OPTS="-XX:+UseParNewGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10"
 
 CMD ["/usr/src/app/bin/duplication"]
