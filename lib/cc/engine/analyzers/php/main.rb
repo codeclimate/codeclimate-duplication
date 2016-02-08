@@ -14,7 +14,7 @@ module CC
             "**/*.inc",
             "**/*.module"
           ]
-          DEFAULT_MASS_THRESHOLD = 10
+          DEFAULT_MASS_THRESHOLD = 28
           POINTS_PER_OVERAGE = 100_000
 
           private
