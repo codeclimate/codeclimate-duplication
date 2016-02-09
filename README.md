@@ -1,6 +1,6 @@
 # codeclimate-duplication
 
-[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate-duplication/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate-duplication)
+[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate-duplication/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate-duplication) [![codebeat badge](https://codebeat.co/badges/05f080b5-e2b1-4ca4-a734-6019c53cc491)](https://codebeat.co/projects/github-com-codeclimate-codeclimate-duplication)
 
 `codeclimate-duplication` is an engine that wraps [flay] and supports Ruby,
 Python, JavaScript, and PHP. You can run it on the command line using the Code
