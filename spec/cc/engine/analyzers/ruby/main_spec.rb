@@ -56,7 +56,7 @@ module CC::Engine::Analyzers
         expect(json["other_locations"]).to eq([
           {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
         ])
-        expect(json["content"]["body"]).to match /This issue has a mass of `18`/
+        expect(json["content"]["body"]).to match /This issue has a mass of 18/
         expect(json["fingerprint"]).to eq("b7e46d8f5164922678e48942e26100f2")
       end
 
