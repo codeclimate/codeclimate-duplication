@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/codeclimate/flay.git
-  revision: ac8fd46ba30e9636e8bdc625cf5f849615d505b6
+  revision: 52307b134202cc22d78b26405c7de2d03f8a6ce1
   specs:
     flay (2.6.1)
 
