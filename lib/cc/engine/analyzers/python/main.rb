@@ -11,7 +11,7 @@ module CC
       module Python
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "python"
-          DEFAULT_PATHS = ["**/*.py"]
+          PATTERNS = ["**/*.py"]
           DEFAULT_MASS_THRESHOLD = 32
           POINTS_PER_OVERAGE = 50_000
 

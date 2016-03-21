@@ -9,7 +9,7 @@ module CC
       module Php
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "php"
-          DEFAULT_PATHS = [
+          PATTERNS = [
             "**/*.php",
             "**/*.inc",
             "**/*.module"

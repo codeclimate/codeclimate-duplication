@@ -62,8 +62,7 @@ module CC
         def file_list
           @_file_list ||= ::CC::Engine::Analyzers::FileList.new(
             engine_config: engine_config,
-            default_paths: self.class::DEFAULT_PATHS,
-            language: self.class::LANGUAGE
+            patterns: self.class::PATTERNS,
           )
         end
       end

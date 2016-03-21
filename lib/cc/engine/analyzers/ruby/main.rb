@@ -9,7 +9,7 @@ module CC
       module Ruby
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "ruby"
-          DEFAULT_PATHS = [
+          PATTERNS = [
             "**/*.rb",
             "**/*.rake",
             "**/Rakefile",

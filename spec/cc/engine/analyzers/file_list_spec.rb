@@ -21,65 +21,26 @@ RSpec.describe CC::Engine::Analyzers::FileList do
   end
 
   describe "#files" do
-    it "returns files from default_paths when language is missing paths" do
+    it "expands patterns for directory includes" do
       file_list = ::CC::Engine::Analyzers::FileList.new(
-        engine_config: CC::Engine::Analyzers::EngineConfig.new({}),
-        default_paths: ["**/*.js", "**/*.jsx"],
-        language: "javascript",
+        engine_config: CC::Engine::Analyzers::EngineConfig.new(
+          "include_paths" => ["./"],
+        ),
+        patterns: ["**/*.js", "**/*.jsx"],
       )
 
       expect(file_list.files).to eq(["./foo.js", "./foo.jsx"])
     end
 
-    it "returns files from engine config defined paths when present" do
+    it "filters file includes by patterns" do
       file_list = ::CC::Engine::Analyzers::FileList.new(
-        engine_config: CC::Engine::Analyzers::EngineConfig.new({
-          "config" => {
-            "languages" => {
-              "elixir" => {
-                "paths" => ["**/*.ex"]
-              }
-            }
-          }
-        }),
-        default_paths: ["**/*.js", "**/*.jsx"],
-        language: "elixir",
+        engine_config: CC::Engine::Analyzers::EngineConfig.new(
+          "include_paths" => ["./foo.ex", "./foo.js"],
+        ),
+        patterns: ["**/*.js", "**/*.jsx"],
       )
 
-      expect(file_list.files).to eq(["./foo.ex"])
-    end
-
-    it "returns files from default_paths when languages is an array" do
-      file_list = ::CC::Engine::Analyzers::FileList.new(
-        engine_config: CC::Engine::Analyzers::EngineConfig.new({
-          "config" => {
-            "languages" => [
-              "elixir"
-            ],
-          },
-        }),
-        default_paths: ["**/*.js", "**/*.jsx"],
-        language: "javascript",
-      )
-
-      expect(file_list.files).to eq(["./foo.js", "./foo.jsx"])
-    end
-
-    it "excludes files not in include_paths" do
-      file_list = ::CC::Engine::Analyzers::FileList.new(
-        engine_config: CC::Engine::Analyzers::EngineConfig.new({
-          "include_paths" => ["foo.jsx", "nested"],
-          "config" => {
-            "languages" => [
-              "elixir"
-            ],
-          },
-        }),
-        default_paths: ["**/*.js", "**/*.jsx", "**/*.hs"],
-        language: "javascript",
-      )
-
-      expect(file_list.files).to eq(["./foo.jsx", "./nested/nest.hs"])
+      expect(file_list.files).to eq(["./foo.js"])
     end
   end
 end

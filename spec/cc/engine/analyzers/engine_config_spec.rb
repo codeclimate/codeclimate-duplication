@@ -47,34 +47,6 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
     end
   end
 
-  describe "#paths_for" do
-    it "returns paths values for given language" do
-      engine_config = CC::Engine::Analyzers::EngineConfig.new({
-        "config" => {
-          "languages" => {
-            "EliXiR" => {
-              "paths" => ["/", "/etc"],
-            }
-          }
-        }
-      })
-
-      expect(engine_config.paths_for("elixir")).to eq(["/", "/etc"])
-    end
-
-    it "returns nil if language is an empty key" do
-      engine_config = CC::Engine::Analyzers::EngineConfig.new({
-        "config" => {
-          "languages" => {
-            "EliXiR" => ""
-          }
-        }
-      })
-
-      expect(engine_config.paths_for("elixir")).to be_nil
-    end
-  end
-
   describe "mass_threshold_for" do
     it "returns configured mass threshold as integer" do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
@@ -103,7 +75,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
     end
   end
 
-  describe "exlude_paths" do
+  describe "include_paths" do
     it "returns given include paths" do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
         "include_paths" => ["/tmp"]

@@ -10,7 +10,7 @@ module CC
     module Analyzers
       module Javascript
         class Main < CC::Engine::Analyzers::Base
-          DEFAULT_PATHS = [
+          PATTERNS = [
             "**/*.js",
             "**/*.jsx"
           ]
