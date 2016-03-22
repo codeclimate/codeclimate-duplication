@@ -30,7 +30,7 @@ module CC
             concurrency: engine_config.concurrency
           )
 
-          processed_files_count = 0
+          processed_files_count = Concurrent::AtomicFixnum.new
 
           pool.run do |file|
             debug("Processing file: #{file}")
@@ -38,12 +38,12 @@ module CC
             sexp = language_strategy.run(file)
             process_sexp(sexp)
 
-            processed_files_count += 1
+            processed_files_count.increment
           end
 
           pool.join
 
-          debug("Processed #{processed_files_count} files")
+          debug("Processed #{processed_files_count.value} files")
         end
 
         def report
