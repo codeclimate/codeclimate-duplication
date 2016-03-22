@@ -24,11 +24,11 @@ deployment:
     commands:
       - >
         docker run
-          --env CIRCLE_BUILD_NUM
-          --env CIRCLE_PROJECT_REPONAME
-          --env GCR_JSON_KEY
-          --volume /var/run/docker.sock:/var/run/docker.sock
-          codeclimate/patrick push gcr
+        --env CIRCLE_BUILD_NUM
+        --env CIRCLE_PROJECT_REPONAME
+        --env GCR_JSON_KEY
+        --volume /var/run/docker.sock:/var/run/docker.sock
+        codeclimate/patrick push gcr
 
 notify:
   webhooks:
