@@ -31,7 +31,7 @@ print("Hello", "python")
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of `6`/
+      expect(json["content"]["body"]).to match /This issue has a mass of 6/
       expect(json["fingerprint"]).to eq("3f3d34361bcaef98839d9da6ca9fcee4")
     end
 
@@ -59,7 +59,7 @@ print("Hello from the other side", "python")
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of `6`/
+      expect(json["content"]["body"]).to match /This issue has a mass of 6/
       expect(json["fingerprint"]).to eq("019118ceed60bf40b35aad581aae1b02")
     end
 
