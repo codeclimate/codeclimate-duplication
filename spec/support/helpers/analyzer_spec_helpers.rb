@@ -11,7 +11,7 @@ module AnalyzerSpecHelpers
     io = StringIO.new
 
     engine = described_class.new(engine_config: config)
-    reporter = ::CC::Engine::Analyzers::Reporter.new(double(concurrency: 2), engine, io)
+    reporter = ::CC::Engine::Analyzers::Reporter.new(config, engine, io)
 
     reporter.run
 

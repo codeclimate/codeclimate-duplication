@@ -6,6 +6,10 @@ module CC
           @config = normalize(hash)
         end
 
+        def debug?
+          config.fetch("config", {}).fetch("debug", false)
+        end
+
         def include_paths
           config.fetch("include_paths", ["./"])
         end
