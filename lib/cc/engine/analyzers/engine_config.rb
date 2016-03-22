@@ -26,10 +26,6 @@ module CC
           end
         end
 
-        def paths_for(language)
-          fetch_language(language).fetch("paths", nil)
-        end
-
         private
 
         attr_reader :config

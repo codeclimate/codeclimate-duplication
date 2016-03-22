@@ -4,63 +4,46 @@ module CC
   module Engine
     module Analyzers
       class FileList
-        def initialize(engine_config:, default_paths:, language:)
+        def initialize(engine_config:, patterns:)
           @engine_config = engine_config
-          @default_paths = default_paths
-          @language = language
+          @patterns = patterns
         end
 
         def files
-          Array(matching_files) & Array(included_files)
+          engine_config.include_paths.flat_map do |path|
+            if path.end_with?("/")
+              expand(path)
+            elsif matches?(path)
+              [path]
+            else
+              []
+            end
+          end
         end
 
         private
 
-        attr_reader :engine_config, :default_paths, :language
+        attr_reader :engine_config, :patterns
 
-        def matching_files
-          paths.map do |glob|
-            Dir.glob("./#{glob}").reject do |path|
-              File.directory?(path)
-            end
-          end.flatten
+        def expand(path)
+          globs = patterns.map { |p| File.join(relativize(path), p) }
+
+          Dir.glob(globs)
         end
 
-        def paths
-          engine_paths || default_paths
-        end
-
-        def engine_paths
-          @engine_config.paths_for(language)
-        end
-
-        def included_files
-          include_paths.
-            map { |path| make_relative(path) }.
-            map { |path| collect_files(path) }.flatten.compact
-        end
-
-        def collect_files(path)
-          if File.directory?(path)
-            Dir.entries(path).map do |new_path|
-              next if [".", ".."].include?(new_path)
-              collect_files File.join(path, new_path)
-            end
-          else
-            path
+        def matches?(path)
+          patterns.any? do |p|
+            File.fnmatch?(
+              relativize(p),
+              relativize(path),
+              File::FNM_PATHNAME | File::FNM_EXTGLOB
+            )
           end
         end
 
-        def make_relative(path)
-          if path.match(%r(^\./))
-            path
-          else
-            "./#{path}"
-          end
-        end
-
-        def include_paths
-          engine_config.include_paths
+        # Ensure all paths (and patterns) are ./-prefixed
+        def relativize(path)
+          "./#{path.sub(%r{^\./}, "")}"
         end
       end
     end
