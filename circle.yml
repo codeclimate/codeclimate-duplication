@@ -1,29 +1,34 @@
 machine:
   services:
     - docker
-  environment:
-    CLOUDSDK_CORE_DISABLE_PROMPTS: 1
-    PRIVATE_REGISTRY: us.gcr.io/code_climate
 
 dependencies:
   override:
-    - docker info
-    - docker build -t=$PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM .
+    - >
+      docker run
+      --env CIRCLE_BRANCH
+      --env CIRCLE_PROJECT_REPONAME
+      --env CIRCLE_TOKEN
+      --env GCR_JSON_KEY
+      --volume /var/run/docker.sock:/var/run/docker.sock
+      codeclimate/patrick pull || true
+    - make image
 
 test:
   override:
-    - docker run $PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM bundle exec rake
+    - make citest
 
 deployment:
   registry:
     branch: master
-    owner: codeclimate
     commands:
-      - echo $GCLOUD_JSON_KEY_BASE64 | sed 's/ //g' | base64 -d > /tmp/gcloud_key.json
-      - curl https://sdk.cloud.google.com | bash
-      - gcloud auth activate-service-account --key-file /tmp/gcloud_key.json
-      - gcloud docker -a
-      - docker push $PRIVATE_REGISTRY/$CIRCLE_PROJECT_REPONAME:b$CIRCLE_BUILD_NUM
+      - >
+        docker run
+          --env CIRCLE_BUILD_NUM
+          --env CIRCLE_PROJECT_REPONAME
+          --env GCR_JSON_KEY
+          --volume /var/run/docker.sock:/var/run/docker.sock
+          codeclimate/patrick push gcr
 
 notify:
   webhooks:
