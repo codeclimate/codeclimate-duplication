@@ -16,8 +16,12 @@ module CC
         end
 
         def run
+          debug("Processing #{language_strategy.files.count} files concurrency=#{engine_config.concurrency}")
+
           process_files
           report
+
+          debug("Reported #{reports.size} violations...")
         end
 
         def process_files
@@ -26,12 +30,20 @@ module CC
             concurrency: engine_config.concurrency
           )
 
+          processed_files_count = 0
+
           pool.run do |file|
+            debug("Processing file: #{file}")
+
             sexp = language_strategy.run(file)
             process_sexp(sexp)
+
+            processed_files_count += 1
           end
 
           pool.join
+
+          debug("Processed #{processed_files_count} files")
         end
 
         def report
@@ -39,6 +51,8 @@ module CC
             violations = new_violations(issue)
 
             violations.each do |violation|
+              debug("Violation name=#{violation.report_name} mass=#{violation.mass}")
+
               unless reports.include?(violation.report_name)
                 reports.add(violation.report_name)
                 io.puts "#{violation.format.to_json}\0"
@@ -79,6 +93,10 @@ module CC
             fuzzy: false,
             only: nil
           }
+        end
+
+        def debug(message)
+          $stderr.puts(message) if engine_config.debug?
         end
       end
     end
