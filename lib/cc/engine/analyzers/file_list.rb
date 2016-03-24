@@ -28,11 +28,11 @@ module CC
         def expand(path)
           globs = patterns.map { |p| File.join(relativize(path), p) }
 
-          Dir.glob(globs)
+          Dir.glob(globs).select { |f| File.file?(f) }
         end
 
         def matches?(path)
-          patterns.any? do |p|
+          File.file?(path) && patterns.any? do |p|
             File.fnmatch?(
               relativize(p),
               relativize(path),

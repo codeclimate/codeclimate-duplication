@@ -42,5 +42,20 @@ RSpec.describe CC::Engine::Analyzers::FileList do
 
       expect(file_list.files).to eq(["./foo.js"])
     end
+
+    it "does not emit directories even if they match the patterns" do
+      file_list = ::CC::Engine::Analyzers::FileList.new(
+        engine_config: CC::Engine::Analyzers::EngineConfig.new(
+          "include_paths" => ["./"],
+        ),
+        patterns: ["**/*.js"],
+      )
+
+      Dir.mkdir("vendor.js")
+      File.write(File.join(@tmp_dir, "vendor.js", "vendor.src.js"), "")
+
+      expect(file_list.files).to include("./vendor.js/vendor.src.js")
+      expect(file_list.files).not_to include("./vendor.js")
+    end
   end
 end
