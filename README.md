@@ -6,6 +6,11 @@
 Python, JavaScript, and PHP. You can run it on the command line using the Code
 Climate CLI or on our [hosted analysis platform][codeclimate].
 
+## What is duplication?
+
+The duplication engine's algorithm can be surprising, but it's actually very
+simple. We have a [docs page][what-is-duplication] explaining the algorithm.
+
 ## Installation
 
 1. Install the [Code Climate CLI][cli], if you haven't already.
@@ -64,5 +69,6 @@ Note that you have the update the YAML structure under the `languages` key to
 the Hash type to support extra configuration.
 
 [codeclimate]: https://codeclimate.com/dashboard
+[what-is-duplication]: https://docs.codeclimate.com/docs/duplication-concept
 [flay]: https://github.com/seattlerb/flay
 [cli]: https://github.com/codeclimate/codeclimate
