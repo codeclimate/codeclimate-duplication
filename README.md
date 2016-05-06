@@ -68,7 +68,22 @@ engines:
 Note that you have the update the YAML structure under the `languages` key to
 the Hash type to support extra configuration.
 
+### Excluding files and directories
+
+As with any other Code Climate engine, you can exclude certain files or
+directories from being analyzed. For more information, see
+[*Exclude paths for specific engines*][exclude-files-engine] in our
+documentation.
+
+```yaml
+engines:
+  duplication:
+    exclude_paths:
+    - examples/
+```
+
 [codeclimate]: https://codeclimate.com/dashboard
 [what-is-duplication]: https://docs.codeclimate.com/docs/duplication-concept
 [flay]: https://github.com/seattlerb/flay
 [cli]: https://github.com/codeclimate/codeclimate
+[exclude-files-engine]: https://docs.codeclimate.com/docs/excluding-files-and-folders#section-exclude-paths-for-specific-engines
