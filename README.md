@@ -70,7 +70,10 @@ the Hash type to support extra configuration.
 
 ### Excluding files and directories
 
-As with any other Codeclimate engine, you can exclude certain files or directories from being analyzed. For more information, [see *Exclude paths for specific engines* on our documentation][exclude-files-engine].
+As with any other Code Climate engine, you can exclude certain files or
+directories from being analyzed. For more information, see
+[*Exclude paths for specific engines*][exclude-files-engine] in our
+documentation.
 
 ```yaml
 engines:
