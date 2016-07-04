@@ -24,8 +24,6 @@ COPY vendor/php-parser/composer.lock /usr/src/app/vendor/php-parser/
 RUN bundle install -j 4
 RUN cd /usr/src/app/vendor/php-parser/ && composer install --prefer-source --no-interaction
 
-CMD ["/bin/sh"]
-
 RUN adduser app -u 9000 -D
 
 COPY . /usr/src/app
