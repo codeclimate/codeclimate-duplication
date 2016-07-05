@@ -1,23 +1,30 @@
-FROM jruby:9.0.3-jdk
+FROM alpine:3.4
+
+RUN apk add --no-cache \
+  build-base \
+  git \
+  ruby-dev \
+  ruby-bundler \
+  nodejs-lts \
+  curl \
+  php5 \
+  php5-openssl \
+  php5-json \ 
+  php5-phar \
+  python3 \
+  && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 WORKDIR /usr/src/app/
 
 COPY Gemfile /usr/src/app/
 COPY Gemfile.lock /usr/src/app/
-
 COPY vendor/php-parser/composer.json /usr/src/app/vendor/php-parser/
 COPY vendor/php-parser/composer.lock /usr/src/app/vendor/php-parser/
 
-RUN curl --silent --location https://deb.nodesource.com/setup_5.x | bash - && \
-    apt-get update && apt-get install -y nodejs python openssh-client php5-cli php5-json
-RUN gem install bundler --no-ri --no-rdoc && \
-    bundle install -j 4 && \
-    curl -sS https://getcomposer.org/installer | php
-
-RUN mv composer.phar /usr/local/bin/composer
+RUN bundle install -j 4
 RUN cd /usr/src/app/vendor/php-parser/ && composer install --prefer-source --no-interaction
 
-RUN adduser app -u 9000
+RUN adduser app -u 9000 -D
 
 COPY . /usr/src/app
 RUN chown -R app .
