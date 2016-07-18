@@ -64,6 +64,19 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       expect(json["fingerprint"]).to eq("d9dab8e4607e2a74da3b9eefb49eacec")
     end
 
+    it "handles ES6 spread params" do
+      create_source_file("foo.jsx", <<-EOJS)
+        const ThingClass = React.createClass({
+          propTypes: {
+            ...OtherThing.propTypes,
+            otherProp: "someVal"
+          }
+        });
+      EOJS
+
+      expect { run_engine(engine_conf) }.not_to output(/Skipping file/).to_stderr
+    end
+
     it "skips unparsable files" do
       create_source_file("foo.js", <<-EOJS)
         function () { do(); // missing closing brace
