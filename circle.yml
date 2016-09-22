@@ -20,7 +20,7 @@ test:
 
 deployment:
   registry:
-    branch: master
+    branch: /master|channel\/[\w-]+/
     commands:
       - >
         docker run
