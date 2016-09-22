@@ -7,6 +7,8 @@ module CC
         DEFAULT_CONCURRENCY = 2
         MAX_CONCURRENCY = 2
 
+        Thread.abort_on_exception = true
+
         def initialize(files, concurrency: DEFAULT_CONCURRENCY)
           @files = files
           @concurrency = concurrency
