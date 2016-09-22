@@ -10,7 +10,6 @@ module CC
           ::Errno::ENOENT,
           ::Racc::ParseError,
           ::RubyParser::SyntaxError,
-          ::RuntimeError,
         ].freeze
 
         BASE_POINTS = 1_500_000
