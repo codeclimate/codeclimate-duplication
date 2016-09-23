@@ -27,5 +27,8 @@ RUN chown -R app .
 
 USER app
 
+WORKDIR /code
+VOLUME /code
+
 ENV JAVA_OPTS="-XX:+UseParallelGC -XX:MinHeapFreeRatio=40 -XX:MaxHeapFreeRatio=70 -Xmx1024m"
 CMD ["/usr/src/app/bin/duplication"]
