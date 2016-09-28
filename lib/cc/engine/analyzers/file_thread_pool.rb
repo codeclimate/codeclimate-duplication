@@ -7,14 +7,13 @@ module CC
         DEFAULT_CONCURRENCY = 2
         MAX_CONCURRENCY = 2
 
-        Thread.abort_on_exception = true
-
         def initialize(files, concurrency: DEFAULT_CONCURRENCY)
           @files = files
           @concurrency = concurrency
         end
 
         def run(&block)
+          Thread.abort_on_exception = true
           queue = build_queue
           lock = Mutex.new
 
@@ -25,6 +24,8 @@ module CC
               end
             end
           end
+        ensure
+          Thread.abort_on_exception = false
         end
 
         def join
