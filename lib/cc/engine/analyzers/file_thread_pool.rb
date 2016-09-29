@@ -7,11 +7,6 @@ module CC
         DEFAULT_CONCURRENCY = 2
         MAX_CONCURRENCY = 2
 
-        class JumpyThread < Thread
-        end
-
-        JumpyThread.abort_on_exception = true
-
         def initialize(files, concurrency: DEFAULT_CONCURRENCY)
           @files = files
           @concurrency = concurrency
@@ -22,11 +17,13 @@ module CC
           lock = Mutex.new
 
           @workers = Array.new(thread_count) do
-            JumpyThread.new do
+            t = Thread.new do
               while (item = next_item(queue, lock))
                 yield item
               end
             end
+            t.abort_on_exception = true
+            t
           end
         end
 
