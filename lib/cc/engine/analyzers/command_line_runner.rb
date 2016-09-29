@@ -13,6 +13,7 @@ module CC
         end
 
         def run(input)
+          Thread.abort_on_exception = false
           Timeout.timeout(timeout) do
             out, err, status = Open3.capture3(command, stdin_data: input)
 
@@ -24,6 +25,8 @@ module CC
               raise ::CC::Engine::Analyzers::ParserError, "`#{command}` exited with code #{status.exitstatus}:\n#{err}"
             end
           end
+        ensure
+          Thread.abort_on_exception = true
         end
 
         private
