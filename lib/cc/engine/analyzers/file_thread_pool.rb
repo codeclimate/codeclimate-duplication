@@ -16,8 +16,8 @@ module CC
           queue = build_queue
           lock = Mutex.new
 
-          @workers = thread_count.times.map do
-            Thread.new do
+          @workers = Array.new(thread_count) do
+            with_thread_abortion do
               while (item = next_item(queue, lock))
                 yield item
               end
@@ -53,6 +53,13 @@ module CC
           else
             DEFAULT_CONCURRENCY
           end
+        end
+
+        def with_thread_abortion
+          t = Thread.new do
+            yield
+          end
+          (t.abort_on_exception = true) && t
         end
       end
     end
