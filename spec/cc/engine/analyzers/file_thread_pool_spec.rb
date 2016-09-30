@@ -3,9 +3,8 @@ require "cc/engine/analyzers/file_thread_pool"
 
 RSpec.describe CC::Engine::Analyzers::FileThreadPool do
   describe "#run" do
-    let(:thread) { Thread.new {} }
     it "uses default count of threads when concurrency is not specified" do
-      allow(Thread).to receive(:new).and_return(thread)
+      allow(Thread).to receive(:new)
 
       pool = CC::Engine::Analyzers::FileThreadPool.new([])
       pool.run  {}
@@ -16,7 +15,7 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
     end
 
     it "uses default concurrency when concurrency is over max" do
-      allow(Thread).to receive(:new).and_return(thread)
+      allow(Thread).to receive(:new)
 
       run_pool_with_concurrency(
         CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY + 2
@@ -28,7 +27,7 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
     end
 
     it "uses default concucurrency when concucurrency is under 1" do
-      allow(Thread).to receive(:new).and_return(thread)
+      allow(Thread).to receive(:new)
 
       run_pool_with_concurrency(-2)
 
@@ -38,7 +37,7 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
     end
 
     it "uses supplied concurrency when valid" do
-      allow(Thread).to receive(:new).and_return(thread)
+      allow(Thread).to receive(:new)
 
       run_pool_with_concurrency(1)
 
@@ -57,14 +56,6 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
       expect(results).to include("cba")
       expect(results).to include("321")
       expect(results).to include("zyx")
-    end
-
-    it "aborts on a thread exception" do
-      allow(Thread).to receive(:new).and_return(thread)
-
-      run_pool_with_concurrency(1)
-
-      expect(thread.abort_on_exception).to eq(true)
     end
   end
 
