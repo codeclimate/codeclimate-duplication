@@ -27,6 +27,6 @@ RUN chown -R app .
 
 USER app
 
-ENV JAVA_OPTS="-XX:+UseParNewGC"
+ENV JAVA_OPTS="-XX:+UseParNewGC -Xmx1024m"
 
 CMD ["/usr/src/app/bin/duplication"]
