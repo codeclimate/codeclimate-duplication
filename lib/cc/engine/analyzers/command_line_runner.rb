@@ -20,6 +20,8 @@ module CC
 
             if status.success?
               yield out
+            elsif err.lines.any? { |line| line.include?("timeout/Timeout.java") }
+              raise Timeout::Error
             else
               raise ::CC::Engine::Analyzers::ParserError, "`#{command}` exited with code #{status.exitstatus}:\n#{err}"
             end
