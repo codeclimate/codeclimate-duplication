@@ -22,7 +22,11 @@ module CC
           end
 
           def parser(path)
-            ::CC::Engine::Analyzers::Python::Parser.new(self, File.binread(path), path)
+            ::CC::Engine::Analyzers::Python::Parser.new(python_version, File.binread(path), path)
+          end
+
+          def python_version
+            engine_config.languages.fetch("python", {}).fetch("python_version", 2)
           end
         end
       end
