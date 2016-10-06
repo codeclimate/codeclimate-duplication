@@ -18,7 +18,11 @@ module CC
           private
 
           def process_file(path)
-            Node.new(::CC::Engine::Analyzers::Python::Parser.new(File.binread(path), path).parse.syntax_tree, path).format
+            Node.new(parser(path).parse.syntax_tree, path).format
+          end
+
+          def parser(path)
+            ::CC::Engine::Analyzers::Python::Parser.new(self, File.binread(path), path)
           end
         end
       end

@@ -9,7 +9,8 @@ module CC
         class Parser < ParserBase
           attr_reader :code, :filename, :syntax_tree
 
-          def initialize(code, filename)
+          def initialize(analyzer, code, filename)
+            @analyzer = analyzer
             @code = code
             @filename = filename
           end
@@ -23,9 +24,17 @@ module CC
             self
           end
 
+          private
+
+          attr_reader :analyzer
+
           def python_command
             file = File.expand_path(File.dirname(__FILE__)) + '/parser.py'
-            "python #{file}"
+            "#{python_binary} #{file}"
+          end
+
+          def python_binary
+            "python2"
           end
         end
       end
