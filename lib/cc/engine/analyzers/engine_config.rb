@@ -30,10 +30,6 @@ module CC
           end
         end
 
-        private
-
-        attr_reader :config
-
         def fetch_language(language)
           language = config.
             fetch("languages", {}).
@@ -45,6 +41,10 @@ module CC
             {}
           end
         end
+
+        private
+
+        attr_reader :config
 
         def normalize(hash)
           hash.tap do |config|
