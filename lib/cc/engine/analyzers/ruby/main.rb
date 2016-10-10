@@ -15,7 +15,6 @@ module CC
             "**/Rakefile",
             "**/Gemfile",
             "**/*.gemspec"
-
           ]
           DEFAULT_MASS_THRESHOLD = 18
           POINTS_PER_OVERAGE = 100_000

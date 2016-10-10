@@ -86,6 +86,15 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         expect(run_engine(engine_conf)).to eq("")
       }.to output(/Skipping file/).to_stderr
     end
+
+    it "skips minified files" do
+      path = fixture_path("huge_js_file.js")
+      create_source_file("foo.js", File.read(path))
+
+      expect {
+        expect(run_engine(engine_conf)).to eq("")
+      }.to output(/Skipping file/).to_stderr
+    end
   end
 
   it "does not flag duplicate comments" do
@@ -102,7 +111,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
   it "does not report the same line for multiple issues" do
     create_source_file("dup.jsx", <<-EOJSX)
-          <a className='button button-primary full' href='#' onClick={this.onSubmit.bind(this)}>Login</a>
+<a className='button button-primary full' href='#' onClick={this.onSubmit.bind(this)}>Login</a>
     EOJSX
 
     issues = run_engine(engine_conf).strip.split("\0")
