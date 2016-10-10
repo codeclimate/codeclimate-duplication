@@ -2,6 +2,8 @@
 engines:
   rubocop:
     enabled: true
+    exclude_fingerprints:
+      - 15684e77a6036a56ca2db7cbb958ab08 # long method
   eslint:
     enabled: true
   bundler-audit:

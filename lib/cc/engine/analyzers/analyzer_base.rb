@@ -20,7 +20,12 @@ module CC
         end
 
         def run(file)
-          process_file(file)
+          if (skip_reason = skip?(file))
+            $stderr.puts("Skipping file #{file} because #{skip_reason}")
+          else
+            $stderr.puts("Processing #{file}")
+            process_file(file)
+          end
         rescue => ex
           if RESCUABLE_ERRORS.map { |klass| ex.instance_of?(klass) }.include?(true)
             $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
@@ -64,6 +69,10 @@ module CC
             engine_config: engine_config,
             patterns: self.class::PATTERNS,
           )
+        end
+
+        def skip?(_path)
+          nil
         end
       end
     end
