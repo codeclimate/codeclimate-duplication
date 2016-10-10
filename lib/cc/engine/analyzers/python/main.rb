@@ -27,7 +27,7 @@ module CC
           end
 
           def python_version
-            engine_config.languages.fetch("python", {}).fetch("python_version", DEFAULT_PYTHON_VERSION)
+            engine_config.fetch_language(LANGUAGE).fetch("python_version", DEFAULT_PYTHON_VERSION)
           end
         end
       end

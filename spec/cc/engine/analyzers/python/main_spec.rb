@@ -117,6 +117,23 @@ def c(thing: str):
     end
   end
 
+  it "handles an empty yml key in config" do
+      create_source_file("foo.py", <<-EOPY)
+def a(thing):
+  print("Hello", thing)
+      EOPY
+
+      conf = CC::Engine::Analyzers::EngineConfig.new({
+      "config" => {
+        "languages" => {
+          "python" => ""
+        }
+      }
+    })
+
+    expect(run_engine(engine_conf)).to eq("")
+  end
+
   def engine_conf
     CC::Engine::Analyzers::EngineConfig.new({
       "config" => {
