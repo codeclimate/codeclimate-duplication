@@ -7,7 +7,7 @@ ini_set('xdebug.max_nesting_level', 2000);
 
 try {
 
-  $parser = new PhpParser\Parser(new PhpParser\Lexer\Emulative);
+  $parser = (new PhpParser\ParserFactory)->create(PhpParser\ParserFactory::PREFER_PHP7);
   $code = file_get_contents("php://stdin");
   $stmts = $parser->parse($code);
 
