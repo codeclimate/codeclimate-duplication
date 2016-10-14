@@ -25,8 +25,14 @@ Style/Documentation:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
 # Use a trailing comma to keep diffs clean when elements are inserted or removed
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
 
 # We avoid GuardClause because it can result in "suprise return"
@@ -51,10 +57,10 @@ Style/GlobalVars:
   - "$mongo"
   - "$rollout"
 
-# Allow $! in config/initializers
+# Using english names requires loading an extra module, which is annoying, so
+# we prefer the perl names for consistency.
 Style/SpecialGlobalVars:
-  Exclude:
-  - config/initializers/**/*
+  EnforcedStyle: use_perl_names
 
 # We have common cases where has_ and have_ make sense
 Style/PredicateName:
@@ -65,8 +71,10 @@ Style/PredicateName:
 # We use %w[ ], not %w( ) because the former looks like an array
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
-    "%w": []
-    "%W": []
+    "%i": "[]"
+    "%I": "[]"
+    "%w": "[]"
+    "%W": "[]"
 
 # Allow "trivial" accessors when defined as a predicate? method
 Style/TrivialAccessors:
@@ -77,6 +85,40 @@ Style/Next:
 
 # We think it's OK to use the "extend self" module pattern
 Style/ModuleFunction:
+  Enabled: false
+
+# Disallow extra spacing for token alignment
+Style/ExtraSpacing:
+  AllowForAlignment: false
+
+# and/or in conditionals has no meaningful difference (only gotchas), so we
+# disallow them there. When used for control flow, the difference in precedence
+# can make for a less noisy expression, as in:
+#
+#   x = find_x or raise XNotFound
+#
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Style/MultilineOperationIndentation:
+  EnforcedStyle: indented
+
+Style/AlignHash:
+  EnforcedLastArgumentHashStyle: ignore_implicit
+
+# This has the behavior we want, but it has a bug in it which produces a lot of false positives
+# https://github.com/bbatsov/rubocop/issues/3462
+# MultilineMethodCallBraceLayout:
+#   EnforcedStyle: new_line
+
+################################################################################
+# Performance
+################################################################################
+
+Performance/RedundantMerge:
   Enabled: false
 
 ################################################################################
