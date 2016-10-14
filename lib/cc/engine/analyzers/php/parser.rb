@@ -33,7 +33,7 @@ module CC
           def parser_path
             relative_path = "../../../../../vendor/php-parser/parser.php"
             File.expand_path(
-              File.join(File.dirname(__FILE__), relative_path)
+              File.join(File.dirname(__FILE__), relative_path),
             )
           end
         end

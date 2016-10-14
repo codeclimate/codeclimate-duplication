@@ -10,7 +10,7 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
       pool.run  {}
 
       expect(Thread).to have_received(:new).exactly(
-        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY
+        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY,
       ).times
     end
 
@@ -18,11 +18,11 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
       allow(Thread).to receive(:new)
 
       run_pool_with_concurrency(
-        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY + 2
+        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY + 2,
       )
 
       expect(Thread).to have_received(:new).exactly(
-        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY
+        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY,
       ).times
     end
 
@@ -32,7 +32,7 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
       run_pool_with_concurrency(-2)
 
       expect(Thread).to have_received(:new).exactly(
-        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY
+        CC::Engine::Analyzers::FileThreadPool::DEFAULT_CONCURRENCY,
       ).times
     end
 
@@ -62,7 +62,7 @@ RSpec.describe CC::Engine::Analyzers::FileThreadPool do
   def run_pool_with_concurrency(concurrency)
       pool = CC::Engine::Analyzers::FileThreadPool.new(
         [],
-        concurrency: concurrency
+        concurrency: concurrency,
       )
       pool.run  {}
   end

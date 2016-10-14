@@ -12,7 +12,7 @@ module CC
           PATTERNS = [
             "**/*.php",
             "**/*.inc",
-            "**/*.module"
+            "**/*.module",
           ]
           DEFAULT_MASS_THRESHOLD = 28
           POINTS_PER_OVERAGE = 100_000

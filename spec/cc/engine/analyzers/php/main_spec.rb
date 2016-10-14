@@ -108,10 +108,10 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       'config' => {
         'languages' => {
           'php' => {
-            'mass_threshold' => 5
-          }
-        }
-      }
+            'mass_threshold' => 5,
+          },
+        },
+      },
     })
   end
 end
