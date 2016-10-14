@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
 require "cc/engine/duplication"
 
 if File.exists?("/config.json")
