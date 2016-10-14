@@ -12,7 +12,7 @@ module CC
         class Main < CC::Engine::Analyzers::Base
           PATTERNS = [
             "**/*.js",
-            "**/*.jsx"
+            "**/*.jsx",
           ]
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 40

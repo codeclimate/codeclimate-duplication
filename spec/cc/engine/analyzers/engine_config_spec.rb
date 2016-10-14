@@ -9,14 +9,14 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "config" => {
           "languages" => {
             "EliXiR" => {
-              "mass_threshold" => 15
-            }
-          }
-        }
+              "mass_threshold" => 15,
+            },
+          },
+        },
       })
 
-      expect(engine_config.languages,).to eq({
-        "elixir" =>  { "mass_threshold" => 15 }
+      expect(engine_config.languages).to eq({
+        "elixir" =>  { "mass_threshold" => 15 },
       })
     end
 
@@ -25,14 +25,14 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "config" => {
           "languages" => [
             "EliXiR",
-            "RubY"
-          ]
-        }
+            "RubY",
+          ],
+        },
       })
 
       expect(engine_config.languages).to eq({
         "elixir" =>  {},
-        "ruby" => {}
+        "ruby" => {},
       })
     end
 
@@ -40,7 +40,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
         "config" => {
           "languages" => "potato",
-        }
+        },
       })
 
       expect(engine_config.languages).to eq({})
@@ -53,10 +53,10 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "config" => {
           "languages" => {
             "EliXiR" => {
-              "mass_threshold" => "13"
-            }
-          }
-        }
+              "mass_threshold" => "13",
+            },
+          },
+        },
       })
 
       expect(engine_config.mass_threshold_for("elixir")).to eq(13)
@@ -67,8 +67,8 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "config" => {
           "languages" => {
             "ruby" => "",
-          }
-        }
+          },
+        },
       })
 
       expect(engine_config.mass_threshold_for("ruby")).to be_nil
@@ -78,7 +78,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
   describe "include_paths" do
     it "returns given include paths" do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
-        "include_paths" => ["/tmp"]
+        "include_paths" => ["/tmp"],
       })
 
       expect(engine_config.include_paths).to eq(["/tmp"])

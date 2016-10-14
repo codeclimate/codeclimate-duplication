@@ -27,7 +27,7 @@ module CC
         def process_files
           pool = FileThreadPool.new(
             language_strategy.files,
-            concurrency: engine_config.concurrency
+            concurrency: engine_config.concurrency,
           )
 
           processed_files_count = Concurrent::AtomicFixnum.new
@@ -91,7 +91,7 @@ module CC
             timeout: TIMEOUT,
             liberal: false,
             fuzzy: false,
-            only: nil
+            only: nil,
           }
         end
 

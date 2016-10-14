@@ -36,7 +36,7 @@ module CC
             File.fnmatch?(
               relativize(p),
               relativize(path),
-              File::FNM_PATHNAME | File::FNM_EXTGLOB
+              File::FNM_PATHNAME | File::FNM_EXTGLOB,
             )
           end
         end

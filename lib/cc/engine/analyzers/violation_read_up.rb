@@ -20,7 +20,7 @@ module CC
 
         def template_path
           File.expand_path(
-            File.join(File.dirname(__FILE__), TEMPLATE_REL_PATH)
+            File.join(File.dirname(__FILE__), TEMPLATE_REL_PATH),
           )
         end
       end

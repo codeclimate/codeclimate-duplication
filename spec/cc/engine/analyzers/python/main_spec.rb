@@ -29,7 +29,7 @@ print("Hello", "python")
       expect(json["remediation_points"]).to eq(1_600_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
-        {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
+        {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 6/
       expect(json["fingerprint"]).to eq("3f3d34361bcaef98839d9da6ca9fcee4")
@@ -57,7 +57,7 @@ print("Hello from the other side", "python")
       expect(json["remediation_points"]).to eq(1_600_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
-        {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} }
+        {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 6/
       expect(json["fingerprint"]).to eq("019118ceed60bf40b35aad581aae1b02")
@@ -80,10 +80,10 @@ def c(thing: str):
         "languages" => {
           "python" => {
             "mass_threshold" => 4,
-            "python_version" => 3
-          }
-        }
-      }
+            "python_version" => 3,
+          },
+        },
+      },
     })
       issues = run_engine(conf).strip.split("\0")
       result = issues.first.strip
@@ -100,7 +100,7 @@ def c(thing: str):
       expect(json["remediation_points"]).to eq(2_100_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 4, "end" => 5 } },
-        {"path" => "foo.py", "lines" => { "begin" => 7, "end" => 8 } }
+        {"path" => "foo.py", "lines" => { "begin" => 7, "end" => 8 } },
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 16/
       expect(json["fingerprint"]).to eq("607cf2d16d829e667c5f34534197d14c")
@@ -126,9 +126,9 @@ def a(thing):
       conf = CC::Engine::Analyzers::EngineConfig.new({
       "config" => {
         "languages" => {
-          "python" => ""
-        }
-      }
+          "python" => "",
+        },
+      },
     })
 
     expect(run_engine(engine_conf)).to eq("")
@@ -139,10 +139,10 @@ def a(thing):
       "config" => {
         "languages" => {
           "python" => {
-            "mass_threshold" => 4
-          }
-        }
-      }
+            "mass_threshold" => 4,
+          },
+        },
+      },
     })
   end
 end

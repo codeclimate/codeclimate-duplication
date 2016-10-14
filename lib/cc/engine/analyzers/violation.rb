@@ -23,7 +23,7 @@ module CC
             "remediation_points": calculate_points,
             "other_locations": format_other_locations,
             "content": content_body,
-            "fingerprint": fingerprint
+            "fingerprint": fingerprint,
           }
         end
 

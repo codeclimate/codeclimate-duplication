@@ -14,7 +14,7 @@ module CC
             "**/*.rake",
             "**/Rakefile",
             "**/Gemfile",
-            "**/*.gemspec"
+            "**/*.gemspec",
 
           ]
           DEFAULT_MASS_THRESHOLD = 18
