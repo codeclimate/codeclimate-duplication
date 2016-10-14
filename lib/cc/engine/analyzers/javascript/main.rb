@@ -13,7 +13,7 @@ module CC
           PATTERNS = [
             "**/*.js",
             "**/*.jsx",
-          ]
+          ].freeze
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 40
           POINTS_PER_OVERAGE = 30_000

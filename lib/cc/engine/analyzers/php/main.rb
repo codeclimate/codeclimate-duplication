@@ -13,7 +13,7 @@ module CC
             "**/*.php",
             "**/*.inc",
             "**/*.module",
-          ]
+          ].freeze
           DEFAULT_MASS_THRESHOLD = 28
           POINTS_PER_OVERAGE = 100_000
 
