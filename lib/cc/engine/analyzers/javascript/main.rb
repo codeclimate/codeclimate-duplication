@@ -17,6 +17,7 @@ module CC
           ].freeze
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 40
+          DEFAULT_COUNT_THRESHOLD = 2
           POINTS_PER_OVERAGE = 30_000
 
           private

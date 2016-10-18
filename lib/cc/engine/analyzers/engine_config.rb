@@ -30,6 +30,11 @@ module CC
           end
         end
 
+        def count_threshold_for(language)
+          threshold = fetch_language(language).fetch("count_threshold", nil)
+          threshold ? threshold.to_i : threshold
+        end
+
         def fetch_language(language)
           language = config.
             fetch("languages", {}).

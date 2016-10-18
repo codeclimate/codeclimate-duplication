@@ -43,6 +43,10 @@ module CC
           engine_config.mass_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_MASS_THRESHOLD
         end
 
+        def count_threshold
+          engine_config.count_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_COUNT_THRESHOLD
+        end
+
         def calculate_points(mass)
           overage = mass - mass_threshold
           base_points + (overage * points_per_overage)

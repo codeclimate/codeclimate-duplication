@@ -14,6 +14,7 @@ module CC
           PATTERNS = ["**/*.py"]
           DEFAULT_MASS_THRESHOLD = 32
           DEFAULT_PYTHON_VERSION = 2
+          DEFAULT_COUNT_THRESHOLD = 2
           POINTS_PER_OVERAGE = 50_000
 
           private

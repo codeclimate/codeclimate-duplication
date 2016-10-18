@@ -17,6 +17,7 @@ module CC
             "**/*.gemspec",
           ].freeze
           DEFAULT_MASS_THRESHOLD = 18
+          DEFAULT_COUNT_THRESHOLD = 2
           POINTS_PER_OVERAGE = 100_000
           TIMEOUT = 300
 
