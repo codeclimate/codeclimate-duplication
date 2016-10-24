@@ -25,7 +25,7 @@ module CC
 
           def js_command
             file = File.expand_path(File.dirname(__FILE__)) + '/parser.js'
-            "node #{file}"
+            ["node", file.to_s]
           end
 
           def strip_shebang(code)

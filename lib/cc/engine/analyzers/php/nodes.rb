@@ -1,4 +1,5 @@
 require "cc/engine/analyzers/php/visitor"
+require "ostruct"
 
 module CC
   module Engine

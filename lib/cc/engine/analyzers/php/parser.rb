@@ -1,4 +1,5 @@
 require "cc/engine/analyzers/command_line_runner"
+require "cc/engine/analyzers/parser_base"
 require "cc/engine/analyzers/php/ast"
 require "cc/engine/analyzers/php/nodes"
 
@@ -15,7 +16,8 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new("php #{parser_path}")
+            cmd = ["php", parser_path.to_s]
+            runner = CommandLineRunner.new(cmd)
             runner.run(code) do |output|
               json = parse_json(output)
 

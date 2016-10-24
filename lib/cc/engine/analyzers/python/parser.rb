@@ -30,7 +30,7 @@ module CC
 
           def python_command
             file = File.expand_path(File.dirname(__FILE__)) + "/parser.py"
-            "#{python_binary} #{file}"
+            [python_binary, file.to_s]
           end
 
           def python_binary

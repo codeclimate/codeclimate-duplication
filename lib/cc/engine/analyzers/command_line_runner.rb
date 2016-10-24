@@ -1,5 +1,6 @@
-require "open3"
 require "timeout"
+require "spoon"
+require "securerandom"
 
 module CC
   module Engine
@@ -14,14 +15,33 @@ module CC
 
         def run(input)
           Timeout.timeout(timeout) do
-            out, err, status = Open3.capture3(command, stdin_data: input)
+            file_actions = Spoon::FileActions.new
+            id = SecureRandom.uuid
 
-            status ||= handle_open3_race_condition(out)
+            # setup stdin
+            file_actions.close(0)
+            File.open("/tmp/#{id}.in", "w") { |f| f.write(input) }
+            file_actions.open(0, "/tmp/#{id}.in", 0, 0600)
 
-            if status.success?
-              yield out
+            # setup stdout
+            file_actions.close(1)
+            file_actions.open(1, "/tmp/#{id}.out", File::WRONLY | File::TRUNC | File::CREAT, 0600)
+
+            # setup stderr
+            file_actions.close(2)
+            file_actions.open(2, "/tmp/#{id}.err", File::WRONLY | File::TRUNC | File::CREAT, 0600)
+
+            spawn_attr = Spoon::SpawnAttributes.new
+
+            cmd = ["env", command].flatten
+            pid = Spoon.posix_spawnp("/usr/bin/env", file_actions, spawn_attr, cmd)
+            Process.waitpid(pid)
+
+            if (output = standard_output(id))
+              yield output
             else
-              raise ::CC::Engine::Analyzers::ParserError, "`#{command}` exited with code #{status.exitstatus}:\n#{err}"
+              err = error_output(id)
+              raise ::CC::Engine::Analyzers::ParserError, "`#{command}` did not produce valid JSON and printed this to stderr: #{err}"
             end
           end
         end
@@ -30,26 +50,21 @@ module CC
 
         attr_reader :command, :timeout
 
-        # Work around a race condition in JRuby's Open3.capture3 that can lead
-        # to a nil status returned. We'll consider the process successful if it
-        # produced output that can be parsed as JSON.
-        #
-        # https://github.com/jruby/jruby/blob/master/lib/ruby/stdlib/open3.rb#L200-L201
-        #
-        def handle_open3_race_condition(out)
-          JSON.parse(out)
-          NullStatus.new(true, 0)
-        rescue JSON::ParserError
-          NullStatus.new(false, 1)
+        def standard_output(id)
+          output = File.read("/tmp/#{id}.out")
+          begin
+            JSON.parse(output, max_nesting: false)
+          rescue JSON::ParserError
+            nil
+          else
+            output
+          end
         end
 
-        NullStatus = Struct.new(:success, :exitstatus) do
-          def success?
-            success
-          end
+        def error_output(id)
+          File.read("/tmp/#{id}.err")
         end
       end
     end
   end
 end
-
