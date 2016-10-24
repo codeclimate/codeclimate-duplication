@@ -37,7 +37,7 @@ module CC
             pid = Spoon.posix_spawnp("/usr/bin/env", file_actions, spawn_attr, cmd)
             Process.waitpid(pid)
 
-            if (output = successful_output?(id))
+            if (output = standard_output(id))
               yield output
             else
               err = error_output(id)
@@ -50,11 +50,15 @@ module CC
 
         attr_reader :command, :timeout
 
-        def successful_output?(id)
+        def standard_output(id)
           output = File.read("/tmp/#{id}.out")
-          JSON.parse(output, max_nesting: false) and output
-        rescue JSON::ParserError
-          nil
+          begin
+            JSON.parse(output, max_nesting: false)
+          rescue JSON::ParserError
+            nil
+          else
+            output
+          end
         end
 
         def error_output(id)
