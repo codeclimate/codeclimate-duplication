@@ -6,6 +6,7 @@ gem 'ruby_parser'
 gem 'pry'
 gem 'sexp_processor'
 gem 'json'
+gem 'spoon'
 
 group :test do
   gem 'rake'
