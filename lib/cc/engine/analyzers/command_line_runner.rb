@@ -1,6 +1,6 @@
 require "timeout"
-require 'spoon'
-require 'securerandom'
+require "spoon"
+require "securerandom"
 
 module CC
   module Engine
@@ -16,7 +16,7 @@ module CC
         def run(input)
           Timeout.timeout(timeout) do
             file_actions = Spoon::FileActions.new
-            id = SecureRandom.hex
+            id = SecureRandom.uuid
 
             # setup stdin
             file_actions.close(0)
