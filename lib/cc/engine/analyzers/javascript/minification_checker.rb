@@ -10,8 +10,10 @@ module CC
           end
 
           def minified?
-            ratio = content.chars.count / content.lines.count
-            ratio >= MINIFIED_AVG_LINE_LENGTH_CUTOFF
+            if content.lines.count != 0
+              ratio = content.chars.count / content.lines.count
+              ratio >= MINIFIED_AVG_LINE_LENGTH_CUTOFF
+            end
           end
 
           private
