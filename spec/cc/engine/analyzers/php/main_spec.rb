@@ -29,6 +29,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       EOPHP
 
       issues = run_engine(engine_conf).strip.split("\0")
+      expect(issues.length).to be > 0
       result = issues.first.strip
       json = JSON.parse(result)
 
@@ -51,6 +52,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
     it "runs against complex files" do
       FileUtils.cp(fixture_path("symfony_configuration.php"), File.join(@code, "configuration.php"))
       issues = run_engine(engine_conf).strip.split("\0")
+      expect(issues.length).to be > 0
       result = issues.first.strip
 
       expect(result).to match "\"type\":\"issue\""
@@ -94,6 +96,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
     it "can parse php 7 code" do
       create_source_file("foo.php", File.read(fixture_path("from_phan_php7.php")))
       issues = run_engine(engine_conf).strip.split("\0")
+      expect(issues.length).to be > 0
       result = issues.first.strip
       json = JSON.parse(result)
       expect(json["location"]).to eq({
