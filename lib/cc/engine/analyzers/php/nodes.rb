@@ -5,8 +5,13 @@ module CC
     module Analyzers
       module Php
         module Nodes
-          class Node < OpenStruct
+          class Node
+            def initialize(attrs)
+              @attrs = attrs
+            end
+
             def accept(visitor)
+              node_type = @attrs[:node_type]
               visit_method = :"visit_#{node_type}Node"
 
               if visitor.respond_to?(visit_method)
@@ -15,11 +20,19 @@ module CC
             end
 
             def line
-              startLine
+              @attrs[:startLine]
+            end
+
+            def file
+              @attrs[:file]
             end
 
             def to_sexp
               CC::Engine::Analyzers::Php::SexpVisitor.new.accept(self)
+            end
+
+            def each_pair(&block)
+              @attrs.each_pair(&block)
             end
 
             def sub_nodes
