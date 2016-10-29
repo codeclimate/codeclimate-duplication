@@ -70,7 +70,7 @@ the Hash type to support extra configuration.
 
 ### Count Threshold
 
-By default, the duplication engine will report code that has been duplicated in just two locations. You can be less strict by only raising a warning if code is duplicated in three or more locations only. To adjust this setting, add a `count_threshold` key to your language config. For instance, to use the default `mass_threshold` for ruby, but to enforce the [Rule of Three][rule-of-three], you could use this configuration:
+By default, the duplication engine will report code that has been duplicated in just two locations. You can be less strict by only raising a warning if code is duplicated in three or more locations only. To adjust this setting, add a `count_threshold` key to your config. For instance, to use the default `mass_threshold` for ruby, but to enforce the [Rule of Three][rule-of-three], you could use this configuration:
 
 ```yaml
 engines:
@@ -80,6 +80,15 @@ engines:
       languages:
         ruby:
           count_threshold: 3
+```
+
+You can also change the default count_threshold for all languages:
+
+```yaml
+engines:
+  duplication:
+    enabled: true
+    count_threshold: 3
 ```
 
 ### Excluding files and directories
