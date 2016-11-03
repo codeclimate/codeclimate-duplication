@@ -23,7 +23,6 @@ module CC
           if (skip_reason = skip?(file))
             $stderr.puts("Skipping file #{file} because #{skip_reason}")
           else
-            $stderr.puts("Processing #{file}")
             process_file(file)
           end
         rescue => ex
