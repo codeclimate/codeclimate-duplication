@@ -40,6 +40,28 @@ engines:
 
 This will tell the duplication engine to analyze Ruby and JavaScript files.
 
+#### JavaScript
+
+The engine uses `babylon` to parse JS source code. Here's a configuration
+example that enables both `flow` and `jsx`:
+
+```yaml
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+      javascript_plugins:
+      - flow
+      - jsx
+```
+
+For a full list of Babylon plugins: https://github.com/babel/babylon#plugins
+
+**Note:** If no `config.javascript_plugins` is provided, the default includes
+`jsx` and `objectRestSpread`.
+
 ### Threshold
 
 We set useful threshold defaults for the languages we support but you may want
