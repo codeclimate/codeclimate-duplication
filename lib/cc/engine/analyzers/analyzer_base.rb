@@ -44,7 +44,7 @@ module CC
         end
 
         def count_threshold
-          engine_config.count_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_COUNT_THRESHOLD
+          engine_config.count_threshold_for(self.class::LANGUAGE)
         end
 
         def calculate_points(mass)
