@@ -2,6 +2,8 @@ module CC
   module Engine
     module Analyzers
       class EngineConfig
+        DEFAULT_COUNT_THRESHOLD = 2
+
         def initialize(hash)
           @config = normalize(hash)
         end
@@ -24,6 +26,16 @@ module CC
 
         def mass_threshold_for(language)
           threshold = fetch_language(language).fetch("mass_threshold", nil)
+
+          if threshold
+            threshold.to_i
+          end
+        end
+
+        def count_threshold_for(language)
+          threshold = fetch_language(language)["count_threshold"] ||
+            config.fetch("config", {}).fetch("count_threshold", nil) ||
+            DEFAULT_COUNT_THRESHOLD
 
           if threshold
             threshold.to_i

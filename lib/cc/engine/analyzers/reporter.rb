@@ -51,6 +51,7 @@ module CC
             violations = new_violations(issue)
 
             violations.each do |violation|
+              next if (violation.occurrences + 1) < language_strategy.count_threshold
               debug("Violation name=#{violation.report_name} mass=#{violation.mass}")
 
               unless reports.include?(violation.report_name)

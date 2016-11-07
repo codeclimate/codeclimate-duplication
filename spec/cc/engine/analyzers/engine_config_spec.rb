@@ -75,6 +75,47 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
     end
   end
 
+  describe "count_threshold_for" do
+    it "returns configured count threshold as integer" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "EliXiR" => {
+              "count_threshold" => "3",
+            },
+          },
+        },
+      })
+
+      expect(engine_config.count_threshold_for("elixir")).to eq(3)
+    end
+
+    it "returns default value when language value is empty" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "count_threshold" => "4",
+          "languages" => {
+            "ruby" => "",
+          },
+        },
+      })
+
+      expect(engine_config.count_threshold_for("ruby")).to eq(4)
+    end
+
+    it "returns 2 by default" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => "",
+          },
+        },
+      })
+
+      expect(engine_config.count_threshold_for("ruby")).to eq(2)
+    end
+  end
+
   describe "include_paths" do
     it "returns given include paths" do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
