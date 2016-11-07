@@ -38,6 +38,26 @@ engines:
       - javascript
 ```
 
+#### JavaScript
+
+The engine uses `babylon` to parse JS source code, you can choose which plugins
+to be included by flow with the following example (default is only `jsx`):
+
+```yaml
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+      javascript_plugins:
+      - flow
+      - jsx
+```
+
+This will include `jsx` and `flow`, for a list of plugins take a look at the
+babylon docs: https://github.com/babel/babylon#plugins
+
 This will tell the duplication engine to analyze Ruby and JavaScript files.
 
 ### Mass Threshold
