@@ -68,7 +68,8 @@ module CC
         def build_language_config(languages)
           if languages.is_a?(Array)
             languages.each_with_object({}) do |language, map|
-              map[language.downcase] = {}
+              language, config = coerce_array_entry(language)
+              map[language.downcase] = config
             end
           elsif languages.is_a?(Hash)
             languages.each_with_object({}) do |(key, value), map|
@@ -76,6 +77,14 @@ module CC
             end
           else
             {}
+          end
+        end
+
+        def coerce_array_entry(entry)
+          if entry.is_a?(String)
+            [entry.downcase, {}]
+          elsif entry.is_a?(Hash) && entry.keys.count == 1
+            [entry.keys.first, entry[entry.keys.first]]
           end
         end
       end
