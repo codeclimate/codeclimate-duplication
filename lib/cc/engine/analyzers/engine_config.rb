@@ -3,6 +3,7 @@ module CC
     module Analyzers
       class EngineConfig
         DEFAULT_COUNT_THRESHOLD = 2
+        InvalidConfigError = Class.new(StandardError)
 
         def initialize(hash)
           @config = normalize(hash)
@@ -76,7 +77,7 @@ module CC
               map[key.downcase] = value
             end
           else
-            {}
+            raise InvalidConfigError, "languages config entry is invalid: please check documentation for details of configuring languages"
           end
         end
 
@@ -85,6 +86,8 @@ module CC
             [entry.downcase, {}]
           elsif entry.is_a?(Hash) && entry.keys.count == 1
             [entry.keys.first, entry[entry.keys.first]]
+          else
+            raise InvalidConfigError, "#{entry.inspect} is not a valid language entry"
           end
         end
       end
