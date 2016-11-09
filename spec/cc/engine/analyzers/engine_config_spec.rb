@@ -45,6 +45,22 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
 
       expect(engine_config.languages).to eq({})
     end
+
+    it "handles an array containing a hash" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => [
+            { "ruby" => { "mass_threshold" => 20 } },
+            "python"
+          ]
+        }
+      })
+
+      expect(engine_config.languages).to eq({
+        "ruby" => { "mass_threshold" => 20 },
+        "python" => {},
+      })
+    end
   end
 
   describe "mass_threshold_for" do
