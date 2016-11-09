@@ -36,14 +36,16 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       })
     end
 
-    it "returns an empty hash if languages is invalid" do
-      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+    it "raises an exception for a completely invalid config" do
+      config = {
         "config" => {
           "languages" => "potato",
-        },
-      })
+        }
+      }
 
-      expect(engine_config.languages).to eq({})
+      expect {
+        CC::Engine::Analyzers::EngineConfig.new(config)
+      }.to raise_error(CC::Engine::Analyzers::EngineConfig::InvalidConfigError)
     end
 
     it "handles an array containing a hash" do
@@ -60,6 +62,21 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "ruby" => { "mass_threshold" => 20 },
         "python" => {},
       })
+    end
+
+    it "raises an exception for an array containing a bad hash" do
+      config = {
+        "config" => {
+          "languages" => [
+            { "ruby" => { "mass_threshold" => 20 }, "extra_key" => 123 },
+            "python"
+          ]
+        }
+      }
+
+      expect {
+        CC::Engine::Analyzers::EngineConfig.new(config)
+      }.to raise_error(CC::Engine::Analyzers::EngineConfig::InvalidConfigError)
     end
   end
 
