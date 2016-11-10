@@ -34,8 +34,8 @@ engines:
     enabled: true
     config:
       languages:
-      - ruby
-      - javascript
+        ruby:
+        javascript:
 ```
 
 This will tell the duplication engine to analyze Ruby and JavaScript files.
