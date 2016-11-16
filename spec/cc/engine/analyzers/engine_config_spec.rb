@@ -158,4 +158,16 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       expect(engine_config.include_paths).to eq(["/tmp"])
     end
   end
+
+  describe "concurrency" do
+    it "coerces to a number" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "concurrency" => "45",
+        },
+      })
+
+      expect(engine_config.concurrency).to eq(45)
+    end
+  end
 end

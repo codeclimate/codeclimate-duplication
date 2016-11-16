@@ -22,7 +22,7 @@ module CC
         end
 
         def concurrency
-          config.fetch("concurrency", 2)
+          config.fetch("config", {}).fetch("concurrency", 2).to_i
         end
 
         def mass_threshold_for(language)
