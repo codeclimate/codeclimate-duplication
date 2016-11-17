@@ -10,7 +10,7 @@ module CC
         end
 
         def debug?
-          config.fetch("config", {}).fetch("debug", false)
+          config.fetch("config", {}).fetch("debug", "false").to_s.downcase == "true"
         end
 
         def include_paths

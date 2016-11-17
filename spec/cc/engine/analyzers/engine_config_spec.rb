@@ -170,4 +170,36 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       expect(engine_config.concurrency).to eq(45)
     end
   end
+
+  describe "debug" do
+    it "passes through booleans" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "debug" => true,
+        },
+      })
+
+      expect(engine_config.debug?).to eq(true)
+    end
+
+    it "coerces 'true' to true" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "debug" => "true",
+        },
+      })
+
+      expect(engine_config.debug?).to eq(true)
+    end
+
+    it "coerces 'false' to false" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "debug" => "false",
+        },
+      })
+
+      expect(engine_config.debug?).to eq(false)
+    end
+  end
 end
