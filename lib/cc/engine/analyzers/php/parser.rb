@@ -16,7 +16,7 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new("php #{parser_path}")
+            runner = CommandLineRunner.new("php -d 'display_errors = Off' #{parser_path}")
             runner.run(code) do |output|
               json = parse_json(output)
 
