@@ -105,6 +105,29 @@ engines:
     - examples/
 ```
 
+### Custom file name patterns
+
+All engines check only appropriate files but you can override default set of
+patterns. Patterns are ran aginast the project root direcory so you have to use
+`**` to match files in nested directories. Also note that you have to specify
+all patterns, not only the one you want to add.
+
+```yml
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        ruby:
+          patterns:
+            - "**/*.rb
+            - "**/*.rake"
+            - "Rakefile"
+            - "**/*.ruby"
+```
+
+
+
 [codeclimate]: https://codeclimate.com/dashboard
 [what-is-duplication]: https://docs.codeclimate.com/docs/duplication-concept
 [flay]: https://github.com/seattlerb/flay
