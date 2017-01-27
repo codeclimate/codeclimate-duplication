@@ -202,4 +202,30 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       expect(engine_config.debug?).to eq(false)
     end
   end
+
+  describe "#patterns_for" do
+    it "returns patterns for specified language" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "fancy" => {
+              "patterns" => [
+                "**/*.fancy"
+              ],
+            },
+          },
+        },
+      })
+
+      expect(engine_config.patterns_for("fancy", []))
+        .to match_array(["**/*.fancy"])
+    end
+
+    it "returns fallback patterns for missing language" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({})
+
+      expect(engine_config.patterns_for("fancy", ["**/*.fancy"]))
+        .to match_array(["**/*.fancy"])
+    end
+  end
 end

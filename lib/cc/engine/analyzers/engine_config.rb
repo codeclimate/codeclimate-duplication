@@ -55,6 +55,10 @@ module CC
           end
         end
 
+        def patterns_for(language, fallbacks)
+          Array(fetch_language(language).fetch("patterns", fallbacks))
+        end
+
         private
 
         attr_reader :config

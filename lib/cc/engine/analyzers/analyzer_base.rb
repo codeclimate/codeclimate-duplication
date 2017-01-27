@@ -70,7 +70,10 @@ module CC
         def file_list
           @_file_list ||= ::CC::Engine::Analyzers::FileList.new(
             engine_config: engine_config,
-            patterns: self.class::PATTERNS,
+            patterns: engine_config.patterns_for(
+              self.class::LANGUAGE,
+              self.class::PATTERNS,
+            ),
           )
         end
 
