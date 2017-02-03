@@ -47,7 +47,7 @@ module CC
         end
 
         def report
-          flay.report(StringIO.new).each do |issue|
+          flay.analyze.each do |issue|
             violations = new_violations(issue)
 
             violations.each do |violation|
