@@ -14,14 +14,12 @@ COPY package.json /usr/src/app/
 # RUN curl --silent --location https://deb.nodesource.com/setup_5.x | bash -
 RUN apk update && apk add nodejs python python3 php5-phar php5-openssl php5-cli php5-json php5-zlib
 
-# for bundler w/ flay fork... not necessary once off flay fork
-RUN apk add git
-RUN gem install bundler --no-ri --no-rdoc && \
-    bundle install -j 4
-
-RUN apk add curl
-RUN curl -sS https://getcomposer.org/installer | php
-RUN apk del --purge curl git
+# git is for bundler w/ flay fork... not necessary once off flay fork
+RUN apk add git curl && \
+    gem install bundler --no-ri --no-rdoc && \
+    bundle install -j 4 && \
+    curl -sS https://getcomposer.org/installer | php && \
+    apk del --purge curl git
 
 RUN mv composer.phar /usr/local/bin/composer
 RUN cd /usr/src/app/vendor/php-parser/ && composer install --prefer-source --no-interaction
