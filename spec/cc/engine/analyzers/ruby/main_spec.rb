@@ -17,8 +17,9 @@ module CC::Engine::Analyzers
           end
         EORUBY
 
-        pending "Potential lexing bug. Ask customer to remove escaping."
-        run_engine(engine_conf).strip.split("\0")
+        expect {
+          expect(run_engine(engine_conf)).to eq("")
+        }.to output(/^ERROR parsing .+ Skipping$/).to_stderr
       end
 
       it "prints an issue" do
@@ -99,7 +100,7 @@ module CC::Engine::Analyzers
 
         expect {
           expect(run_engine(engine_conf)).to eq("")
-        }.to output(/Skipping file/).to_stderr
+        }.to output(/^ERROR parsing .+ Skipping$/).to_stderr
       end
     end
 
