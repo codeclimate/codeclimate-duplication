@@ -1,6 +1,8 @@
 require 'cc/engine/analyzers/violations'
 require 'cc/engine/analyzers/file_thread_pool'
 require 'thread'
+require "concurrent"
+require "ccflay"
 
 module CC
   module Engine
@@ -72,7 +74,7 @@ module CC
         attr_reader :reports
 
         def flay
-          @flay ||= Flay.new(flay_options)
+          @flay ||= CCFlay.new(flay_options)
         end
 
         attr_reader :engine_config, :language_strategy, :io

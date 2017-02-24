@@ -14,7 +14,7 @@ module CC::Engine::Analyzers
             Jekyll.logger.warn "Error reading file \#{File.join(base, name)}: \#{e.message}"
           end
         SOURCE
-        flay = Flay.new({
+        flay = CCFlay.new({
           diff: false,
           mass: CC::Engine::Analyzers::Ruby::Main::DEFAULT_MASS_THRESHOLD,
           summary: false,
