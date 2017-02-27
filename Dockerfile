@@ -10,11 +10,8 @@ COPY vendor/php-parser/composer.lock /usr/src/app/vendor/php-parser/
 
 COPY package.json /usr/src/app/
 
-# not sure if this is ok to skip. apk's nodejs is 6.7.x:
-# RUN curl --silent --location https://deb.nodesource.com/setup_5.x | bash -
 RUN apk update && apk add nodejs python python3 php5-phar php5-openssl php5-cli php5-json php5-zlib php5-xml
 
-# git is for bundler w/ flay fork... not necessary once off flay fork
 RUN apk add curl && \
     gem install bundler --no-ri --no-rdoc && \
     bundle install -j 4 && \

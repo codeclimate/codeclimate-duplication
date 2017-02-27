@@ -31,13 +31,15 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each) do
-    $stderr = DummyStderr.new
-  end unless ENV["ENGINE_DEBUG"]
+  unless ENV["ENGINE_DEBUG"]
+    config.before(:each) do
+      $stderr = DummyStderr.new
+    end
 
-  config.after(:each) do
-    $stderr = STDERR
-  end unless ENV["ENGINE_DEBUG"]
+    config.after(:each) do
+      $stderr = STDERR
+    end
+  end
 
   config.order = :random
   config.disable_monkey_patching!
