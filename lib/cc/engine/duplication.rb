@@ -1,13 +1,13 @@
-require 'bundler/setup'
-require 'cc/engine/analyzers/ruby/main'
-require 'cc/engine/analyzers/javascript/main'
-require 'cc/engine/analyzers/php/main'
-require 'cc/engine/analyzers/python/main'
-require 'cc/engine/analyzers/reporter'
-require 'cc/engine/analyzers/engine_config'
-require 'cc/engine/analyzers/sexp'
-require 'flay'
-require 'json'
+require "bundler/setup"
+require "cc/engine/analyzers/ruby/main"
+require "cc/engine/analyzers/javascript/main"
+require "cc/engine/analyzers/php/main"
+require "cc/engine/analyzers/python/main"
+require "cc/engine/analyzers/reporter"
+require "cc/engine/analyzers/engine_config"
+require "cc/engine/analyzers/sexp"
+require "flay"
+require "json"
 
 module CC
   module Engine
