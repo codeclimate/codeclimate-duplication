@@ -26,8 +26,6 @@ module CC
             RubyParser.new.process(File.binread(file), file, TIMEOUT)
           rescue Timeout::Error
             warn "TIMEOUT parsing #{file}. Skipping."
-          rescue => e
-            warn "ERROR parsing #{file}: #{e.class}: #{e.message}. Skipping"
           end
         end
       end
