@@ -85,7 +85,7 @@ describe '#whaddup?' do
 end
         SOURCE
 
-        flay = Flay.new({
+        flay = CCFlay.new({
           diff: false,
           mass: CC::Engine::Analyzers::Ruby::Main::DEFAULT_MASS_THRESHOLD,
           summary: false,

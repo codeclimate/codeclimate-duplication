@@ -31,12 +31,14 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each) do
-    $stderr = DummyStderr.new
-  end
+  unless ENV["ENGINE_DEBUG"]
+    config.before(:each) do
+      $stderr = DummyStderr.new
+    end
 
-  config.after(:each) do
-    $stderr = STDERR
+    config.after(:each) do
+      $stderr = STDERR
+    end
   end
 
   config.order = :random
