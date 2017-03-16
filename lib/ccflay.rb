@@ -84,3 +84,25 @@ class Sexp # straight from flay-persistent
     hash
   end
 end
+
+class Sexp
+  def flatter
+    r = self.dup.clear
+
+    each do |s|
+      if Sexp === s then
+        ss = s.flatter
+
+        if ss.size == 2 && Sexp === ss[1] then
+          r.concat ss
+        else
+          r << ss
+        end
+      else
+        r << s
+      end
+    end
+
+    r
+  end
+end

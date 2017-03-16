@@ -35,18 +35,18 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Identical code")
-      expect(json["description"]).to eq("Identical code found in 1 other location (mass = 11)")
+      expect(json["description"]).to eq("Identical code found in 1 other location (mass = 8)")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 6 },
       })
-      expect(json["remediation_points"]).to eq(2_100_000)
+      expect(json["remediation_points"]).to eq(1_800_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of 11/
-      expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 8/)
+      expect(json["fingerprint"]).to eq("0f3dbd6f65c165fe34cfc14cf4a7cd24")
     end
 
     it "runs against complex files" do

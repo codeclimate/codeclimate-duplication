@@ -66,7 +66,7 @@ module CC
 
         def process_sexp(sexp)
           return unless sexp
-          flay.process_sexp(sexp)
+          flay.process_sexp(sexp.flatter)
         end
 
         private
