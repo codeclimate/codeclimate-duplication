@@ -25,6 +25,6 @@ end
 class Sexp
   # override to cache... TODO: add back to sexp_processor, then remove this
   def line_max
-    @line_max ||= self.deep_each.map(&:line).max
+    @line_max ||= deep_each.map(&:line).max
   end
 end

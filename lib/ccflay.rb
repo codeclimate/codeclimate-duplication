@@ -87,13 +87,13 @@ end
 
 class Sexp
   def flatter
-    r = self.dup.clear
+    r = dup.clear
 
     each do |s|
-      if Sexp === s then
+      if s.is_a? Sexp
         ss = s.flatter
 
-        if ss.size == 2 && Sexp === ss[1] then
+        if ss.size == 2 && ss[1].is_a?(Sexp)
           r.concat ss
         else
           r << ss
