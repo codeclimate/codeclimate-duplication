@@ -66,9 +66,6 @@ RUN adduser -u 9000 -D -h /usr/src/app -s /bin/false app
 COPY . /usr/src/app
 RUN chown -R app:app /usr/src/app
 
-# ENV PURE_HASH=1
-# ENV CODECLIMATE_PROFILE=1
-
 USER app
 
 CMD ["/usr/src/app/bin/duplication"]
