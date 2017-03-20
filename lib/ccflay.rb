@@ -86,13 +86,17 @@ class Sexp # straight from flay-persistent
 end
 
 class Sexp
-  def flatter
-    r = dup.clear
+  attr_writer :mass
 
-    each do |s|
-      if s.is_a? Sexp
+  def flatter
+    result = dup.clear
+    result.mass = mass
+
+    each_with_object(result) do |s, r|
+      if s.is_a?(Sexp)
         ss = s.flatter
 
+        # s(:a, s(:b, s(:c, 42))) => s(:a, :b, s(:c, 42))
         if ss.size == 2 && ss[1].is_a?(Sexp)
           r.concat ss
         else
@@ -102,7 +106,5 @@ class Sexp
         r << s
       end
     end
-
-    r
   end
 end

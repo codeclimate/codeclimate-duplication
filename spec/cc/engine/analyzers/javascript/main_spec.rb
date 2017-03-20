@@ -21,19 +21,19 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Identical code")
-      expect(json["description"]).to eq("Identical code found in 2 other locations (mass = 6)")
+      expect(json["description"]).to eq("Identical code found in 2 other locations (mass = 11)")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(1_650_000)
+      expect(json["remediation_points"]).to eq(1_800_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 6/)
-      expect(json["fingerprint"]).to eq("7bd62257fdae18f985366ab3bbce0c7f")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
+      expect(json["fingerprint"]).to eq("c4d29200c20d02297c6f550ad2c87c15")
     end
 
     it "prints an issue for similar code" do
@@ -49,19 +49,19 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Similar code")
-      expect(json["description"]).to eq("Similar code found in 2 other locations (mass = 6)")
+      expect(json["description"]).to eq("Similar code found in 2 other locations (mass = 11)")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(1_650_000)
+      expect(json["remediation_points"]).to eq(1_800_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 6/)
-      expect(json["fingerprint"]).to eq("9cf6f5a7e248d3ecfd8f4735fa01b904")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
+      expect(json["fingerprint"]).to eq("d9dab8e4607e2a74da3b9eefb49eacec")
     end
 
     it "handles ES6 spread params" do
