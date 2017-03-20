@@ -90,6 +90,17 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         expect(run_engine(engine_conf)).to eq("")
       }.to output(/Skipping file/).to_stderr
     end
+
+    it "can parse php 7 code" do
+      create_source_file("foo.php", File.read(fixture_path("from_phan_php7.php")))
+      issues = run_engine(engine_conf).strip.split("\0")
+      result = issues.first.strip
+      json = JSON.parse(result)
+      expect(json["location"]).to eq({
+        "path" => "foo.php",
+        "lines" => { "begin" => 117, "end" => 118 },
+      })
+    end
   end
 
   def engine_conf
@@ -97,10 +108,10 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       'config' => {
         'languages' => {
           'php' => {
-            'mass_threshold' => 5
-          }
-        }
-      }
+            'mass_threshold' => 5,
+          },
+        },
+      },
     })
   end
 end

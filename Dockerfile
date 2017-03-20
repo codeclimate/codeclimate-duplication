@@ -11,7 +11,7 @@ COPY vendor/php-parser/composer.lock /usr/src/app/vendor/php-parser/
 COPY package.json /usr/src/app/
 
 RUN curl --silent --location https://deb.nodesource.com/setup_5.x | bash - && \
-    apt-get update && apt-get install -y nodejs python openssh-client php5-cli php5-json
+    apt-get update && apt-get install -y nodejs python python3 openssh-client php5-cli php5-json
 RUN gem install bundler --no-ri --no-rdoc && \
     bundle install -j 4 && \
     curl -sS https://getcomposer.org/installer | php

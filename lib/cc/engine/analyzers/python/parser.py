@@ -1,5 +1,16 @@
 import json, sys, ast
 
+PY3 = sys.version_info[0] == 3
+
+def string_type():
+    return str if PY3 else basestring
+
+def num_types():
+    if PY3:
+        return (int, float, complex)
+    else:
+        return (int, float, long, complex)
+
 def to_json(node):
     json_ast = {'attributes': {}}
     json_ast['_type'] = node.__class__.__name__
@@ -16,9 +27,9 @@ def cast_infinity(value):
         return "-Infinity"
 
 def cast_value(value):
-    if value is None or isinstance(value, (bool, basestring)):
+    if value is None or isinstance(value, (bool, string_type())):
         return value
-    elif isinstance(value, (int, float, long, complex)):
+    elif isinstance(value, num_types()):
         if abs(value) == 1e3000:
             return cast_infinity(value)
         return value
@@ -31,4 +42,4 @@ if __name__ == '__main__':
     source = ""
     for line in sys.stdin.readlines():
         source += line
-    print json.dumps(to_json(ast.parse(source)))
+    print(json.dumps(to_json(ast.parse(source))))

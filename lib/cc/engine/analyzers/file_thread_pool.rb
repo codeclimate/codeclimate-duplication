@@ -17,7 +17,7 @@ module CC
           lock = Mutex.new
 
           @workers = Array.new(thread_count) do
-            with_thread_abortion do
+            with_thread_abort_on_exceptions do
               while (item = next_item(queue, lock))
                 yield item
               end
@@ -55,11 +55,10 @@ module CC
           end
         end
 
-        def with_thread_abortion
-          t = Thread.new do
-            yield
-          end
-          (t.abort_on_exception = true) && t
+        def with_thread_abort_on_exceptions(&block)
+          thread = Thread.new(&block)
+          thread.abort_on_exception = true
+          thread
         end
       end
     end

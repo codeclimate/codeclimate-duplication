@@ -13,12 +13,21 @@ module CC
           LANGUAGE = "python"
           PATTERNS = ["**/*.py"]
           DEFAULT_MASS_THRESHOLD = 32
+          DEFAULT_PYTHON_VERSION = 2
           POINTS_PER_OVERAGE = 50_000
 
           private
 
           def process_file(path)
-            Node.new(::CC::Engine::Analyzers::Python::Parser.new(File.binread(path), path).parse.syntax_tree, path).format
+            Node.new(parser(path).parse.syntax_tree, path).format
+          end
+
+          def parser(path)
+            ::CC::Engine::Analyzers::Python::Parser.new(python_version, File.binread(path), path)
+          end
+
+          def python_version
+            engine_config.fetch_language(LANGUAGE).fetch("python_version", DEFAULT_PYTHON_VERSION)
           end
         end
       end

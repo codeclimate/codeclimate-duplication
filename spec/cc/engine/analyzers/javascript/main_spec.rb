@@ -30,7 +30,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       expect(json["remediation_points"]).to eq(1_800_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
-        {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }
+        {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} },
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 11/
       expect(json["fingerprint"]).to eq("c4d29200c20d02297c6f550ad2c87c15")
@@ -58,7 +58,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       expect(json["remediation_points"]).to eq(1_800_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
-        {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} }
+        {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} },
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 11/
       expect(json["fingerprint"]).to eq("d9dab8e4607e2a74da3b9eefb49eacec")
@@ -86,6 +86,15 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         expect(run_engine(engine_conf)).to eq("")
       }.to output(/Skipping file/).to_stderr
     end
+
+    it "skips minified files" do
+      path = fixture_path("huge_js_file.js")
+      create_source_file("foo.js", File.read(path))
+
+      expect {
+        expect(run_engine(engine_conf)).to eq("")
+      }.to output(/Skipping file/).to_stderr
+    end
   end
 
   it "does not flag duplicate comments" do
@@ -102,7 +111,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
   it "does not report the same line for multiple issues" do
     create_source_file("dup.jsx", <<-EOJSX)
-          <a className='button button-primary full' href='#' onClick={this.onSubmit.bind(this)}>Login</a>
+<a className='button button-primary full' href='#' onClick={this.onSubmit.bind(this)}>Login</a>
     EOJSX
 
     issues = run_engine(engine_conf).strip.split("\0")
@@ -115,10 +124,10 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       'config' => {
         'languages' => {
           'javascript' => {
-            'mass_threshold' => 1
-          }
-        }
-      }
+            'mass_threshold' => 1,
+          },
+        },
+      },
     })
   end
 end
