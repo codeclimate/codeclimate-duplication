@@ -36,14 +36,47 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       })
     end
 
-    it "returns an empty hash if languages is invalid" do
-      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+    it "raises an exception for a completely invalid config" do
+      config = {
         "config" => {
           "languages" => "potato",
-        },
+        }
+      }
+
+      expect {
+        CC::Engine::Analyzers::EngineConfig.new(config)
+      }.to raise_error(CC::Engine::Analyzers::EngineConfig::InvalidConfigError)
+    end
+
+    it "handles an array containing a hash" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => [
+            { "ruby" => { "mass_threshold" => 20 } },
+            "python"
+          ]
+        }
       })
 
-      expect(engine_config.languages).to eq({})
+      expect(engine_config.languages).to eq({
+        "ruby" => { "mass_threshold" => 20 },
+        "python" => {},
+      })
+    end
+
+    it "raises an exception for an array containing a bad hash" do
+      config = {
+        "config" => {
+          "languages" => [
+            { "ruby" => { "mass_threshold" => 20 }, "extra_key" => 123 },
+            "python"
+          ]
+        }
+      }
+
+      expect {
+        CC::Engine::Analyzers::EngineConfig.new(config)
+      }.to raise_error(CC::Engine::Analyzers::EngineConfig::InvalidConfigError)
     end
   end
 
@@ -75,6 +108,47 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
     end
   end
 
+  describe "count_threshold_for" do
+    it "returns configured count threshold as integer" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "EliXiR" => {
+              "count_threshold" => "3",
+            },
+          },
+        },
+      })
+
+      expect(engine_config.count_threshold_for("elixir")).to eq(3)
+    end
+
+    it "returns default value when language value is empty" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "count_threshold" => "4",
+          "languages" => {
+            "ruby" => "",
+          },
+        },
+      })
+
+      expect(engine_config.count_threshold_for("ruby")).to eq(4)
+    end
+
+    it "returns 2 by default" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => "",
+          },
+        },
+      })
+
+      expect(engine_config.count_threshold_for("ruby")).to eq(2)
+    end
+  end
+
   describe "include_paths" do
     it "returns given include paths" do
       engine_config = CC::Engine::Analyzers::EngineConfig.new({
@@ -82,6 +156,76 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       })
 
       expect(engine_config.include_paths).to eq(["/tmp"])
+    end
+  end
+
+  describe "concurrency" do
+    it "coerces to a number" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "concurrency" => "45",
+        },
+      })
+
+      expect(engine_config.concurrency).to eq(45)
+    end
+  end
+
+  describe "debug" do
+    it "passes through booleans" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "debug" => true,
+        },
+      })
+
+      expect(engine_config.debug?).to eq(true)
+    end
+
+    it "coerces 'true' to true" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "debug" => "true",
+        },
+      })
+
+      expect(engine_config.debug?).to eq(true)
+    end
+
+    it "coerces 'false' to false" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "debug" => "false",
+        },
+      })
+
+      expect(engine_config.debug?).to eq(false)
+    end
+  end
+
+  describe "#patterns_for" do
+    it "returns patterns for specified language" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "fancy" => {
+              "patterns" => [
+                "**/*.fancy"
+              ],
+            },
+          },
+        },
+      })
+
+      expect(engine_config.patterns_for("fancy", []))
+        .to match_array(["**/*.fancy"])
+    end
+
+    it "returns fallback patterns for missing language" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({})
+
+      expect(engine_config.patterns_for("fancy", ["**/*.fancy"]))
+        .to match_array(["**/*.fancy"])
     end
   end
 end

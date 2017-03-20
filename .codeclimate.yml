@@ -4,6 +4,7 @@ engines:
     enabled: true
     exclude_fingerprints:
       - 15684e77a6036a56ca2db7cbb958ab08 # long method
+      - 8f5f9fae9dac04fe85d0529021092b01 # long method
   eslint:
     enabled: true
   bundler-audit:

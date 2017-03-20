@@ -18,6 +18,11 @@ module CC
               path = fixture_path("normal_js_file.js")
               expect(MinificationChecker.new(path)).to_not be_minified
             end
+
+            it "returns false for empty files" do
+              path = fixture_path("empty_file.js")
+              expect(MinificationChecker.new(path)).to_not be_minified
+            end
           end
         end
       end

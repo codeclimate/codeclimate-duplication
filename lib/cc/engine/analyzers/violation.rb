@@ -35,6 +35,10 @@ module CC
           current_sexp.mass
         end
 
+        def occurrences
+          other_sexps.count
+        end
+
         private
 
         attr_reader :language_strategy, :other_sexps, :current_sexp
@@ -95,10 +99,6 @@ module CC
           description += "s" if occurrences > 1
           description += " (mass = #{mass})"
           description
-        end
-
-        def occurrences
-          other_sexps.count
         end
       end
     end

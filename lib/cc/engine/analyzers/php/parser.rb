@@ -1,4 +1,5 @@
 require "cc/engine/analyzers/command_line_runner"
+require "cc/engine/analyzers/parser_base"
 require "cc/engine/analyzers/php/ast"
 require "cc/engine/analyzers/php/nodes"
 
@@ -15,14 +16,14 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new("php #{parser_path}")
+            runner = CommandLineRunner.new("php -d 'display_errors = Off' #{parser_path}")
             runner.run(code) do |output|
               json = parse_json(output)
 
-              @syntax_tree = CC::Engine::Analyzers::Php::Nodes::Node.new.tap do |node|
-                node.stmts = CC::Engine::Analyzers::Php::AST.json_to_ast(json, filename)
-                node.node_type = "AST"
-              end
+              @syntax_tree = CC::Engine::Analyzers::Php::Nodes::Node.new(
+                stmts: CC::Engine::Analyzers::Php::AST.json_to_ast(json, filename),
+                node_type: "AST",
+              )
             end
 
             self

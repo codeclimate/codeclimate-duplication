@@ -2,12 +2,15 @@ module CC
   module Engine
     module Analyzers
       class EngineConfig
+        DEFAULT_COUNT_THRESHOLD = 2
+        InvalidConfigError = Class.new(StandardError)
+
         def initialize(hash)
           @config = normalize(hash)
         end
 
         def debug?
-          config.fetch("config", {}).fetch("debug", false)
+          config.fetch("config", {}).fetch("debug", "false").to_s.casecmp("true").zero?
         end
 
         def include_paths
@@ -19,11 +22,21 @@ module CC
         end
 
         def concurrency
-          config.fetch("concurrency", 2)
+          config.fetch("config", {}).fetch("concurrency", 2).to_i
         end
 
         def mass_threshold_for(language)
           threshold = fetch_language(language).fetch("mass_threshold", nil)
+
+          if threshold
+            threshold.to_i
+          end
+        end
+
+        def count_threshold_for(language)
+          threshold = fetch_language(language)["count_threshold"] ||
+            config.fetch("config", {}).fetch("count_threshold", nil) ||
+            DEFAULT_COUNT_THRESHOLD
 
           if threshold
             threshold.to_i
@@ -42,6 +55,10 @@ module CC
           end
         end
 
+        def patterns_for(language, fallbacks)
+          Array(fetch_language(language).fetch("patterns", fallbacks))
+        end
+
         private
 
         attr_reader :config
@@ -56,14 +73,25 @@ module CC
         def build_language_config(languages)
           if languages.is_a?(Array)
             languages.each_with_object({}) do |language, map|
-              map[language.downcase] = {}
+              language, config = coerce_array_entry(language)
+              map[language.downcase] = config
             end
           elsif languages.is_a?(Hash)
             languages.each_with_object({}) do |(key, value), map|
               map[key.downcase] = value
             end
           else
-            {}
+            raise InvalidConfigError, "languages config entry is invalid: please check documentation for details of configuring languages"
+          end
+        end
+
+        def coerce_array_entry(entry)
+          if entry.is_a?(String)
+            [entry.downcase, {}]
+          elsif entry.is_a?(Hash) && entry.keys.count == 1
+            [entry.keys.first, entry[entry.keys.first]]
+          else
+            raise InvalidConfigError, "#{entry.inspect} is not a valid language entry"
           end
         end
       end

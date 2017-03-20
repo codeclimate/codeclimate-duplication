@@ -1,6 +1,8 @@
 require 'cc/engine/analyzers/violations'
 require 'cc/engine/analyzers/file_thread_pool'
 require 'thread'
+require "concurrent"
+require "ccflay"
 
 module CC
   module Engine
@@ -47,10 +49,11 @@ module CC
         end
 
         def report
-          flay.report(StringIO.new).each do |issue|
+          flay.analyze.each do |issue|
             violations = new_violations(issue)
 
             violations.each do |violation|
+              next if (violation.occurrences + 1) < language_strategy.count_threshold
               debug("Violation name=#{violation.report_name} mass=#{violation.mass}")
 
               unless reports.include?(violation.report_name)
@@ -71,7 +74,7 @@ module CC
         attr_reader :reports
 
         def flay
-          @flay ||= Flay.new(flay_options)
+          @flay ||= CCFlay.new(flay_options)
         end
 
         attr_reader :engine_config, :language_strategy, :io
