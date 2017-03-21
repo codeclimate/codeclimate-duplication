@@ -13,7 +13,7 @@ module CC
           ::RuntimeError,
         ].freeze
 
-        BASE_POINTS = 1_500_000
+        BASE_POINTS = 300_000 # 30 minutes (5min = 50K)
 
         def initialize(engine_config:)
           @engine_config = engine_config
