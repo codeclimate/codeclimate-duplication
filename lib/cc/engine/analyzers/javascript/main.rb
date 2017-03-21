@@ -19,6 +19,10 @@ module CC
           DEFAULT_MASS_THRESHOLD = 40
           POINTS_PER_OVERAGE = 30_000
 
+          def transform_sexp(sexp)
+            sexp.flatter
+          end
+
           private
 
           def process_file(path)
