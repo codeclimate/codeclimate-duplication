@@ -84,3 +84,27 @@ class Sexp # straight from flay-persistent
     hash
   end
 end
+
+class Sexp
+  attr_writer :mass
+
+  def flatter
+    result = dup.clear
+    result.mass = mass
+
+    each_with_object(result) do |s, r|
+      if s.is_a?(Sexp)
+        ss = s.flatter
+
+        # s(:a, s(:b, s(:c, 42))) => s(:a, :b, s(:c, 42))
+        if ss.size == 2 && ss[1].is_a?(Sexp)
+          r.concat ss
+        else
+          r << ss
+        end
+      else
+        r << s
+      end
+    end
+  end
+end

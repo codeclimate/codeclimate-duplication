@@ -45,7 +45,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of 11/
+      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
       expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
     end
 
