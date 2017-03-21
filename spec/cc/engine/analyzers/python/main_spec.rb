@@ -31,7 +31,7 @@ print("Hello", "python")
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of 6/
+      expect(json["content"]["body"]).to match(/This issue has a mass of 6/)
       expect(json["fingerprint"]).to eq("3f3d34361bcaef98839d9da6ca9fcee4")
     end
 
@@ -59,7 +59,7 @@ print("Hello from the other side", "python")
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of 6/
+      expect(json["content"]["body"]).to match(/This issue has a mass of 6/)
       expect(json["fingerprint"]).to eq("019118ceed60bf40b35aad581aae1b02")
     end
 
@@ -102,7 +102,7 @@ def c(thing: str):
         {"path" => "foo.py", "lines" => { "begin" => 4, "end" => 5 } },
         {"path" => "foo.py", "lines" => { "begin" => 7, "end" => 8 } },
       ])
-      expect(json["content"]["body"]).to match /This issue has a mass of 16/
+      expect(json["content"]["body"]).to match(/This issue has a mass of 16/)
       expect(json["fingerprint"]).to eq("607cf2d16d829e667c5f34534197d14c")
     end
 

@@ -51,6 +51,10 @@ module CC
           base_points + (overage * points_per_overage)
         end
 
+        def transform_sexp(sexp)
+          sexp
+        end
+
         private
 
         attr_reader :engine_config
