@@ -13,7 +13,7 @@ module CC
           ::RuntimeError,
         ].freeze
 
-        POINTS_PER_MINUTE = 10_000 # Remediation points represent engineering time to resolve issue
+        POINTS_PER_MINUTE = 10_000 # Points represent engineering time to resolve issue
         HOUR_POINTS = 60 * POINTS_PER_MINUTE
         BASE_POINTS = HOUR_POINTS / 2
 
