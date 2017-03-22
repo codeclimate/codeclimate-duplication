@@ -108,3 +108,17 @@ class Sexp
     end
   end
 end
+
+class Sexp # TODO: push this back to flay
+  alias old_mass mass
+
+  def mass
+    @mass ||= inject(1) { |t, s|
+      if Sexp === s then
+        t + s.mass
+      else
+        t
+      end
+    }
+  end
+end
