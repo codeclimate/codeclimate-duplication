@@ -54,7 +54,7 @@ module CC::Engine::Analyzers
           "path" => "foo.rb",
           "lines" => { "begin" => 1, "end" => 5 },
         })
-        expect(json["remediation_points"]).to eq(1_500_000)
+        expect(json["remediation_points"]).to eq(300_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
         ])
