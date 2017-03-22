@@ -41,7 +41,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 6 },
       })
-      expect(json["remediation_points"]).to eq(2_100_000)
+      expect(json["remediation_points"]).to eq(900_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
       ])
@@ -82,7 +82,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 6 },
       })
-      expect(json["remediation_points"]).to eq(2_100_000)
+      expect(json["remediation_points"]).to eq(900_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
       ])
