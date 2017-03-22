@@ -33,6 +33,7 @@ print("Hello", "python")
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 6/
       expect(json["fingerprint"]).to eq("3f3d34361bcaef98839d9da6ca9fcee4")
+      expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
     end
 
     it "prints an issue for similar code" do
@@ -61,6 +62,7 @@ print("Hello from the other side", "python")
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 6/
       expect(json["fingerprint"]).to eq("019118ceed60bf40b35aad581aae1b02")
+      expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
     end
 
     it "finds duplication in python3 code" do
@@ -104,6 +106,7 @@ def c(thing: str):
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 16/
       expect(json["fingerprint"]).to eq("607cf2d16d829e667c5f34534197d14c")
+      expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
     it "skips unparsable files" do

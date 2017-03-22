@@ -60,6 +60,7 @@ module CC::Engine::Analyzers
         ])
         expect(json["content"]["body"]).to match /This issue has a mass of 18/
         expect(json["fingerprint"]).to eq("b7e46d8f5164922678e48942e26100f2")
+        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
       end
 
       it "creates an issue for each occurrence of the duplicated code" do
