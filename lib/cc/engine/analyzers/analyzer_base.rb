@@ -13,7 +13,9 @@ module CC
           ::RuntimeError,
         ].freeze
 
-        BASE_POINTS = 300_000 # 30 minutes (5min = 50K)
+        POINTS_PER_MINUTE = 10_000 # Points represent engineering time to remediate
+        HOUR_POINTS = 60 * POINTS_PER_MINUTE
+        BASE_POINTS = HOUR_POINTS / 2
 
         def initialize(engine_config:)
           @engine_config = engine_config
