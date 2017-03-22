@@ -60,7 +60,7 @@ module CC
         end
 
         def calculate_severity(points)
-          if points > MAJOR_SEVERITY_THRESHOLD
+          if points >= MAJOR_SEVERITY_THRESHOLD
             MAJOR
           else
             MINOR

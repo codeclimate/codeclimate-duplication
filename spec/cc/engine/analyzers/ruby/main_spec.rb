@@ -149,6 +149,40 @@ module CC::Engine::Analyzers
       end
     end
 
+    describe "#calculate_severity(points)" do
+      let(:analyzer) { Ruby::Main.new(engine_config: engine_conf) }
+      let(:base_points) { Ruby::Main::BASE_POINTS }
+      let(:points_per) { Ruby::Main::POINTS_PER_OVERAGE }
+      let(:threshold) { Ruby::Main::DEFAULT_MASS_THRESHOLD }
+
+      context "when points exceed threshold" do
+        it "assigns a severity of major" do
+          total_points = Base::MAJOR_SEVERITY_THRESHOLD + 1
+          severity = analyzer.calculate_severity(total_points)
+
+          expect(severity).to eq(Base::MAJOR)
+        end
+      end
+
+      context "when points equal threshold" do
+        it "assigns a severity of major" do
+          total_points = Base::MAJOR_SEVERITY_THRESHOLD
+          severity = analyzer.calculate_severity(total_points)
+
+          expect(severity).to eq(Base::MAJOR)
+        end
+      end
+
+      context "when points equal threshold" do
+        it "assigns a severity of major" do
+          total_points = Base::MAJOR_SEVERITY_THRESHOLD - 10
+          severity = analyzer.calculate_severity(total_points)
+
+          expect(severity).to eq(Base::MINOR)
+        end
+      end
+    end
+
     def engine_conf
       EngineConfig.new({})
     end
