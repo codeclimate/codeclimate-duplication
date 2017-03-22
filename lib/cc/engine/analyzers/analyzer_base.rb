@@ -14,8 +14,7 @@ module CC
         ].freeze
 
         POINTS_PER_MINUTE = 10_000 # Points represent engineering time to resolve issue
-        HOUR_POINTS = 60 * POINTS_PER_MINUTE
-        BASE_POINTS = HOUR_POINTS / 2
+        BASE_POINTS = 30 * POINTS_PER_MINUTE
 
         def initialize(engine_config:)
           @engine_config = engine_config
