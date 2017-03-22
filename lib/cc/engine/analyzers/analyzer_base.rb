@@ -21,7 +21,7 @@ module CC
           MINOR = "minor".freeze,
         ].freeze
 
-        SEVERITY_THRESHOLD = 120 * POINTS_PER_MINUTE # > 2 hours of work is major
+        MAJOR_SEVERITY_THRESHOLD = 120 * POINTS_PER_MINUTE
 
         def initialize(engine_config:)
           @engine_config = engine_config
@@ -60,7 +60,7 @@ module CC
         end
 
         def calculate_severity(points)
-          if points > SEVERITY_THRESHOLD
+          if points > MAJOR_SEVERITY_THRESHOLD
             MAJOR
           else
             MINOR
