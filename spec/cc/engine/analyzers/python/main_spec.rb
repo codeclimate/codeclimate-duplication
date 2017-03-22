@@ -26,7 +26,7 @@ print("Hello", "python")
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(1_600_000)
+      expect(json["remediation_points"]).to eq(400_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
@@ -54,7 +54,7 @@ print("Hello from the other side", "python")
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(1_600_000)
+      expect(json["remediation_points"]).to eq(400_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
@@ -97,7 +97,7 @@ def c(thing: str):
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 2 },
       })
-      expect(json["remediation_points"]).to eq(2_100_000)
+      expect(json["remediation_points"]).to eq(900_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 4, "end" => 5 } },
         {"path" => "foo.py", "lines" => { "begin" => 7, "end" => 8 } },
