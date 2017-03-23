@@ -47,6 +47,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       ])
       expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
       expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
+      expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
     it "prints an issue for similar code" do
