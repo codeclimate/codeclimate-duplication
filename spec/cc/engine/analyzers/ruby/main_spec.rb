@@ -105,6 +105,7 @@ module CC::Engine::Analyzers
         ])
         expect(json["content"]["body"]).to match /This issue has a mass of 18/
         expect(json["fingerprint"]).to eq("b7e46d8f5164922678e48942e26100f2")
+        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
       end
 
       it "creates an issue for each occurrence of the duplicated code" do
@@ -226,6 +227,40 @@ module CC::Engine::Analyzers
           points = analyzer.calculate_points(mass)
 
           expect(points).to eq(expected_points)
+        end
+      end
+    end
+
+    describe "#calculate_severity(points)" do
+      let(:analyzer) { Ruby::Main.new(engine_config: engine_conf) }
+      let(:base_points) { Ruby::Main::BASE_POINTS }
+      let(:points_per) { Ruby::Main::POINTS_PER_OVERAGE }
+      let(:threshold) { Ruby::Main::DEFAULT_MASS_THRESHOLD }
+
+      context "when points exceed threshold" do
+        it "assigns a severity of major" do
+          total_points = Base::MAJOR_SEVERITY_THRESHOLD + 1
+          severity = analyzer.calculate_severity(total_points)
+
+          expect(severity).to eq(Base::MAJOR)
+        end
+      end
+
+      context "when points equal threshold" do
+        it "assigns a severity of major" do
+          total_points = Base::MAJOR_SEVERITY_THRESHOLD
+          severity = analyzer.calculate_severity(total_points)
+
+          expect(severity).to eq(Base::MAJOR)
+        end
+      end
+
+      context "when points are below threshold" do
+        it "assigns a severity of minor" do
+          total_points = Base::MAJOR_SEVERITY_THRESHOLD - 10
+          severity = analyzer.calculate_severity(total_points)
+
+          expect(severity).to eq(Base::MINOR)
         end
       end
     end
