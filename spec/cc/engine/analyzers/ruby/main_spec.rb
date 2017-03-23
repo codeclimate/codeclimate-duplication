@@ -173,8 +173,8 @@ module CC::Engine::Analyzers
         end
       end
 
-      context "when points equal threshold" do
-        it "assigns a severity of major" do
+      context "when points are below threshold" do
+        it "assigns a severity of minor" do
           total_points = Base::MAJOR_SEVERITY_THRESHOLD - 10
           severity = analyzer.calculate_severity(total_points)
 
