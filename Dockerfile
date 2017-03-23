@@ -66,6 +66,9 @@ RUN adduser -u 9000 -D -h /usr/src/app -s /bin/false app
 COPY . /usr/src/app
 RUN chown -R app:app /usr/src/app
 
+# 3x normal default
+ENV RUBY_THREAD_MACHINE_STACK_SIZE=3145728
+
 USER app
 
 CMD ["/usr/src/app/bin/duplication"]
