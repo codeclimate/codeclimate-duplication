@@ -115,7 +115,7 @@ class Sexp # TODO: push this back to flay
   def mass
     @mass ||= inject(1) { |t, s|
       if Sexp === s then
-        t + s.mass
+        t + s.old_mass
       else
         t
       end
