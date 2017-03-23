@@ -4,31 +4,22 @@ require "cc/engine/duplication"
 module CC::Engine::Analyzers
   RSpec.describe Violations do
     describe "#each" do
-      it "yields correct number of violations" do
-        issue = double(:issue, mass: 10, identical?: true)
-        hashes = sexps
-        language_strategy = double(:language_strategy, calculate_points: 30)
+      let(:issue) { double(:issue, mass: 10, identical?: true) }
+      let(:hashes) { sexps }
+      let(:language_strategy) { double(:language_strategy, calculate_points: 30, calculate_severity: CC::Engine::Analyzers::Base::MINOR) }
+      let(:violations) { [] }
 
-        violations = []
-
+      before do
         Violations.new(language_strategy, issue, hashes).each do |v|
           violations << v
         end
+      end
 
+      it "yields correct number of violations" do
         expect(violations.length).to eq(3)
       end
 
       it "yields violation objects with correct information" do
-        issue = double(:issue, mass: 10, identical?: true)
-        hashes = sexps
-        language_strategy = double(:language_strategy, calculate_points: 30, calculate_severity: CC::Engine::Analyzers::Base::MINOR)
-
-        violations = []
-
-        Violations.new(language_strategy, issue, hashes).each do |v|
-          violations << v
-        end
-
         first_formatted = violations[0].format
         second_formatted = violations[1].format
         third_formatted = violations[2].format
