@@ -18,6 +18,13 @@ module CC
         POINTS_PER_MINUTE = 10_000 # Points represent engineering time to resolve issue
         BASE_POINTS = 30 * POINTS_PER_MINUTE
 
+        SEVERITIES = [
+          MAJOR = "major".freeze,
+          MINOR = "minor".freeze,
+        ].freeze
+
+        MAJOR_SEVERITY_THRESHOLD = 120 * POINTS_PER_MINUTE
+
         def initialize(engine_config:)
           @engine_config = engine_config
         end
@@ -52,6 +59,14 @@ module CC
         def calculate_points(mass)
           overage = mass - mass_threshold
           base_points + (overage * points_per_overage)
+        end
+
+        def calculate_severity(points)
+          if points >= MAJOR_SEVERITY_THRESHOLD
+            MAJOR
+          else
+            MINOR
+          end
         end
 
         def transform_sexp(sexp)
