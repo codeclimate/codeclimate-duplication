@@ -34,6 +34,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 11/
       expect(json["fingerprint"]).to eq("c4d29200c20d02297c6f550ad2c87c15")
+      expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
     it "prints an issue for similar code" do
@@ -62,6 +63,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       ])
       expect(json["content"]["body"]).to match /This issue has a mass of 11/
       expect(json["fingerprint"]).to eq("d9dab8e4607e2a74da3b9eefb49eacec")
+      expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
     it "handles ES6 spread params" do

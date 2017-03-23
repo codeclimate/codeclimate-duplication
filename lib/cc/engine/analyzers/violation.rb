@@ -24,6 +24,7 @@ module CC
             "other_locations": format_other_locations,
             "content": content_body,
             "fingerprint": fingerprint,
+            "severity": calculate_severity,
           }
         end
 
@@ -37,6 +38,10 @@ module CC
 
         def occurrences
           other_sexps.count
+        end
+
+        def total_occurrences
+          occurrences + 1
         end
 
         private
@@ -56,7 +61,15 @@ module CC
         end
 
         def calculate_points
-          language_strategy.calculate_points(mass)
+          @calculate_points ||= language_strategy.calculate_points(mass)
+        end
+
+        def points_across_occurrences
+          calculate_points * total_occurrences
+        end
+
+        def calculate_severity
+          language_strategy.calculate_severity(points_across_occurrences)
         end
 
         def format_location
