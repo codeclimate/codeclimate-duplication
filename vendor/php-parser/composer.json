@@ -1,5 +1,5 @@
 {
     "require": {
-        "nikic/php-parser": "2.1.1"
+        "nikic/php-parser": "3.0.5"
     }
 }
