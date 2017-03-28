@@ -104,6 +104,24 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "lines" => { "begin" => 117, "end" => 118 },
       })
     end
+
+    it "can parse php 7.1 code" do
+      create_source_file("foo.php", File.read(fixture_path("php_71_sample.php")))
+
+      issues = run_engine(engine_conf).strip.split("\0")
+
+      expect(issues.length).to eq(2)
+
+      expect(JSON.parse(issues.first.strip)["location"]).to eq({
+        "path" => "foo.php",
+        "lines" => { "begin" => 2, "end" => 7 },
+      })
+
+      expect(JSON.parse(issues.last.strip)["location"]).to eq({
+        "path" => "foo.php",
+        "lines" => { "begin" => 11, "end" => 16 },
+      })
+    end
   end
 
   def engine_conf
