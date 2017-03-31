@@ -1,4 +1,8 @@
 ---
+prepare:
+  fetch:
+    - url: https://raw.githubusercontent.com/codeclimate/styleguide/master/ruby/rubocop.yml
+      path: base_rubocop.yml
 engines:
   rubocop:
     enabled: true
