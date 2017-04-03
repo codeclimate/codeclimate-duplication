@@ -1,6 +1,8 @@
-require 'cc/engine/analyzers/violations'
-require 'cc/engine/analyzers/file_thread_pool'
-require 'thread'
+# frozen_string_literal: true
+
+require "cc/engine/analyzers/violations"
+require "cc/engine/analyzers/file_thread_pool"
+require "thread"
 require "concurrent"
 require "ccflay"
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cc/engine/analyzers/php/visitor"
 
 module CC

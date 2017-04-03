@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cc/engine/analyzers/command_line_runner"
 require "timeout"
 require "json"

@@ -1,4 +1,6 @@
-require 'cc/engine/analyzers/node'
+# frozen_string_literal: true
+
+require "cc/engine/analyzers/node"
 
 module CC
   module Engine

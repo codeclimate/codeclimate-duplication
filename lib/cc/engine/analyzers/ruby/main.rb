@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "flay"
 require "json"
 require "cc/engine/analyzers/reporter"

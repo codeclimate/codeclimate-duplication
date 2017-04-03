@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cc/engine/analyzers/parser_error"
 require "cc/engine/analyzers/parser_base"
 
@@ -67,8 +69,8 @@ module CC
           self.class::POINTS_PER_OVERAGE
         end
 
-        def process_file(path)
-          raise NoMethodError.new("Subclass must implement `process_file`")
+        def process_file(_path)
+          raise NoMethodError, "Subclass must implement `process_file`"
         end
 
         def file_list

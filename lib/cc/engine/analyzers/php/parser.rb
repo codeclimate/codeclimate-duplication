@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cc/engine/analyzers/command_line_runner"
 require "cc/engine/analyzers/parser_base"
 require "cc/engine/analyzers/php/ast"
@@ -29,7 +31,7 @@ module CC
             self
           end
 
-        private
+          private
 
           def parser_path
             relative_path = "../../../../../vendor/php-parser/parser.php"
@@ -42,4 +44,3 @@ module CC
     end
   end
 end
-

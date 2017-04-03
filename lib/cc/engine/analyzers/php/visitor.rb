@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CC
   module Engine
     module Analyzers
@@ -172,7 +174,7 @@ module CC
             MagicConst_Method
             MagicConst_Namespace
             MagicConst_Trait
-          ]
+          ].freeze
 
           def accept(target)
             target.accept(self)
@@ -206,4 +208,3 @@ module CC
     end
   end
 end
-

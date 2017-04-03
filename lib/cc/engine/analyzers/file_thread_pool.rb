@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "thread"
 
 module CC
@@ -12,7 +14,7 @@ module CC
           @concurrency = concurrency
         end
 
-        def run(&block)
+        def run
           queue = build_queue
           lock = Mutex.new
 
@@ -46,7 +48,7 @@ module CC
         end
 
         def thread_count
-          if (1..MAX_CONCURRENCY) === concurrency
+          if (1..MAX_CONCURRENCY).cover?(concurrency)
             concurrency
           elsif concurrency < 1
             DEFAULT_CONCURRENCY

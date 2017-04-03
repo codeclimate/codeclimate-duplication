@@ -1,4 +1,6 @@
-require 'cc/engine/analyzers/php/nodes'
+# frozen_string_literal: true
+
+require "cc/engine/analyzers/php/nodes"
 
 module CC
   module Engine
@@ -24,8 +26,8 @@ module CC
             }
             if (node_type = ast.delete("nodeType"))
               node_attrs[:node_type] = node_type.
-                  sub(prefix_re, '').
-                  sub(suffix_re, '')
+                                       sub(prefix_re, "").
+                                       sub(suffix_re, "")
             end
             ast.each do |key, value|
               unless key == "nodeAttributes"
