@@ -1,7 +1,9 @@
-require 'cc/engine/analyzers/php/parser'
+# frozen_string_literal: true
+
+require "cc/engine/analyzers/php/parser"
 require "cc/engine/analyzers/analyzer_base"
-require 'flay'
-require 'json'
+require "flay"
+require "json"
 
 module CC
   module Engine
@@ -28,9 +30,7 @@ module CC
             parser = php_parser.new(code, path).parse
             syntax_tree = parser.syntax_tree
 
-            if syntax_tree
-              syntax_tree.to_sexp
-            end
+            syntax_tree&.to_sexp
           end
 
           def php_parser

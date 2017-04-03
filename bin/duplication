@@ -1,13 +1,15 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
 require "cc/engine/duplication"
 
-if File.exists?("/config.json")
-  engine_config = JSON.parse(File.read("/config.json"))
-else
-  engine_config = {}
-end
+engine_config =
+  if File.exist?("/config.json")
+    JSON.parse(File.read("/config.json"))
+  else
+    {}
+  end
 
 directory = ARGV[0] || "/code"
 

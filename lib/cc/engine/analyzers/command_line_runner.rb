@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "open3"
 require "timeout"
 
@@ -52,4 +54,3 @@ module CC
     end
   end
 end
-

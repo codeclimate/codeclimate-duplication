@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "flay"
 require "concurrent"
 require "digest"
@@ -113,12 +115,12 @@ class Sexp # TODO: push this back to flay
   alias old_mass mass
 
   def mass
-    @mass ||= inject(1) { |t, s|
-      if Sexp === s then
+    @mass ||= inject(1) do |t, s|
+      if s.is_a?(Sexp)
         t + s.mass
       else
         t
       end
-    }
+    end
   end
 end

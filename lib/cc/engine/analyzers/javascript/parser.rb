@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cc/engine/analyzers/command_line_runner"
 
 module CC
@@ -24,12 +26,12 @@ module CC
           private
 
           def js_command
-            file = File.expand_path(File.dirname(__FILE__)) + '/parser.js'
+            file = File.expand_path(File.dirname(__FILE__)) + "/parser.js"
             "node #{file}"
           end
 
           def strip_shebang(code)
-            if code.start_with?('#!')
+            if code.start_with?("#!")
               code.lines.drop(1).join
             else
               code

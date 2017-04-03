@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module CC
   module Engine
     module Analyzers
       class Node
-        SCRUB_PROPERTIES = []
+        SCRUB_PROPERTIES = [].freeze
 
         def initialize(node, file, default_line = 0)
           @node = node
@@ -42,7 +44,7 @@ module CC
           valid_properties.map do |key, value|
             if value.is_a?(Array)
               create_sexp(key.to_sym, *self.class.new(value, @file, @line).format)
-            elsif  value.is_a?(Hash)
+            elsif value.is_a?(Hash)
               create_sexp(key.to_sym, self.class.new(value, @file, @line).format)
             else
               value.to_s.to_sym

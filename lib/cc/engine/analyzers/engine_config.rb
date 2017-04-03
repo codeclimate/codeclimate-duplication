@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CC
   module Engine
     module Analyzers
@@ -45,8 +47,8 @@ module CC
 
         def fetch_language(language)
           language = config.
-            fetch("languages", {}).
-            fetch(language, {})
+                     fetch("languages", {}).
+                     fetch(language, {})
 
           if language.is_a? Hash
             language

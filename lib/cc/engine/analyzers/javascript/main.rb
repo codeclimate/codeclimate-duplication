@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cc/engine/analyzers/analyzer_base"
 require "cc/engine/analyzers/javascript/parser"
 require "cc/engine/analyzers/javascript/minification_checker"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "bundler/setup"
 require "cc/engine/analyzers/ruby/main"
 require "cc/engine/analyzers/javascript/main"

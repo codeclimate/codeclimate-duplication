@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cc/engine/analyzers/python/parser"
 require "cc/engine/analyzers/python/node"
 require "cc/engine/analyzers/reporter"
@@ -11,7 +13,7 @@ module CC
       module Python
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "python"
-          PATTERNS = ["**/*.py"]
+          PATTERNS = ["**/*.py"].freeze
           DEFAULT_MASS_THRESHOLD = 32
           DEFAULT_PYTHON_VERSION = 2
           POINTS_PER_OVERAGE = 50_000

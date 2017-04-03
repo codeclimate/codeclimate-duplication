@@ -1,11 +1,13 @@
-require 'cc/engine/analyzers/node'
+# frozen_string_literal: true
+
+require "cc/engine/analyzers/node"
 
 module CC
   module Engine
     module Analyzers
       module Javascript
         class Node < CC::Engine::Analyzers::Node
-          SCRUB_PROPERTIES = %w[type start end]
+          SCRUB_PROPERTIES = %w[type start end].freeze
 
           private
 
