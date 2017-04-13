@@ -27,12 +27,10 @@ class CCFlay < Flay
     def structural_hash
       @structural_hash ||= pure_ruby_hash
     end
-    $stderr.puts "NOTE: Using pure ruby hash!"
   else
     def structural_hash
       @structural_hash ||= Digest::MD5.hexdigest(structure.to_s)
     end
-    $stderr.puts "NOTE: Using MD5 hash!"
   end
 end
 
