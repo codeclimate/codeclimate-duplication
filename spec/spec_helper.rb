@@ -2,6 +2,10 @@ require 'bundler/setup'
 require 'flay'
 require 'tmpdir'
 
+require "pry"
+Pry.config.pager = false
+Pry.config.color = false
+
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
 
 RSpec.configure do |config|
@@ -43,4 +47,9 @@ RSpec.configure do |config|
 
   config.order = :random
   config.disable_monkey_patching!
+
+  config.filter_run focus: true
+  config.alias_example_to :fit, focus: true
+  config.alias_example_to :pit, pending: true
+  config.run_all_when_everything_filtered = true
 end
