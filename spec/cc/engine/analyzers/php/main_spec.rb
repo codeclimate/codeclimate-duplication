@@ -19,11 +19,11 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
             }
           }
 
-          function hi($name) {
+          function hello($name) {
             if (empty($name)) {
-              echo "Hi World!";
+              echo "Hello World!";
             } else {
-              echo "Hi $name!";
+              echo "Hello $name!";
             }
           }
       EOPHP
@@ -47,6 +47,47 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       ])
       expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
       expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
+    end
+
+    it "prints an issue for similar code" do
+      create_source_file("foo.php", <<-EOPHP)
+          <?php
+          function hello($name) {
+            if (empty($name)) {
+              echo "Hello World!";
+            } else {
+              echo "Hello $name!";
+            }
+          }
+
+          function hi($nickname) {
+            if (empty($nickname)) {
+              echo "Hi World!";
+            } else {
+              echo "Hi $nickname!";
+            }
+          }
+      EOPHP
+
+      issues = run_engine(engine_conf).strip.split("\0")
+      expect(issues.length).to be > 0
+      result = issues.first.strip
+      json = JSON.parse(result)
+
+      expect(json["type"]).to eq("issue")
+      expect(json["check_name"]).to eq("Similar code")
+      expect(json["description"]).to eq("Similar code found in 1 other location (mass = 11)")
+      expect(json["categories"]).to eq(["Duplication"])
+      expect(json["location"]).to eq({
+        "path" => "foo.php",
+        "lines" => { "begin" => 2, "end" => 6 },
+      })
+      expect(json["remediation_points"]).to eq(2_100_000)
+      expect(json["other_locations"]).to eq([
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+      ])
+      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
+      expect(json["fingerprint"]).to eq("e25ff98e21ce7e3e4ec3504174a820d2")
     end
 
     it "runs against complex files" do

@@ -29,8 +29,12 @@ module CC
               @attrs[:file]
             end
 
+            def identifier
+              @attrs[:name] || @attrs[:value]
+            end
+
             def to_sexp
-              CC::Engine::Analyzers::Php::SexpVisitor.new.accept(self)
+              CC::Engine::Analyzers::Php::Visitor.new.accept(self)
             end
 
             def each_pair(&block)
