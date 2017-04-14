@@ -183,22 +183,18 @@ module CC
           ALL_NODES.each do |type|
             eval <<-RUBY
               def visit_#{type}Node(node)
-                node.sub_nodes.map do |sub_node|
+                name = :#{type.gsub(/([a-z])([A-Z])/, '\1_\2').downcase}
+                sub = node.sub_nodes.map do |sub_node|
                   sub_node.accept(self)
                 end
-              end
-            RUBY
-          end
-        end
 
-        class SexpVisitor < Visitor
-          ALL_NODES.each do |type|
-            eval <<-RUBY
-              def visit_#{type}Node(o)
-                name = :#{type.gsub(/([a-z])([A-Z])/, '\1_\2').downcase}
-                sexp = Sexp.new(name, *super(o))
-                sexp.line = o.line
-                sexp.file = o.file
+                if sub.empty? && (ident = node.identifier)
+                  sub = [ident]
+                end
+
+                sexp = Sexp.new(name, *sub)
+                sexp.line = node.line
+                sexp.file = node.file
                 sexp
               end
             RUBY
