@@ -75,7 +75,7 @@ module CC::Engine::Analyzers
               before { subject.type = 'ruby' }
 
               it 'returns true' do
-                expect(subject.ruby?).to be true
+                10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.ruby?).to be true
               end
             end
 
@@ -83,7 +83,7 @@ module CC::Engine::Analyzers
               before { subject.type = 'js' }
 
               it 'returns true' do
-                expect(subject.js?).to be true
+                10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.js?).to be true
               end
             end
         EORUBY
@@ -100,12 +100,12 @@ module CC::Engine::Analyzers
           "path" => "foo.rb",
           "lines" => { "begin" => 1, "end" => 5 },
         })
-        expect(json["remediation_points"]).to eq(300_000)
+        expect(json["remediation_points"]).to eq(350_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
         ])
-        expect(json["content"]["body"]).to match /This issue has a mass of 18/
-        expect(json["fingerprint"]).to eq("b7e46d8f5164922678e48942e26100f2")
+        expect(json["content"]["body"]).to match /This issue has a mass of 35/
+        expect(json["fingerprint"]).to eq("fb28e849f22fbabf946d1afdeaa84c5b")
         expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
       end
 
@@ -115,7 +115,7 @@ module CC::Engine::Analyzers
               before { subject.type = 'ruby' }
 
               it 'returns true' do
-                expect(subject.ruby?).to be true
+                10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.ruby?).to be true
               end
             end
 
@@ -123,7 +123,7 @@ module CC::Engine::Analyzers
               before { subject.type = 'js' }
 
               it 'returns true' do
-                expect(subject.js?).to be true
+                10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.js?).to be true
               end
             end
 
@@ -131,7 +131,7 @@ module CC::Engine::Analyzers
               before { subject.type = 'js' }
 
               it 'returns true' do
-                expect(subject.js?).to be true
+                10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.js?).to be true
               end
             end
         EORUBY
