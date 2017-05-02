@@ -21,7 +21,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Identical code")
-      expect(json["description"]).to eq("Avoid identical blocks of code (3 locations). Consider refactoring.")
+      expect(json["description"]).to eq("Identical blocks of code found in 3 locations. Consider refactoring.")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.js",
@@ -50,7 +50,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
       expect(json["type"]).to eq("issue")
       expect(json["check_name"]).to eq("Similar code")
-      expect(json["description"]).to eq("Avoid similar blocks of code (3 locations). Consider refactoring.")
+      expect(json["description"]).to eq("Similar blocks of code found in 3 locations. Consider refactoring.")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.js",
