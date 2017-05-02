@@ -57,7 +57,7 @@ module CC::Engine::Analyzers
     def locations_from_source(source, flay_opts = {})
       flay = CCFlay.new({
         diff: false,
-        mass: CC::Engine::Analyzers::Ruby::Main::DEFAULT_MASS_THRESHOLD,
+        mass: 18,
         summary: false,
         verbose: false,
         number: true,
