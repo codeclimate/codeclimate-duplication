@@ -26,7 +26,7 @@ module CC::Engine::Analyzers
 
         expect(first_formatted[:type]).to eq("issue")
         expect(first_formatted[:check_name]).to eq("Identical code")
-        expect(first_formatted[:description]).to eq("Avoid identical blocks of code (3 locations). Consider refactoring.")
+        expect(first_formatted[:description]).to eq("Identical blocks of code found in 3 locations. Consider refactoring.")
         expect(first_formatted[:categories]).to eq(["Duplication"])
         expect(first_formatted[:remediation_points]).to eq(30)
         expect(first_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>1, :end=>5}})
