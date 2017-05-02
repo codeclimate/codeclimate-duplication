@@ -109,11 +109,16 @@ module CC
           digest.to_s
         end
 
+        def duplication_type
+          if identical?
+            "identical"
+          else
+            "similar"
+          end
+        end
+
         def description
-          description = "#{check_name} found in #{occurrences} other location"
-          description += "s" if occurrences > 1
-          description += " (mass = #{mass})"
-          description
+          "Avoid #{duplication_type} blocks of code (#{total_occurrences} locations). Consider refactoring."
         end
       end
     end
