@@ -34,7 +34,7 @@ module CC::Engine::Analyzers
           { :path => "file.rb", :lines => { :begin => 9, :end => 13} },
           { :path => "file.rb", :lines => { :begin => 17, :end => 21} },
         ])
-        expect(first_formatted[:fingerprint]).to eq("f52d2f61a77c569513f8b6314a00d013")
+        expect(first_formatted[:fingerprint]).to eq("64d2fe721009691194926b5534f2eaea")
         expect(first_formatted[:severity]).to eq(CC::Engine::Analyzers::Base::MINOR)
 
         expect(second_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>9, :end=>13}})
@@ -56,7 +56,7 @@ describe '#ruby?' do
   before { subject.type = 'ruby' }
 
   it 'returns true' do
-    expect(subject.ruby?).to be true
+    10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.ruby?).to be true
   end
 end
 
@@ -64,7 +64,7 @@ describe '#js?' do
   before { subject.type = 'js' }
 
   it 'returns true' do
-    expect(subject.js?).to be true
+    10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.js?).to be true
   end
 end
 
@@ -72,7 +72,7 @@ describe '#whaddup?' do
   before { subject.type = 'js' }
 
   it 'returns true' do
-    expect(subject.js?).to be true
+    10.times { |i| if i < 5; if i % 2 == 0; subject.increase_mass!; end; end }; expect(subject.js?).to be true
   end
 end
         SOURCE
