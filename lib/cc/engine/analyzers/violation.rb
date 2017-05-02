@@ -51,11 +51,7 @@ module CC
         attr_reader :language_strategy, :other_sexps, :current_sexp
 
         def check_name
-          if identical?
-            "Identical code"
-          else
-            "Similar code"
-          end
+          "#{duplication_type.capitalize} code"
         end
 
         def identical?
@@ -118,7 +114,7 @@ module CC
         end
 
         def description
-          "Avoid #{duplication_type} blocks of code (#{total_occurrences} locations). Consider refactoring."
+          "#{duplication_type.capitalize} blocks of code found in #{total_occurrences} locations. Consider refactoring."
         end
       end
     end
