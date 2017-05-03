@@ -23,6 +23,52 @@ module CC::Engine::Analyzers
         }.to output(/Skipping file/).to_stderr
       end
 
+      it "calculates locations correctly for conditional statements" do
+        create_source_file("foo.rb", <<-EORUBY)
+          def self.from_level(level)
+            if level >= 4
+              new("A")
+            elsif level >= 2
+              new("E")
+            elsif level >= 1
+              new("I")
+            elsif level >= 0
+              new("O")
+            else
+              new("U")
+            end
+          end
+
+          def self.from_remediation_amount(amount)
+            if amount.nil?
+              NULL_RATING
+            elsif amount <= 20
+              new("A")
+            elsif amount <= 40
+              new("E")
+            elsif amount <= 80
+              new("I")
+            elsif amount <= 160
+              new("O")
+            else
+              new("U")
+            end
+          end
+        EORUBY
+
+        issues = run_engine(engine_conf).strip.split("\0")
+        result = issues.first.strip
+        json = JSON.parse(result)
+
+        expect(json["location"]).to eq({
+          "path" => "foo.rb",
+          "lines" => { "begin" => 2, "end" => 12 },
+        })
+        expect(json["other_locations"]).to eq([
+          {"path" => "foo.rb", "lines" => { "begin" => 18, "end" => 28} },
+        ])
+      end
+
       it "prints an issue" do
         create_source_file("foo.rb", <<-EORUBY)
             describe '#ruby?' do

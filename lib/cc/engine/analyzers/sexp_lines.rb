@@ -16,12 +16,8 @@ module CC
         attr_reader :root_sexp
 
         def calculate
-          @begin_line = root_sexp.line
-          @end_line = root_sexp.end_line || root_sexp.line_max
-
-          if @end_line < @begin_line
-            @begin_line = root_sexp.line_min
-          end
+          @begin_line = [root_sexp.line, root_sexp.line_min].compact.min
+          @end_line = [root_sexp.end_line, root_sexp.line_max].compact.max
         end
       end
     end
