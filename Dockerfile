@@ -48,13 +48,14 @@ RUN apk add --no-cache curl make gcc g++ linux-headers binutils-gold gnupg libst
       find /usr/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf; \
     fi && \
     gem install bundler --no-ri --no-rdoc && \
-    (cd /usr/src/app && bundle install -j 4) && \
     (cd /usr/src/app && curl -sS https://getcomposer.org/installer | php) && \
     apk del --purge curl make gcc g++ linux-headers binutils-gold gnupg ${DEL_PKGS} && \
     rm -rf ${RM_DIRS} /node-${NODE_VERSION}* /usr/share/man /tmp/* /var/cache/apk/* \
       /root/.npm /root/.node-gyp /root/.gnupg /usr/lib/node_modules/npm/man \
       /usr/lib/node_modules/npm/doc /usr/lib/node_modules/npm/html \
       /usr/lib/node_modules/npm/scripts
+
+RUN cd /usr/src/app && bundle install -j 4
 
 WORKDIR /usr/src/app/
 
