@@ -49,8 +49,8 @@ module CC::Engine::Analyzers
 
         expect(locations.count).to eq 2
 
-        expect([locations[0].begin_line, locations[0].end_line]).to eq([2, 7])
-        expect([locations[1].begin_line, locations[1].end_line]).to eq([11, 16])
+        expect([locations[0].begin_line, locations[0].end_line]).to eq([1, 7])
+        expect([locations[1].begin_line, locations[1].end_line]).to eq([10, 16])
       end
     end
 
