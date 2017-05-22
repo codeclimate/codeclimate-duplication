@@ -40,12 +40,16 @@ module CC
           file_list.files
         end
 
+        def language
+          self.class::LANGUAGE
+        end
+
         def mass_threshold
-          engine_config.mass_threshold_for(self.class::LANGUAGE) || self.class::DEFAULT_MASS_THRESHOLD
+          engine_config.mass_threshold_for(language) || self.class::DEFAULT_MASS_THRESHOLD
         end
 
         def count_threshold
-          engine_config.count_threshold_for(self.class::LANGUAGE)
+          engine_config.count_threshold_for(language)
         end
 
         def calculate_points(mass)
@@ -77,7 +81,7 @@ module CC
           @_file_list ||= ::CC::Engine::Analyzers::FileList.new(
             engine_config: engine_config,
             patterns: engine_config.patterns_for(
-              self.class::LANGUAGE,
+              language,
               self.class::PATTERNS,
             ),
           )
