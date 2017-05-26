@@ -28,7 +28,8 @@ module CC
           private
 
           def process_file(path)
-            Node.new(js_parser.new(File.read(path), path).parse.syntax_tree, path).format
+            ast = js_parser.new(File.read(path), path).parse
+            Node.new(ast.syntax_tree, path).format if ast
           end
 
           def js_parser
