@@ -40,6 +40,10 @@ module CC
           file_list.files
         end
 
+        def filters
+          engine_config.filters_for(language)
+        end
+
         def language
           self.class::LANGUAGE
         end
