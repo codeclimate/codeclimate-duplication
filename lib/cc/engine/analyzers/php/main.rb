@@ -27,10 +27,8 @@ module CC
 
           def process_file(path)
             code = File.binread(path)
-            parser = php_parser.new(code, path).parse
-            syntax_tree = parser.syntax_tree
-
-            syntax_tree&.to_sexp
+            ast = php_parser.new(code, path).parse
+            ast.syntax_tree&.to_sexp if ast
           end
 
           def php_parser
