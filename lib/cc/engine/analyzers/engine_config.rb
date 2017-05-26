@@ -27,6 +27,12 @@ module CC
           config.fetch("config", {}).fetch("concurrency", 2).to_i
         end
 
+        def filters_for(language)
+          fetch_language(language).fetch("filters", []).map { |s|
+            Sexp::Matcher.parse s
+          }
+        end
+
         def mass_threshold_for(language)
           threshold = fetch_language(language).fetch("mass_threshold", nil)
 

@@ -87,6 +87,7 @@ module CC
         def flay_options
           changes = {
             mass: language_strategy.mass_threshold,
+            filters: language_strategy.filters,
           }
 
           CCFlay.default_options.merge changes

@@ -1,6 +1,7 @@
 require "spec_helper"
 require "cc/engine/analyzers/engine_config"
 require "cc/engine/analyzers/ruby/main"
+require "sexp" # to build matchers for filtering
 
 RSpec.describe CC::Engine::Analyzers::EngineConfig  do
   describe "#config" do
@@ -106,6 +107,16 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
 
       expect(engine_config.mass_threshold_for("ruby")).to be_nil
     end
+
+    it "returns nil when language is empty via array" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => %w[ruby],
+        },
+      })
+
+      expect(engine_config.mass_threshold_for("ruby")).to be_nil
+    end
   end
 
   describe "count_threshold_for" do
@@ -146,6 +157,36 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       })
 
       expect(engine_config.count_threshold_for("ruby")).to eq(2)
+    end
+  end
+
+  describe "filters_for" do
+    it "returns configured filter for language" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => {
+              "filters" => ["(defn [m /^test_/] _ ___)"],
+            },
+          },
+        },
+      })
+
+      exp = [s{ s(:defn, m(/^test_/), _, ___) }]
+
+      expect(engine_config.filters_for("ruby")).to eq(exp)
+    end
+
+    it "returns default value when language value is empty" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => "",
+          },
+        },
+      })
+
+      expect(engine_config.filters_for("ruby")).to eq([])
     end
   end
 
