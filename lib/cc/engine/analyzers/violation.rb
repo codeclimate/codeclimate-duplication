@@ -46,16 +46,16 @@ module CC
           occurrences + 1
         end
 
+        def identical?
+          @identical
+        end
+
         private
 
         attr_reader :language_strategy, :other_sexps, :current_sexp
 
         def check_name
           "#{duplication_type.capitalize} code"
-        end
-
-        def identical?
-          @identical
         end
 
         def calculate_points
