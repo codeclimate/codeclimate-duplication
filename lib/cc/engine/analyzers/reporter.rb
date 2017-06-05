@@ -150,6 +150,22 @@ module CC
             !engine_config.similar_code_check_enabled?
           end
         end
+
+        def skip?(violation)
+          insufficient_occurrence?(violation) || check_disabled?(violation)
+        end
+
+        def insufficient_occurrence?(violation)
+          (violation.occurrences + 1) < language_strategy.count_threshold
+        end
+
+        def check_disabled?(violation)
+          if violation.identical?
+            !engine_config.identical_code_check_enabled?
+          else
+            !engine_config.similar_code_check_enabled?
+          end
+        end
       end
     end
   end
