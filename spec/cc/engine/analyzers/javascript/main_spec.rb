@@ -124,6 +124,14 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
   def engine_conf
     CC::Engine::Analyzers::EngineConfig.new({
       'config' => {
+        'checks' => {
+          'similar-code' => {
+            'enabled' => true,
+          },
+          'identical-code' => {
+            'enabled' => true,
+          },
+        },
         'languages' => {
           'javascript' => {
             'mass_threshold' => 1,

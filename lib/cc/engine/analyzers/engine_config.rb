@@ -5,6 +5,9 @@ module CC
     module Analyzers
       class EngineConfig
         DEFAULT_COUNT_THRESHOLD = 2
+        IDENTICAL_CODE_CHECK = "identical-code".freeze
+        SIMILAR_CODE_CHECK = "similar-code".freeze
+
         InvalidConfigError = Class.new(StandardError)
 
         def initialize(hash)
@@ -25,6 +28,14 @@ module CC
 
         def concurrency
           config.fetch("config", {}).fetch("concurrency", 2).to_i
+        end
+
+        def identical_code_check_enabled?
+          enabled?(IDENTICAL_CODE_CHECK)
+        end
+
+        def similar_code_check_enabled?
+          enabled?(SIMILAR_CODE_CHECK)
         end
 
         def mass_threshold_for(language)
@@ -95,6 +106,14 @@ module CC
           else
             raise InvalidConfigError, "#{entry.inspect} is not a valid language entry"
           end
+        end
+
+        def checks
+          config.fetch("config", {}).fetch("checks", {})
+        end
+
+        def enabled?(check)
+          checks.fetch(check, {}).fetch("enabled", true)
         end
       end
     end
