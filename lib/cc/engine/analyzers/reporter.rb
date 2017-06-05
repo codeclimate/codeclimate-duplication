@@ -55,7 +55,7 @@ module CC
             violations = new_violations(issue)
 
             violations.each do |violation|
-              next if (violation.occurrences + 1) < language_strategy.count_threshold
+              next if skip?(violation)
               debug("Violation name=#{violation.report_name} mass=#{violation.mass}")
 
               unless reports.include?(violation.report_name)
@@ -102,6 +102,22 @@ module CC
 
         def debug(message)
           $stderr.puts(message) if engine_config.debug?
+        end
+
+        def skip?(violation)
+          insufficient_occurrence?(violation) || check_disabled?(violation)
+        end
+
+        def insufficient_occurrence?(violation)
+          (violation.occurrences + 1) < language_strategy.count_threshold
+        end
+
+        def check_disabled?(violation)
+          if violation.identical?
+            !engine_config.identical_code_check_enabled?
+          else
+            !engine_config.similar_code_check_enabled?
+          end
         end
       end
     end
