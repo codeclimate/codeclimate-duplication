@@ -126,6 +126,33 @@ engines:
             - "**/*.ruby"
 ```
 
+### Node Filtering
+
+Sometimes structural similarities are reported that you just don't
+care about. For example, the contents of arrays or hashes might have
+similar structures and there's little you can do to refactor them. You
+can specify language specific filters to ignore any issues that match
+the pattern. Here is an example that filters simple hashes and arrays:
+
+```yaml
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        ruby:
+          filters:
+            - "(hash (lit _) (str _) ___)"
+            - "(array (str _) ___)"
+```
+
+The syntax for patterns are pretty simple. In the first pattern:
+`"(hash (lit _) (str _) ___)"` specifies "A hash with a literal key, a
+string value, followed by anything else (including nothing)". You
+could also specify `"(hash ___)"` to ignore all hashes altogether.
+
+For more information on pattern matching,
+see [sexp_processor][sexp_processor], especially [sexp.rb][sexp.rb]
 
 
 [codeclimate]: https://codeclimate.com/dashboard
@@ -134,3 +161,5 @@ engines:
 [cli]: https://github.com/codeclimate/codeclimate
 [rule-of-three]: https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)
 [exclude-files-engine]: https://docs.codeclimate.com/docs/excluding-files-and-folders#section-exclude-paths-for-specific-engines
+[sexp_processor]: https://github.com/seattlerb/sexp_processor/
+[sexp.rb]: https://github.com/seattlerb/sexp_processor/blob/master/lib/sexp.rb
