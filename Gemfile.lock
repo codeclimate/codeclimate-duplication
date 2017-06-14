@@ -33,7 +33,7 @@ GEM
     rspec-support (3.3.0)
     ruby_parser (3.9.0)
       sexp_processor (~> 4.1)
-    sexp_processor (4.9.0)
+    sexp_processor (4.10.0b1)
     slop (3.6.0)
 
 PLATFORMS
@@ -46,6 +46,4 @@ DEPENDENCIES
   pry
   rake
   rspec
-
-BUNDLED WITH
-   1.14.4
+  sexp_processor (~> 4.10including.pre.betas0)
