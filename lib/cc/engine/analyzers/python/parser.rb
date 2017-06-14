@@ -25,6 +25,8 @@ module CC
             end
 
             self
+          rescue Timeout::Error
+            warn "TIMEOUT parsing #{filename}. Skipping."
           end
 
           private
