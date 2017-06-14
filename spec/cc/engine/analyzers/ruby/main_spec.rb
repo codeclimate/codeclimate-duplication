@@ -149,6 +149,44 @@ module CC::Engine::Analyzers
           expect(run_engine(engine_conf)).to eq("")
         }.to output(/Skipping file/).to_stderr
       end
+
+      it "does not see hashes as similar" do
+        create_source_file("foo.rb", <<-EORUBY)
+          ANIMALS = {
+            bat: "Bat",
+            bee: "Bee",
+            cat: "Cat",
+            cow: "Cow",
+            dog: "Dog",
+            fly: "Fly",
+            human: "Human",
+            lizard: "Lizard",
+            owl: "Owl",
+            ringworm: "Ringworm",
+            salmon: "Salmon",
+            whale: "Whale",
+          }.freeze
+
+          TRANSPORT = {
+            airplane: "Airplane",
+            bicycle: "Bicycle",
+            bus: "Bus",
+            car: "Car",
+            escalator: "Escalator",
+            helicopter: "Helicopter",
+            lift: "Lift",
+            motorcycle: "Motorcycle",
+            rocket: "Rocket",
+            scooter: "Scooter",
+            skateboard: "Skateboard",
+            truck: "Truck",
+          }.freeze
+        EORUBY
+
+        issues = run_engine(filtered_engine_conf("(hash ___)")).strip.split("\0")
+
+        expect(issues.length).to eq(0)
+      end
     end
 
     describe "#calculate_points(mass)" do
@@ -196,6 +234,19 @@ module CC::Engine::Analyzers
 
     def engine_conf
       EngineConfig.new({})
+    end
+
+    def filtered_engine_conf *patterns
+      EngineConfig.new({
+                        "config" => {
+                                     "languages" => {
+                                                     "ruby" => {
+                                                                "filters" => patterns
+                                                               }
+                                                    }
+                                    }
+                       }
+                      )
     end
   end
 end
