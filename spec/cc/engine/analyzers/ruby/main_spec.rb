@@ -237,16 +237,14 @@ module CC::Engine::Analyzers
     end
 
     def filtered_engine_conf *patterns
-      EngineConfig.new({
-                        "config" => {
-                                     "languages" => {
-                                                     "ruby" => {
-                                                                "filters" => patterns
-                                                               }
-                                                    }
-                                    }
-                       }
-                      )
+      EngineConfig.new({ "config" => {
+                           "languages" => {
+                             "ruby" => {
+                               "filters" => patterns
+                             }
+                           }
+                         }
+                       })
     end
   end
 end

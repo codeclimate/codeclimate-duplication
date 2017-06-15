@@ -28,8 +28,8 @@ module CC
         end
 
         def filters_for(language)
-          fetch_language(language).fetch("filters", []).map { |s|
-            Sexp::Matcher.parse s
+          fetch_language(language).fetch("filters", []).map { |filter|
+            Sexp::Matcher.parse filter
           }
         end
 
