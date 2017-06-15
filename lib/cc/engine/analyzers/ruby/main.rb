@@ -20,7 +20,7 @@ module CC
           ].freeze
           DEFAULT_MASS_THRESHOLD = 18
           POINTS_PER_OVERAGE = 100_000
-          TIMEOUT = 300
+          TIMEOUT = 30
 
           private
 

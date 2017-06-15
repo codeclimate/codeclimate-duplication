@@ -10,8 +10,6 @@ module CC
   module Engine
     module Analyzers
       class Reporter
-        TIMEOUT = 10
-
         def initialize(engine_config, language_strategy, io)
           @engine_config = engine_config
           @language_strategy = language_strategy
@@ -87,17 +85,12 @@ module CC
         end
 
         def flay_options
-          {
-            diff: false,
+          changes = {
             mass: language_strategy.mass_threshold,
-            summary: false,
-            verbose: false,
-            number: true,
-            timeout: TIMEOUT,
-            liberal: false,
-            fuzzy: false,
-            only: nil,
+            filters: language_strategy.filters,
           }
+
+          CCFlay.default_options.merge changes
         end
 
         def debug(message)

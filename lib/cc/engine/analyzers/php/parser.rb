@@ -10,6 +10,8 @@ module CC
     module Analyzers
       module Php
         class Parser < ParserBase
+          TIMEOUT = 10
+
           attr_reader :code, :filename, :syntax_tree
 
           def initialize(code, filename)
@@ -18,7 +20,8 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new("php -d 'display_errors = Off' #{parser_path}")
+            cmd = "php -d 'display_errors = Off' #{parser_path}"
+            runner = CommandLineRunner.new(cmd, TIMEOUT)
             runner.run(code) do |output|
               json = parse_json(output)
 
@@ -29,6 +32,8 @@ module CC
             end
 
             self
+          rescue Timeout::Error
+            warn "TIMEOUT parsing #{filename}. Skipping."
           end
 
           private

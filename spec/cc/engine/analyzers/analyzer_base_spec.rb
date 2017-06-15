@@ -28,6 +28,10 @@ module CC::Engine::Analyzers
       expect(analyzer.files).to match_array(['./foo.a', './foo.b'])
     end
 
+    it "knows what language it is analyzing" do
+      expect(analyzer.language).to eq("dummy")
+    end
+
     context "with custom patterns" do
       let(:engine_config) do
         EngineConfig.new({

@@ -9,6 +9,7 @@ module CC
     module Analyzers
       module Python
         class Parser < ParserBase
+          TIMEOUT = 10
           attr_reader :code, :filename, :syntax_tree
 
           def initialize(python_version, code, filename)
@@ -18,12 +19,14 @@ module CC
           end
 
           def parse
-            runner = CommandLineRunner.new(python_command)
+            runner = CommandLineRunner.new(python_command, TIMEOUT)
             runner.run(code) do |ast|
               @syntax_tree = parse_json(ast)
             end
 
             self
+          rescue Timeout::Error
+            warn "TIMEOUT parsing #{filename}. Skipping."
           end
 
           private
