@@ -13,10 +13,6 @@ module CC
           LANGUAGE = "ruby"
           PATTERNS = [
             "**/*.rb",
-            "**/*.rake",
-            "**/Rakefile",
-            "**/Gemfile",
-            "**/*.gemspec",
           ].freeze
           DEFAULT_MASS_THRESHOLD = 25
           BASE_POINTS = 150_000
