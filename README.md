@@ -151,9 +151,120 @@ The syntax for patterns are pretty simple. In the first pattern:
 string value, followed by anything else (including nothing)". You
 could also specify `"(hash ___)"` to ignore all hashes altogether.
 
+#### Visualizing the Parse Tree
+
+Figuring out what to filter is tricky. codeclimate-duplication comes
+with a configuration option to help with the discovery. Instead of
+scanning your code and printing out issues for codeclimate, it prints
+out the parse-trees instead! Just add `dump_ast: true` to your
+.codeclimate.yml file:
+
+```
+---
+engines:
+  duplication:
+    enabled: true
+    config:
+      dump_ast: true
+      ... rest of config ...
+```
+
+Then run `codeclimate analyze` while using the debug flag to output stderr:
+
+```
+% CODECLIMATE_DEBUG=1 codeclimate analyze
+```
+
+Running that command might output something like:
+
+```
+Sexps for issues:
+
+# 1) ExpressionStatement#4261258897 mass=128:
+
+# 1.1) bogus-examples.js:5
+
+s(:ExpressionStatement,
+ :expression,
+ s(:AssignmentExpression,
+  :"=",
+  :left,
+  s(:MemberExpression,
+   :object,
+   s(:Identifier, :EventBlock),
+   :property,
+   s(:Identifier, :propTypes)),
+   ... LOTS more...)
+   ... even more LOTS more...)
+```
+
+This is the internal representation of the actual code. Assuming
+you've looked at those issues and have determined them not to be an
+issue you want to address, you can filter it by writing a pattern
+string that would match that tree.
+
+Looking at the tree output again, this time flattening it out:
+
+```
+s(:ExpressionStatement, :expression, s(:AssignmentExpression, :"=",:left, ...) ...)
+```
+
+The internal representation (which is ruby) is different from the
+pattern language (which is lisp-like), so first we need to convert
+`s(:` to `(` and remove all commas and colons:
+
+```
+(ExpressionStatement expression (AssignmentExpression "=" left ...) ...)
+```
+
+Next, we don't care bout `expression` so let's get rid of that by
+replacing it with the matcher for any single element `_`:
+
+```
+(ExpressionStatement _ (AssignmentExpression "=" left ...) ...)
+```
+
+The same goes for `"="` and `left`, but we actually don't care about
+the rest of the AssignmentExpression node, so let's use the matcher
+that'll ignore the remainder of the tree `___`:
+
+```
+(ExpressionStatement _ (AssignmentExpression ___) ...)
+```
+
+And finally, we don't care about what follows in the
+`ExpressionStatement` so let's ignore the rest too:
+
+```
+(ExpressionStatement _ (AssignmentExpression ___) ___)
+```
+
+This reads: "Any ExpressionStatement node, with any value and an
+AssignmentExpression node with anything in it, followed by anything
+else". There are other ways to write a pattern to match this tree, but
+this is pretty clear.
+
+Then you can add that filter to your config:
+
+```
+---
+engines:
+  duplication:
+    enabled: true
+    config:
+      dump_ast: true
+      languages:
+        javascript:
+          filters:
+          - "(ExpressionStatement _ (AssignmentExpression ___) ___)"
+```
+
+Then rerun the analyzer and figure out what the next filter should be.
+When you are happy with the results, remove the `dump_ast` config (or
+set it to false) to go back to normal analysis.
+
 For more information on pattern matching,
 see [sexp_processor][sexp_processor], especially [sexp.rb][sexp.rb]
-
 
 [codeclimate]: https://codeclimate.com/dashboard
 [what-is-duplication]: https://docs.codeclimate.com/docs/duplication-concept
