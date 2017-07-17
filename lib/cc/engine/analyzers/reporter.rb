@@ -10,6 +10,9 @@ module CC
   module Engine
     module Analyzers
       class Reporter
+
+        IO_M = Mutex.new
+
         def initialize(engine_config, language_strategy, io)
           @engine_config = engine_config
           @language_strategy = language_strategy
@@ -22,11 +25,12 @@ module CC
 
           process_files
 
-          return dump_ast if engine_config.dump_ast?
-
-          report
-
-          debug("Reported #{reports.size} violations...")
+          if engine_config.dump_ast?
+            dump_ast
+          else
+            report
+            debug("Reported #{reports.size} violations...")
+          end
         end
 
         def dump_ast
@@ -132,9 +136,6 @@ module CC
 
           CCFlay.default_options.merge changes
         end
-
-        require "thread"
-        IO_M = Mutex.new
 
         def debug(message="")
           IO_M.synchronize {
