@@ -68,7 +68,7 @@ module CC
 
         def process_sexp(sexp)
           return unless sexp
-          flay.process_sexp(language_strategy.transform_sexp(sexp))
+          flay.process_sexp(sexp)
         end
 
         private
