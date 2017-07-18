@@ -3,68 +3,43 @@ require "cc/engine/analyzers/sexp"
 module CC
   module Engine
     class SexpBuilder
-      class Transformer
-        def initialize(value, file, location = nil)
-          @value = value
-          @file = file
-
-          @location =
-            if value.is_a?(CC::Parser::Node)
-              value.location
-            else
-              location
-            end
-        end
-
-        def transform
-          case value
-          when CC::Parser::Node then create_sexp(value.type && value.type.to_sym, *properties_to_sexp(value))
-          when Array then value.map { |v| self.class.new(v, file, location).transform }
-          else value.to_s.to_sym
-          end
-        end
-
-        private
-
-        attr_reader \
-          :value,
-          :file,
-          :location
-
-        def create_sexp(*args)
-          Sexp.new(*args).tap do |s|
-            s.file = file
-            s.line = location.first_line
-            s.end_line = location.last_line
-          end
-        end
-
-        def properties_to_sexp(node)
-          node.send(:properties).map do |key, value|
-            case value
-            when CC::Parser::Node
-              create_sexp(key.to_sym, self.class.new(value, file).transform)
-            when Array
-              create_sexp(key.to_sym, *self.class.new(value, file, location).transform)
-            else
-              value && value.to_s.to_sym
-            end
-          end.compact
-        end
-      end
-
       def initialize(node, file)
         @node = node
         @file = file
       end
 
       def build
-        Transformer.new(node, file).transform
+        case node
+        when CC::Parser::Node then create_sexp(node.type, node.send(:properties))
+        when Array then node.map { |v| self.class.new(v, file).build }
+        else node.to_s.to_sym
+        end
       end
 
       private
 
       attr_reader :node, :file
+
+      def create_sexp(type, properties)
+        sexps = properties.map do |key, value|
+          Sexp.new(key.to_sym, *self.class.new(value, file).build).tap do |s|
+            s.file = file
+            if value.is_a? CC::Parser::Node
+              s.line = value.location.first_line
+              s.end_line = value.location.last_line
+            else
+              s.line = node.location.first_line
+              s.end_line = node.location.last_line
+            end
+          end
+        end
+
+        Sexp.new(type.to_sym, *sexps).tap do |s|
+          s.file = file
+          s.line = node.location.first_line
+          s.end_line = node.location.last_line
+        end
+      end
     end
   end
 end
