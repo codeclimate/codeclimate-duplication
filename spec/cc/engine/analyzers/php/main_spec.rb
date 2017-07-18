@@ -141,9 +141,11 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(issues.length).to be > 0
       result = issues.first.strip
       json = JSON.parse(result)
+
+      expect(json["description"]).to include("82 locations")
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 117, "end" => 118 },
+        "lines" => { "begin" => 190, "end" => 190 },
       })
     end
 
@@ -156,12 +158,12 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       expect(JSON.parse(issues.first.strip)["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 7 },
+        "lines" => { "begin" => 2, "end" => 9 },
       })
 
       expect(JSON.parse(issues.last.strip)["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 11, "end" => 16 },
+        "lines" => { "begin" => 11, "end" => 18 },
       })
     end
   end
