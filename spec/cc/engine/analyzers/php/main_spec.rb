@@ -39,11 +39,11 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 6 },
+        "lines" => { "begin" => 2, "end" => 8 },
       })
       expect(json["remediation_points"]).to eq(900_000)
       expect(json["other_locations"]).to eq([
-        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
       expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
       expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
@@ -81,11 +81,11 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 6 },
+        "lines" => { "begin" => 2, "end" => 8 },
       })
       expect(json["remediation_points"]).to eq(900_000)
       expect(json["other_locations"]).to eq([
-        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
       expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
       expect(json["fingerprint"]).to eq("e25ff98e21ce7e3e4ec3504174a820d2")
