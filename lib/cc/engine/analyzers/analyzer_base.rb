@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "cc/parser"
-require "cc/engine/sexp_builder"
+require "cc/engine/analyzers/sexp_builder"
 
 module CC
   module Engine
@@ -16,6 +16,7 @@ module CC
         ].freeze
 
         MAJOR_SEVERITY_THRESHOLD = 120 * POINTS_PER_MINUTE
+        SCRUB_NODE_PROPERTIES = [].freeze
 
         def initialize(engine_config:)
           @engine_config = engine_config
@@ -73,6 +74,7 @@ module CC
           SexpBuilder.new(
             CC::Parser.parse(File.binread(path), self.class::REQUEST_PATH),
             path,
+            scrub_node_properties: self.class::SCRUB_NODE_PROPERTIES,
           ).build
         end
 

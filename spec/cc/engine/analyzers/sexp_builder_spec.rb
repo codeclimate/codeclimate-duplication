@@ -1,8 +1,8 @@
 require "spec_helper"
 require "cc/parser"
-require "cc/engine/sexp_builder"
+require "cc/engine/analyzers/sexp_builder"
 
-RSpec.describe CC::Engine::SexpBuilder do
+RSpec.describe CC::Engine::Analyzers::SexpBuilder do
   describe "#build" do
     it "converts a node to sexp with accurate location information" do
       node = CC::Parser.parse(<<-EOPHP, "/php")
