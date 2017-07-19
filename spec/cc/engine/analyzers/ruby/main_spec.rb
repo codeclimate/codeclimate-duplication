@@ -64,10 +64,10 @@ module CC::Engine::Analyzers
 
         expect(json["location"]).to eq({
           "path" => "foo.rb",
-          "lines" => { "begin" => 2, "end" => 12 },
+          "lines" => { "begin" => 4, "end" => 11 },
         })
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.rb", "lines" => { "begin" => 18, "end" => 28} },
+          {"path" => "foo.rb", "lines" => { "begin" => 20, "end" => 27} },
         ])
       end
 
@@ -100,11 +100,11 @@ module CC::Engine::Analyzers
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
           "path" => "foo.rb",
-          "lines" => { "begin" => 1, "end" => 5 },
+          "lines" => { "begin" => 1, "end" => 7 },
         })
         #expect(json["remediation_points"]).to eq(350_000)
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
+          {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 15} },
         ])
         #expect(json["content"]["body"]).to match /This issue has a mass of 35/
         #expect(json["fingerprint"]).to eq("fb28e849f22fbabf946d1afdeaa84c5b")
