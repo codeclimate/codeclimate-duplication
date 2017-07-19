@@ -4,7 +4,7 @@ module CC
   module Engine
     module Analyzers
       class SexpBuilder
-        def initialize(node, file, scrub_node_properties:)
+        def initialize(node, file, scrub_node_properties: [])
           @node = node
           @file = file
           @scrub_node_properties = scrub_node_properties
