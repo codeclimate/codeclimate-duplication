@@ -10,8 +10,8 @@ module CC
           PATTERNS = [
             "**/*.php",
           ].freeze
-          DEFAULT_MASS_THRESHOLD = 28
-          POINTS_PER_OVERAGE = 100_000
+          DEFAULT_MASS_THRESHOLD = 48
+          POINTS_PER_OVERAGE = 50_000
           SCRUB_NODE_TYPES = %w[
             Scalar_EncapsedStringPart
           ]
