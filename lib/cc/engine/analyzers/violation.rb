@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/sexp_lines"
 require "cc/engine/analyzers/violation_read_up"
 require "digest"
 
