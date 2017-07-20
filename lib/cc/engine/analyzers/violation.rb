@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/sexp_lines"
 require "cc/engine/analyzers/violation_read_up"
 require "digest"
 
@@ -81,12 +80,11 @@ module CC
         end
 
         def format_sexp(sexp)
-          lines = SexpLines.new(sexp)
           {
             "path": sexp.file.gsub(%r{^./}, ""),
             "lines": {
-              "begin": lines.begin_line,
-              "end": lines.end_line,
+              "begin": sexp.line,
+              "end": sexp.end_line,
             },
           }
         end
