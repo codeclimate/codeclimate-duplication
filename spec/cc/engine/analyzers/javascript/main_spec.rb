@@ -27,13 +27,14 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(600_000)
+      expect(json["remediation_points"]).to eq(510_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
-      expect(json["fingerprint"]).to eq("c4d29200c20d02297c6f550ad2c87c15")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 8/)
+
+      expect(json["fingerprint"]).to eq("ae7bc1a2185c7b52307997eb8af709d1")
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
@@ -56,13 +57,14 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         "path" => "foo.js",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(600_000)
+      expect(json["remediation_points"]).to eq(510_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.js", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.js", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
-      expect(json["fingerprint"]).to eq("d9dab8e4607e2a74da3b9eefb49eacec")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 8/)
+
+      expect(json["fingerprint"]).to eq("78faf6e766f99235ecccee34d289bfea")
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 

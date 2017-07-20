@@ -1,5 +1,7 @@
 require "spec_helper"
 require "cc/engine/duplication"
+require "cc/engine/analyzers/node_translator"
+require "cc/parser"
 
 module CC::Engine::Analyzers
   RSpec.describe Violations do
@@ -29,29 +31,29 @@ module CC::Engine::Analyzers
         expect(first_formatted[:description]).to eq("Identical blocks of code found in 3 locations. Consider refactoring.")
         expect(first_formatted[:categories]).to eq(["Duplication"])
         expect(first_formatted[:remediation_points]).to eq(30)
-        expect(first_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>1, :end=>5}})
+        expect(first_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>1, :end=>7}})
         expect(first_formatted[:other_locations]).to eq([
-          { :path => "file.rb", :lines => { :begin => 9, :end => 13} },
-          { :path => "file.rb", :lines => { :begin => 17, :end => 21} },
+          { :path => "file.rb", :lines => { :begin => 9, :end => 15} },
+          { :path => "file.rb", :lines => { :begin => 17, :end => 23} },
         ])
-        expect(first_formatted[:fingerprint]).to eq("64d2fe721009691194926b5534f2eaea")
+        expect(first_formatted[:fingerprint]).to eq("a940882df662508b347437d810edf75f")
         expect(first_formatted[:severity]).to eq(CC::Engine::Analyzers::Base::MINOR)
 
-        expect(second_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>9, :end=>13}})
+        expect(second_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>9, :end=>15}})
         expect(second_formatted[:other_locations]).to eq([
-          { :path => "file.rb", :lines => { :begin => 1, :end => 5} },
-          { :path => "file.rb", :lines => { :begin => 17, :end => 21} },
+          { :path => "file.rb", :lines => { :begin => 1, :end => 7} },
+          { :path => "file.rb", :lines => { :begin => 17, :end => 23} },
         ])
 
-        expect(third_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>17, :end=>21}})
+        expect(third_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>17, :end=>23}})
         expect(third_formatted[:other_locations]).to eq([
-          { :path => "file.rb", :lines => { :begin => 1, :end => 5} },
-          { :path => "file.rb", :lines => { :begin => 9, :end => 13} },
+          { :path => "file.rb", :lines => { :begin => 1, :end => 7} },
+          { :path => "file.rb", :lines => { :begin => 9, :end => 15} },
         ])
       end
 
       def sexps
-        source = <<-SOURCE
+        node = CC::Parser.parse(<<-SOURCE, "/ruby")
 describe '#ruby?' do
   before { subject.type = 'ruby' }
 
@@ -89,7 +91,7 @@ end
           only: nil,
         })
 
-        sexp = RubyParser.new.process(source, "file.rb")
+        sexp = CC::Engine::Analyzers::NodeTranslator.new(node, "file.rb").translate
         flay.process_sexp(sexp)
         report = flay.analyze[0]
         sexps = flay.hashes[report.structural_hash]
