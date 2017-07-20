@@ -39,14 +39,14 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 6 },
+        "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(900_000)
+      expect(json["remediation_points"]).to eq(1_400_000)
       expect(json["other_locations"]).to eq([
-        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
-      expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 21/)
+      expect(json["fingerprint"]).to eq("a0dbeeee91cfb05e39969143853e3dc3")
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
@@ -81,14 +81,14 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 6 },
+        "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(900_000)
+      expect(json["remediation_points"]).to eq(1_400_000)
       expect(json["other_locations"]).to eq([
-        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
-      expect(json["fingerprint"]).to eq("e25ff98e21ce7e3e4ec3504174a820d2")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 21/)
+      expect(json["fingerprint"]).to eq("e5ddd513724cd1e466d7f5750ce118db")
     end
 
     it "runs against complex files" do
@@ -121,7 +121,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
           }
       EOPHP
 
-      result = run_engine(engine_conf).strip
+      result = run_engine(engine_conf("mass_threshold" => 3)).strip
       expect(result).to match "\"type\":\"issue\""
     end
 
@@ -143,7 +143,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       json = JSON.parse(result)
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 117, "end" => 118 },
+        "lines" => { "begin" => 117, "end" => 119 },
       })
     end
 
@@ -156,23 +156,23 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       expect(JSON.parse(issues.first.strip)["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 7 },
+        "lines" => { "begin" => 2, "end" => 9 },
       })
 
       expect(JSON.parse(issues.last.strip)["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 11, "end" => 16 },
+        "lines" => { "begin" => 11, "end" => 18 },
       })
     end
   end
 
-  def engine_conf
+  def engine_conf(opts = {})
     CC::Engine::Analyzers::EngineConfig.new({
       'config' => {
         'languages' => {
           'php' => {
-            'mass_threshold' => 5,
-          },
+            'mass_threshold' => 10,
+          }.merge(opts),
         },
       },
     })

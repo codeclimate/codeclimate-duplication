@@ -1,20 +1,12 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/parser_error"
-require "cc/engine/analyzers/parser_base"
+require "cc/parser"
+require "cc/engine/analyzers/node_translator"
 
 module CC
   module Engine
     module Analyzers
       class Base
-        RESCUABLE_ERRORS = [
-          ::CC::Engine::Analyzers::ParserError,
-          ::Errno::ENOENT,
-          ::Racc::ParseError,
-          ::RubyParser::SyntaxError,
-          ::RuntimeError,
-        ].freeze
-
         POINTS_PER_MINUTE = 10_000 # Points represent engineering time to resolve issue
         BASE_POINTS = 30 * POINTS_PER_MINUTE
 
@@ -30,13 +22,9 @@ module CC
         end
 
         def run(file)
-          if (skip_reason = skip?(file))
-            $stderr.puts("Skipping file #{file} because #{skip_reason}")
-          else
-            process_file(file)
-          end
+          translate_node(node(file), file)
         rescue => ex
-          if RESCUABLE_ERRORS.map { |klass| ex.instance_of?(klass) }.include?(true)
+          if ex.is_a?(CC::Parser::Client::HTTPError)
             $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
           else
             $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
@@ -73,6 +61,12 @@ module CC
           sexp
         end
 
+        protected
+
+        def translate_node(node, file)
+          NodeTranslator.new(node, file).translate
+        end
+
         private
 
         attr_reader :engine_config
@@ -85,8 +79,11 @@ module CC
           self.class::POINTS_PER_OVERAGE
         end
 
-        def process_file(_path)
-          raise NoMethodError, "Subclass must implement `process_file`"
+        def node(file)
+          CC::Parser.parse(
+            File.binread(file),
+            self.class::REQUEST_PATH,
+          )
         end
 
         def file_list
