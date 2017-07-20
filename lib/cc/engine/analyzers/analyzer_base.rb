@@ -1,20 +1,12 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/parser_error"
-require "cc/engine/analyzers/parser_base"
+require "cc/parser"
+require "cc/engine/analyzers/sexp_builder"
 
 module CC
   module Engine
     module Analyzers
       class Base
-        RESCUABLE_ERRORS = [
-          ::CC::Engine::Analyzers::ParserError,
-          ::Errno::ENOENT,
-          ::Racc::ParseError,
-          ::RubyParser::SyntaxError,
-          ::RuntimeError,
-        ].freeze
-
         POINTS_PER_MINUTE = 10_000 # Points represent engineering time to resolve issue
         BASE_POINTS = 30 * POINTS_PER_MINUTE
 
@@ -24,19 +16,17 @@ module CC
         ].freeze
 
         MAJOR_SEVERITY_THRESHOLD = 120 * POINTS_PER_MINUTE
+        SCRUB_NODE_PROPERTIES = [].freeze
+        SCRUB_NODE_TYPES = [].freeze
 
         def initialize(engine_config:)
           @engine_config = engine_config
         end
 
         def run(file)
-          if (skip_reason = skip?(file))
-            $stderr.puts("Skipping file #{file} because #{skip_reason}")
-          else
-            process_file(file)
-          end
+          process_file(file)
         rescue => ex
-          if RESCUABLE_ERRORS.map { |klass| ex.instance_of?(klass) }.include?(true)
+          if ex.is_a?(CC::Parser::Client::HTTPError)
             $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
           else
             $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
@@ -69,10 +59,6 @@ module CC
           end
         end
 
-        def transform_sexp(sexp)
-          sexp
-        end
-
         private
 
         attr_reader :engine_config
@@ -85,8 +71,13 @@ module CC
           self.class::POINTS_PER_OVERAGE
         end
 
-        def process_file(_path)
-          raise NoMethodError, "Subclass must implement `process_file`"
+        def process_file(path)
+          SexpBuilder.new(
+            CC::Parser.parse(File.binread(path), self.class::REQUEST_PATH),
+            path,
+            scrub_node_properties: self.class::SCRUB_NODE_PROPERTIES,
+            scrub_node_types: self.class::SCRUB_NODE_TYPES,
+          ).build
         end
 
         def file_list
@@ -97,10 +88,6 @@ module CC
               self.class::PATTERNS,
             ),
           )
-        end
-
-        def skip?(_path)
-          nil
         end
       end
     end
