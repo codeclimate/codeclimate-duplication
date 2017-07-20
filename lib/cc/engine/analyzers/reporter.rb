@@ -39,9 +39,7 @@ module CC
           pool.run do |file|
             debug("Processing file: #{file}")
 
-            sexp = language_strategy.run(file)
-            process_sexp(sexp)
-
+            process_file(file)
             processed_files_count.increment
           end
 
@@ -66,14 +64,30 @@ module CC
           end
         end
 
-        def process_sexp(sexp)
-          return unless sexp
-          flay.process_sexp(language_strategy.transform_sexp(sexp))
+        def process_file(file)
+          if (sexp = language_strategy.run(file))
+            flay.process_sexp(sexp)
+          end
+        rescue => ex
+          if unparsable_file_error?(ex)
+            $stderr.puts("Skipping #{file} due to #{ex.class}")
+            $stderr.puts("Response status: #{ex.response_status}")
+            debug("Response body: #{ex.response_body}")
+          else
+            $stderr.puts("Error processing file: #{file}")
+            $stderr.puts(ex.message)
+            raise
+          end
         end
 
         private
 
         attr_reader :reports
+
+        def unparsable_file_error?(ex)
+          ex.is_a?(CC::Parser::Client::HTTPError) &&
+            ex.response_status.to_s.start_with?("4")
+        end
 
         def flay
           @flay ||= CCFlay.new(flay_options)
