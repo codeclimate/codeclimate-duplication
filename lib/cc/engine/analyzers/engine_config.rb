@@ -27,6 +27,10 @@ module CC
           config.fetch("config", {}).fetch("concurrency", 2).to_i
         end
 
+        def dump_ast?
+          config.fetch("config", {}).fetch("dump_ast", false)
+        end
+
         def filters_for(language)
           fetch_language(language).fetch("filters", []).map { |filter|
             Sexp::Matcher.parse filter
