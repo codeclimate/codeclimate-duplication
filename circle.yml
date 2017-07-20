@@ -4,14 +4,7 @@ machine:
 
 dependencies:
   override:
-    - >
-      docker run
-      --env CIRCLE_BRANCH
-      --env CIRCLE_PROJECT_REPONAME
-      --env CIRCLE_TOKEN
-      --env GCR_JSON_KEY
-      --volume /var/run/docker.sock:/var/run/docker.sock
-      codeclimate/patrick pull || true
+    - docker pull "codeclimate/codeclimate-duplication:${CIRCLE_BRANCH//\//-}" || docker pull codeclimate/codeclimate-duplication || true
     - make image
 
 test:
