@@ -34,7 +34,7 @@ module CC::Engine::Analyzers
           { :path => "file.rb", :lines => { :begin => 9, :end => 15} },
           { :path => "file.rb", :lines => { :begin => 17, :end => 23} },
         ])
-        expect(first_formatted[:fingerprint]).to eq("d4a485db56098d00caeeae6695d11926")
+        expect(first_formatted[:fingerprint]).to eq("6f2425f09caf17eb2014a20bf83b9953")
         expect(first_formatted[:severity]).to eq(CC::Engine::Analyzers::Base::MINOR)
 
         expect(second_formatted[:location]).to eq({:path=>"file.rb", :lines=>{:begin=>9, :end=>15}})

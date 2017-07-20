@@ -14,18 +14,11 @@ module CC
         def build
           case node
           when CC::Parser::Node
-            create_sexp(node.type, valid_properties)
+            create_sexp(node.type.to_sym, *properties_to_sexps)
           when Array
-            node.map do |v|
-              self.class.new(
-                v,
-                file,
-                scrub_node_properties: scrub_node_properties,
-                scrub_node_types: scrub_node_types,
-              ).build
+            node.map do |value|
+              build_value(value)
             end
-          else
-            node.to_s.to_sym
           end
         end
 
@@ -37,35 +30,31 @@ module CC
           :scrub_node_properties,
           :scrub_node_types
 
-        def create_sexp(type, properties)
-          sexps = properties.map do |key, value|
-            Sexp.new(
-              key.to_sym,
-              *self.class.new(
-                value,
-                file,
-                scrub_node_properties: scrub_node_properties,
-                scrub_node_types: scrub_node_types,
-              ).build,
-            ).tap do |s|
-              s.file = file
-              if value.is_a? CC::Parser::Node
-                s.line = value.location.first_line
-                s.end_line = value.location.last_line
-              else
-                s.line = node.location.first_line
-                s.end_line = node.location.last_line
-              end
+        def properties_to_sexps
+          valid_properties.map do |key, value|
+            case value
+            when Array then create_sexp(key.to_sym, *build_value(value))
+            when CC::Parser::Node then create_sexp(key.to_sym, build_value(value))
+            else value.to_s.to_sym
             end
           end
+        end
 
-          unless scrub_node_types.include?(type)
-            Sexp.new(type.to_sym, *sexps).tap do |s|
-              s.file = file
-              s.line = node.location.first_line
-              s.end_line = node.location.last_line
-            end
+        def create_sexp(*args)
+          Sexp.new(*args).tap do |sexp|
+            sexp.file = file
+            sexp.line = node.location.first_line
+            sexp.end_line = node.location.last_line
           end
+        end
+
+        def build_value(value)
+          self.class.new(
+            value,
+            file,
+            scrub_node_properties: scrub_node_properties,
+            scrub_node_types: scrub_node_types,
+          ).build
         end
 
         def valid_properties

@@ -145,7 +145,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["description"]).to include("82 locations")
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 190, "end" => 190 },
+        "lines" => { "begin" => 117, "end" => 118 },
       })
     end
 
