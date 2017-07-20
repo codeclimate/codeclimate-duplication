@@ -5,14 +5,14 @@ GEM
     concurrent-ruby (1.0.0)
     diff-lcs (1.2.5)
     erubis (2.7.0)
-    flay (2.9.0)
+    flay (2.10.0)
       erubis (~> 2.7.0)
       path_expander (~> 1.0)
       ruby_parser (~> 3.0)
       sexp_processor (~> 4.0)
     json (1.8.3)
     method_source (0.8.2)
-    path_expander (1.0.1)
+    path_expander (1.0.2)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -31,9 +31,9 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
-    ruby_parser (3.9.0)
-      sexp_processor (~> 4.1)
-    sexp_processor (4.10.0b1)
+    ruby_parser (3.10.0)
+      sexp_processor (~> 4.9)
+    sexp_processor (4.10.0)
     slop (3.6.0)
 
 PLATFORMS
@@ -41,9 +41,12 @@ PLATFORMS
 
 DEPENDENCIES
   concurrent-ruby (~> 1.0.0)
-  flay (~> 2.9)
+  flay (~> 2.10)
   json
   pry
   rake
   rspec
-  sexp_processor (~> 4.10including.pre.betas0)
+  sexp_processor (~> 4.10)
+
+BUNDLED WITH
+   1.10.6

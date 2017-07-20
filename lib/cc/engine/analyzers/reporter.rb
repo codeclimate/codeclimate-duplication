@@ -10,6 +10,9 @@ module CC
   module Engine
     module Analyzers
       class Reporter
+
+        IO_M = Mutex.new
+
         def initialize(engine_config, language_strategy, io)
           @engine_config = engine_config
           @language_strategy = language_strategy
@@ -18,12 +21,48 @@ module CC
         end
 
         def run
-          debug("Processing #{language_strategy.files.count} files concurrency=#{engine_config.concurrency}")
+          debug("Processing #{language_strategy.files.count} #{lang} files concurrency=#{engine_config.concurrency}")
 
           process_files
-          report
 
-          debug("Reported #{reports.size} violations...")
+          if engine_config.dump_ast?
+            dump_ast
+          else
+            report
+            debug("Reported #{reports.size} violations...")
+          end
+        end
+
+        def dump_ast
+          require "pp"
+
+          issues = flay.analyze
+
+          return if issues.empty?
+
+          debug "Sexps for issues:"
+          debug
+
+          issues.each_with_index do |issue, idx1|
+            debug "#%2d) %s#%d mass=%d:" % [idx1+1,
+                                          issue.name,
+                                          issue.structural_hash,
+                                          issue.mass]
+            debug
+
+            locs = issue.locations.map.with_index { |loc, idx2|
+              "# %d.%d) %s:%s" % [idx1+1, idx2+1, loc.file, loc.line]
+            }
+
+            locs.zip(flay.hashes[issue.structural_hash]).each do |loc, sexp|
+              debug loc
+              debug
+              debug sexp.pretty_inspect
+              debug
+            end
+
+            debug
+          end
         end
 
         def process_files
@@ -35,9 +74,10 @@ module CC
           processed_files_count = Concurrent::AtomicFixnum.new
 
           pool.run do |file|
-            debug("Processing file: #{file}")
+            debug("Processing #{lang} file: #{file}")
 
             sexp = language_strategy.run(file)
+
             process_sexp(sexp)
 
             processed_files_count.increment
@@ -45,7 +85,11 @@ module CC
 
           pool.join
 
-          debug("Processed #{processed_files_count.value} files")
+          debug("Processed #{processed_files_count.value} #{lang} files")
+        end
+
+        def lang
+          CC::Engine::Duplication::LANGUAGES.invert[language_strategy.class]
         end
 
         def report
@@ -93,8 +137,10 @@ module CC
           CCFlay.default_options.merge changes
         end
 
-        def debug(message)
-          $stderr.puts(message) if engine_config.debug?
+        def debug(message="")
+          IO_M.synchronize {
+            $stderr.puts(message) if engine_config.debug?
+          }
         end
       end
     end
