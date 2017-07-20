@@ -12,6 +12,7 @@ dependencies:
       --env GCR_JSON_KEY
       --volume /var/run/docker.sock:/var/run/docker.sock
       codeclimate/patrick pull || true
+    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" -e "$DOCKER_EMAIL"
     - make image
 
 test:
