@@ -14,6 +14,7 @@ module CC
           DEFAULT_MASS_THRESHOLD = 40
           POINTS_PER_OVERAGE = 30_000
           SCRUB_NODE_PROPERTIES = ["start", "end"].freeze
+          SCRUB_NODE_TYPES = ["CommentBlock", "CommentLine"].freeze
         end
       end
     end

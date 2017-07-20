@@ -17,6 +17,7 @@ module CC
 
         MAJOR_SEVERITY_THRESHOLD = 120 * POINTS_PER_MINUTE
         SCRUB_NODE_PROPERTIES = [].freeze
+        SCRUB_NODE_TYPES = [].freeze
 
         def initialize(engine_config:)
           @engine_config = engine_config
@@ -75,6 +76,7 @@ module CC
             CC::Parser.parse(File.binread(path), self.class::REQUEST_PATH),
             path,
             scrub_node_properties: self.class::SCRUB_NODE_PROPERTIES,
+            scrub_node_types: self.class::SCRUB_NODE_TYPES,
           ).build
         end
 
