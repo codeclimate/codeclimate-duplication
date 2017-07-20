@@ -10,6 +10,7 @@ module CC
           PATTERNS = ["**/*.py"].freeze
           DEFAULT_MASS_THRESHOLD = 32
           POINTS_PER_OVERAGE = 50_000
+          SCRUB_NODE_PROPERTIES = %w[attributes ctx]
         end
       end
     end
