@@ -75,5 +75,35 @@ RSpec.describe(CC::Engine::Analyzers::SexpBuilder) do
       sexp1 = described_class.new(node1, "foo1.rb").build
       expect(sexp0.deep_each.map(&:first)).to eq(sexp1.deep_each.map(&:first))
     end
+
+    it "correctly builds sexps with conditionals" do
+      node = CC::Parser.parse(<<-EORUBY, "/ruby")
+        def self.from_level(level)
+          if level >= 4
+            new("A")
+          elsif level >= 2
+            new("E")
+          elsif level >= 1
+            new("I")
+          elsif level >= 0
+            new("O")
+          else
+            new("U")
+          end
+        end
+      EORUBY
+
+      sexp = described_class.new(node, "file.rb").build
+
+      defs, _, _, args, condition_body = *sexp
+      _, if_condition = *condition_body
+
+      expect(sexp.line).to eq(1)
+      expect(sexp.end_line).to eq(13)
+      expect(if_condition.line).to eq(2)
+      expect(if_condition.end_line).to eq(12)
+      expect([*if_condition].map {|sexp| (sexp.is_a? Symbol) ? sexp : sexp.first }).
+        to eq([:if, :condition, :then, :else])
+    end
   end
 end
