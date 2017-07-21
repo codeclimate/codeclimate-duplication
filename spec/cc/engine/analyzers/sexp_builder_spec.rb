@@ -38,8 +38,8 @@ RSpec.describe(CC::Engine::Analyzers::SexpBuilder) do
       expect(hello_two.end_line).to eq(16)
     end
 
-    it "returns the correct line numbers for ruby" do
-      node = CC::Parser.parse(<<-EORUBY, "/ruby")
+    it "returns similar sexps for similar nodes" do
+      node0 = CC::Parser.parse(<<-EORUBY, "/ruby")
         def self.from_level(level)
           if level >= 4
             new("A")
@@ -53,21 +53,27 @@ RSpec.describe(CC::Engine::Analyzers::SexpBuilder) do
             new("U")
           end
         end
+      EORUBY
 
-        def self.to_level(level)
-          if level >= 4
+      node1 = CC::Parser.parse(<<-EORUBY, "/ruby")
+        def self.from_foo(foo)
+          if foo <= 20
             new("A")
-          elsif level >= 2
+          elsif foo <= 40
             new("E")
-          elsif level >= 1
+          elsif foo <= 80
             new("I")
-          elsif level >= 0
+          elsif foo <= 160
             new("O")
           else
             new("U")
           end
         end
       EORUBY
+
+      sexp0 = described_class.new(node0, "foo0.rb").build
+      sexp1 = described_class.new(node1, "foo1.rb").build
+      expect(sexp0.deep_each.map(&:first)).to eq(sexp1.deep_each.map(&:first))
     end
   end
 end
