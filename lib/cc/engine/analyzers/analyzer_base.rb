@@ -23,13 +23,6 @@ module CC
 
         def run(file)
           build_sexp(node(file), file)
-        rescue => ex
-          if ex.is_a?(CC::Parser::Client::HTTPError)
-            $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
-          else
-            $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
-            raise ex
-          end
         end
 
         def files
@@ -55,10 +48,6 @@ module CC
           else
             MINOR
           end
-        end
-
-        def transform_sexp(sexp)
-          sexp
         end
 
         protected
@@ -94,10 +83,6 @@ module CC
               self.class::PATTERNS,
             ),
           )
-        end
-
-        def skip?(_path)
-          nil
         end
       end
     end

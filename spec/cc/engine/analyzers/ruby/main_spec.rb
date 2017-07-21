@@ -17,10 +17,23 @@ module CC::Engine::Analyzers
           end
         EORUBY
 
-        pending "Potential lexing bug. Ask customer to remove escaping."
         expect {
           expect(run_engine(engine_conf)).to eq("")
-        }.to output(/Skipping file/).to_stderr
+        }.to output(nil).to_stderr
+      end
+
+      it "skips unparsable files" do
+        create_source_file("foo.rb", <<-EORUBY)
+          class ==^>Helper
+            def foo;;dfk;sdlf
+              puts "foo"
+            end
+          end
+        EORUBY
+
+        expect {
+          expect(run_engine(engine_conf)).to eq("")
+        }.to output(/^Skipping/).to_stderr
       end
 
       it "calculates locations correctly for conditional statements" do
@@ -148,7 +161,7 @@ module CC::Engine::Analyzers
 
         expect {
           expect(run_engine(engine_conf)).to eq("")
-        }.to output(/Skipping file/).to_stderr
+        }.to output(/^Skipping/).to_stderr
       end
     end
 

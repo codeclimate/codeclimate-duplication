@@ -130,7 +130,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       expect {
         expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      }.to output(/^Skipping/).to_stderr
     end
 
     it "can parse php 7 code" do

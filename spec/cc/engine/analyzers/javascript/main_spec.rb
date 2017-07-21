@@ -74,7 +74,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         });
       EOJS
 
-      expect { run_engine(engine_conf) }.not_to output(/Skipping file/).to_stderr
+      expect { run_engine(engine_conf) }.not_to output(/^Skipping/).to_stderr
     end
 
     it "skips unparsable files" do
@@ -84,7 +84,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
       expect {
         expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      }.to output(/^Skipping/).to_stderr
     end
 
     it "skips minified files" do
@@ -93,7 +93,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
 
       expect {
         expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      }.to output(/^Skipping/).to_stderr
     end
   end
 

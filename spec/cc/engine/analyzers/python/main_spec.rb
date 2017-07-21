@@ -70,7 +70,7 @@ print("Hello from the other side", "python")
 
       expect {
         expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      }.to output(/^Skipping/).to_stderr
     end
   end
 
