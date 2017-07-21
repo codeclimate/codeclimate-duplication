@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "cc/parser"
-require "cc/engine/analyzers/node_translator"
+require "cc/engine/analyzers/sexp_builder"
 
 module CC
   module Engine
@@ -22,7 +22,7 @@ module CC
         end
 
         def run(file)
-          translate_node(node(file), file)
+          build_sexp(node(file), file)
         rescue => ex
           if ex.is_a?(CC::Parser::Client::HTTPError)
             $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
@@ -63,8 +63,8 @@ module CC
 
         protected
 
-        def translate_node(node, file)
-          NodeTranslator.new(node, file).translate
+        def build_sexp(node, file)
+          SexpBuilder.new(node, file).build
         end
 
         private

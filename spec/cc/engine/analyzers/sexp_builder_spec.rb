@@ -1,10 +1,10 @@
 require "spec_helper"
-require "cc/engine/analyzers/node_translator"
+require "cc/engine/analyzers/sexp_builder"
 
-RSpec.describe(CC::Engine::Analyzers::NodeTranslator) do
+RSpec.describe(CC::Engine::Analyzers::SexpBuilder) do
   include AnalyzerSpecHelpers
 
-  describe "#translate" do
+  describe "#build" do
     it "converts a node to sexp with accurate location information" do
       node = CC::Parser.parse(<<-EOPHP, "/php")
         <?php
@@ -25,7 +25,7 @@ RSpec.describe(CC::Engine::Analyzers::NodeTranslator) do
         }
       EOPHP
 
-      sexp = described_class.new(node, "foo.php").translate
+      sexp = described_class.new(node, "foo.php").build
 
       _, statements = *sexp
       _, _, hello_one, hello_two = *statements

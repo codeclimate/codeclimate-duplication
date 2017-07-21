@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "cc/engine/analyzers/analyzer_base"
-require "cc/engine/analyzers/javascript/node_translator"
+require "cc/engine/analyzers/javascript/sexp_builder"
 
 module CC
   module Engine
@@ -17,8 +17,8 @@ module CC
           DEFAULT_MASS_THRESHOLD = 40
           POINTS_PER_OVERAGE = 30_000
 
-          def translate_node(node, file)
-            ::CC::Engine::Analyzers::Javascript::NodeTranslator.new(node, file).translate
+          def build_sexp(node, file)
+            ::CC::Engine::Analyzers::Javascript::SexpBuilder.new(node, file).build
           end
         end
       end

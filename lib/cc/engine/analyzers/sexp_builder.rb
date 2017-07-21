@@ -1,26 +1,26 @@
 module CC
   module Engine
     module Analyzers
-      class NodeTranslator
+      class SexpBuilder
         def initialize(node, file)
           @node = node
           @file = file
         end
 
-        def translate
+        def build
           case node
           when CC::Parser::Node
-            sexp(node.type.to_sym, *translate_properties(node))
+            sexp(node.type.to_sym, *build_properties(node))
           when Array
             node.map do |value|
-              self.class.new(value, file).translate
+              self.class.new(value, file).build
             end
           end
         end
 
         protected
 
-        def translate_property?(key, value)
+        def build_property?(key, value)
           true
         end
 
@@ -28,12 +28,12 @@ module CC
 
         attr_reader :node, :file
 
-        def translate_properties(other)
+        def build_properties(other)
           other.properties.map do |key, value|
-            if translate_property?(key, value)
+            if build_property?(key, value)
               case value
-              when CC::Parser::Node then self.class.new(value, file).translate
-              when Array then sexp(key.to_sym, *self.class.new(value, file).translate.compact)
+              when CC::Parser::Node then self.class.new(value, file).build
+              when Array then sexp(key.to_sym, *self.class.new(value, file).build.compact)
               else value.to_s.to_sym
               end
             end

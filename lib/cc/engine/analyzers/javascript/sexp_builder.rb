@@ -2,7 +2,7 @@ module CC
   module Engine
     module Analyzers
       module Javascript
-        class NodeTranslator < ::CC::Engine::Analyzers::NodeTranslator
+        class SexpBuilder < ::CC::Engine::Analyzers::SexpBuilder
           protected
 
           PROPERTIES_BLACKLIST = %w[
@@ -10,7 +10,7 @@ module CC
             end
           ]
 
-          def translate_property?(key, _value)
+          def build_property?(key, _value)
             !PROPERTIES_BLACKLIST.include?(key)
           end
         end

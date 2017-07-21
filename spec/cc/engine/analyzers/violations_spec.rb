@@ -1,6 +1,6 @@
 require "spec_helper"
 require "cc/engine/duplication"
-require "cc/engine/analyzers/node_translator"
+require "cc/engine/analyzers/sexp_builder"
 require "cc/parser"
 
 module CC::Engine::Analyzers
@@ -91,7 +91,7 @@ end
           only: nil,
         })
 
-        sexp = CC::Engine::Analyzers::NodeTranslator.new(node, "file.rb").translate
+        sexp = CC::Engine::Analyzers::SexpBuilder.new(node, "file.rb").build
         flay.process_sexp(sexp)
         report = flay.analyze[0]
         sexps = flay.hashes[report.structural_hash]
