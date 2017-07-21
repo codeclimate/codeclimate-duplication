@@ -1,20 +1,12 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/parser_error"
-require "cc/engine/analyzers/parser_base"
+require "cc/parser"
+require "cc/engine/analyzers/sexp_builder"
 
 module CC
   module Engine
     module Analyzers
       class Base
-        RESCUABLE_ERRORS = [
-          ::CC::Engine::Analyzers::ParserError,
-          ::Errno::ENOENT,
-          ::Racc::ParseError,
-          ::RubyParser::SyntaxError,
-          ::RuntimeError,
-        ].freeze
-
         POINTS_PER_MINUTE = 10_000 # Points represent engineering time to resolve issue
         BASE_POINTS = 30 * POINTS_PER_MINUTE
 
@@ -30,18 +22,7 @@ module CC
         end
 
         def run(file)
-          if (skip_reason = skip?(file))
-            $stderr.puts("Skipping file #{file} because #{skip_reason}")
-          else
-            process_file(file)
-          end
-        rescue => ex
-          if RESCUABLE_ERRORS.map { |klass| ex.instance_of?(klass) }.include?(true)
-            $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
-          else
-            $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
-            raise ex
-          end
+          build_sexp(node(file), file)
         end
 
         def files
@@ -69,8 +50,10 @@ module CC
           end
         end
 
-        def transform_sexp(sexp)
-          sexp
+        protected
+
+        def build_sexp(node, file)
+          SexpBuilder.new(node, file).build
         end
 
         private
@@ -85,8 +68,11 @@ module CC
           self.class::POINTS_PER_OVERAGE
         end
 
-        def process_file(_path)
-          raise NoMethodError, "Subclass must implement `process_file`"
+        def node(file)
+          CC::Parser.parse(
+            File.binread(file),
+            self.class::REQUEST_PATH,
+          )
         end
 
         def file_list
@@ -97,10 +83,6 @@ module CC
               self.class::PATTERNS,
             ),
           )
-        end
-
-        def skip?(_path)
-          nil
         end
       end
     end

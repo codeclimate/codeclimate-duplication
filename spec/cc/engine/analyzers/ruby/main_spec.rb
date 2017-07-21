@@ -17,10 +17,23 @@ module CC::Engine::Analyzers
           end
         EORUBY
 
-        pending "Potential lexing bug. Ask customer to remove escaping."
         expect {
           expect(run_engine(engine_conf)).to eq("")
-        }.to output(/Skipping file/).to_stderr
+        }.to output(nil).to_stderr
+      end
+
+      it "skips unparsable files" do
+        create_source_file("foo.rb", <<-EORUBY)
+          class ==^>Helper
+            def foo;;dfk;sdlf
+              puts "foo"
+            end
+          end
+        EORUBY
+
+        expect {
+          expect(run_engine(engine_conf)).to eq("")
+        }.to output(/^Skipping/).to_stderr
       end
 
       it "calculates locations correctly for conditional statements" do
@@ -65,7 +78,7 @@ module CC::Engine::Analyzers
           "lines" => { "begin" => 2, "end" => 12 },
         })
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.rb", "lines" => { "begin" => 18, "end" => 28} },
+          {"path" => "foo.rb", "lines" => { "begin" => 18, "end" => 27} },
         ])
       end
 
@@ -98,15 +111,15 @@ module CC::Engine::Analyzers
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
           "path" => "foo.rb",
-          "lines" => { "begin" => 1, "end" => 5 },
+          "lines" => { "begin" => 1, "end" => 7 },
         })
-        expect(json["remediation_points"]).to eq(350_000)
+        expect(json["remediation_points"]).to eq(1_110_000)
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 13} },
+          {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 15} },
         ])
-        expect(json["content"]["body"]).to match /This issue has a mass of 35/
-        expect(json["fingerprint"]).to eq("fb28e849f22fbabf946d1afdeaa84c5b")
-        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
+        expect(json["content"]["body"]).to match /This issue has a mass of 73/
+        expect(json["fingerprint"]).to eq("5c9f3481d47756e4e9d2bf0e59d2c3cb")
+        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
       end
 
       it "creates an issue for each occurrence of the duplicated code" do
@@ -148,7 +161,7 @@ module CC::Engine::Analyzers
 
         expect {
           expect(run_engine(engine_conf)).to eq("")
-        }.to output(/Skipping file/).to_stderr
+        }.to output(/^Skipping/).to_stderr
       end
     end
 
