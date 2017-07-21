@@ -100,12 +100,12 @@ module CC::Engine::Analyzers
           "path" => "foo.rb",
           "lines" => { "begin" => 1, "end" => 7 },
         })
-        expect(json["remediation_points"]).to eq(790_000)
+        expect(json["remediation_points"]).to eq(1_110_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.rb", "lines" => { "begin" => 9, "end" => 15} },
         ])
-        expect(json["content"]["body"]).to match /This issue has a mass of 57/
-        expect(json["fingerprint"]).to eq("4765bc92677ca63455949a9fd1d47d86")
+        expect(json["content"]["body"]).to match /This issue has a mass of 73/
+        expect(json["fingerprint"]).to eq("5c9f3481d47756e4e9d2bf0e59d2c3cb")
         expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
       end
 

@@ -1,3 +1,5 @@
+require "cc/engine/analyzers/sexp"
+
 module CC
   module Engine
     module Analyzers
@@ -8,10 +10,9 @@ module CC
         end
 
         def build
-          case node
-          when CC::Parser::Node
+          if node.is_a?(CC::Parser::Node)
             sexp(node.type.to_sym, *build_properties(node))
-          when Array
+          elsif node.is_a?(Array)
             node.map do |value|
               self.class.new(value, file).build
             end
@@ -31,9 +32,8 @@ module CC
         def build_properties(other)
           other.properties.map do |key, value|
             if build_property?(key, value)
-              case value
-              when CC::Parser::Node then self.class.new(value, file).build
-              when Array then sexp(key.to_sym, *self.class.new(value, file).build.compact)
+              if value.is_a?(CC::Parser::Node) then sexp(key.to_sym, self.class.new(value, file).build)
+              elsif value.is_a?(Array) then sexp(key.to_sym, *self.class.new(value, file).build)
               else value.to_s.to_sym
               end
             end

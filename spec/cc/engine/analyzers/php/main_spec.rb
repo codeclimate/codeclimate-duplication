@@ -41,12 +41,11 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(1_400_000)
+      expect(json["remediation_points"]).to eq(1_700_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 21/)
-      expect(json["fingerprint"]).to eq("a0dbeeee91cfb05e39969143853e3dc3")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 24/)
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
@@ -83,12 +82,11 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(1_400_000)
+      expect(json["remediation_points"]).to eq(1_700_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 21/)
-      expect(json["fingerprint"]).to eq("e5ddd513724cd1e466d7f5750ce118db")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 24/)
     end
 
     it "runs against complex files" do

@@ -26,13 +26,12 @@ print("Hello", "python")
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(400_000)
+      expect(json["remediation_points"]).to eq(450_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 7/)
-      expect(json["fingerprint"]).to eq("e5131900f15545ab1e6db6c9164926e4")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 8/)
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
@@ -55,13 +54,12 @@ print("Hello from the other side", "python")
         "path" => "foo.py",
         "lines" => { "begin" => 1, "end" => 1 },
       })
-      expect(json["remediation_points"]).to eq(400_000)
+      expect(json["remediation_points"]).to eq(450_000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.py", "lines" => { "begin" => 2, "end" => 2} },
         {"path" => "foo.py", "lines" => { "begin" => 3, "end" => 3} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 7/)
-      expect(json["fingerprint"]).to eq("66b17daf8d9e9bc481f734b59d5de25e")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 8/)
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
