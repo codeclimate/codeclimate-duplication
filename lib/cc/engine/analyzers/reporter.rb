@@ -10,7 +10,6 @@ module CC
   module Engine
     module Analyzers
       class Reporter
-
         IO_M = Mutex.new
 
         def initialize(engine_config, language_strategy, io)
@@ -44,15 +43,20 @@ module CC
           debug
 
           issues.each_with_index do |issue, idx1|
-            debug "#%2d) %s#%d mass=%d:" % [idx1+1,
-                                          issue.name,
-                                          issue.structural_hash,
-                                          issue.mass]
+            debug(
+              format(
+                "#%2d) %s#%d mass=%d:",
+                idx1 + 1,
+                issue.name,
+                issue.structural_hash,
+                issue.mass,
+              ),
+            )
             debug
 
-            locs = issue.locations.map.with_index { |loc, idx2|
-              "# %d.%d) %s:%s" % [idx1+1, idx2+1, loc.file, loc.line]
-            }
+            locs = issue.locations.map.with_index do |loc, idx2|
+              format("# %d.%d) %s:%s", idx1 + 1, idx2 + 1, loc.file, loc.line)
+            end
 
             locs.zip(flay.hashes[issue.structural_hash]).each do |loc, sexp|
               debug loc
@@ -137,10 +141,10 @@ module CC
           CCFlay.default_options.merge changes
         end
 
-        def debug(message="")
-          IO_M.synchronize {
+        def debug(message = "")
+          IO_M.synchronize do
             $stderr.puts(message) if engine_config.debug?
-          }
+          end
         end
       end
     end

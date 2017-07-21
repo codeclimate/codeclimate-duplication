@@ -32,9 +32,9 @@ module CC
         end
 
         def filters_for(language)
-          fetch_language(language).fetch("filters", []).map { |filter|
+          fetch_language(language).fetch("filters", []).map do |filter|
             Sexp::Matcher.parse filter
-          }
+          end
         end
 
         def mass_threshold_for(language)
