@@ -1,4 +1,4 @@
-FROM codeclimate/codeclimate-parser:b153
+FROM codeclimate/codeclimate-parser:b201
 MAINTAINER Code Climate <hello@codeclimate.com>
 
 # Reset from base image
