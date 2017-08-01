@@ -2,6 +2,7 @@
 
 require "cc/parser"
 require "cc/engine/analyzers/sexp_builder"
+require "cc/engine/analyzers/file_list"
 
 module CC
   module Engine
