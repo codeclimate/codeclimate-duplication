@@ -1,5 +1,3 @@
-require "cc/engine/analyzers/sexp"
-
 module CC
   module Engine
     module Analyzers
