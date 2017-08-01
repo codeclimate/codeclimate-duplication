@@ -13,7 +13,7 @@ module CC
           PATTERNS = [
             "**/*.java",
           ].freeze
-          DEFAULT_MASS_THRESHOLD = 2
+          DEFAULT_MASS_THRESHOLD = 20
           BASE_POINTS = 150_000
           POINTS_PER_OVERAGE = 20_000
           TIMEOUT = 300
