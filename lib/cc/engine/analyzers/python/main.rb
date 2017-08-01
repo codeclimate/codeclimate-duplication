@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/analyzer_base"
+require "flay"
+require "json"
 require "cc/engine/analyzers/reporter"
+require "cc/engine/analyzers/analyzer_base"
 
 module CC
   module Engine
