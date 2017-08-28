@@ -25,4 +25,5 @@ RUN chown -R app:app ./
 
 USER app
 
-CMD ["/usr/src/app/bin/duplication"]
+ENTRYPOINT ["/usr/src/app/entrypoint"]
+CMD ["/usr/src/app/bin/duplication", "/code", "/config.json"]
