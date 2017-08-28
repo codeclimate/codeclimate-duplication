@@ -6,6 +6,9 @@ gem "flay", "~> 2.10"
 gem "json"
 gem "sexp_processor", "~> 4.10"
 
+gem "codeclimate-parser-client",
+  path: "/home/app/codeclimate-parser-client"
+
 group :test do
   gem "pry"
   gem "rake"
