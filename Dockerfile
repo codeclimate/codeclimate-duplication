@@ -13,7 +13,7 @@ RUN apt-get update && \
   RUNLEVEL=1 apt-get install --yes --no-install-recommends \
     python2.7
 
-COPY Gemfile* package.json ./
+COPY Gemfile* package.json package-lock.json ./
 COPY vendor/php-parser/composer* ./vendor/php-parser/
 
 RUN bundle install --jobs 4 --quiet && \
