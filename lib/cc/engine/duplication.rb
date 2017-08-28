@@ -2,6 +2,7 @@
 
 require "bundler/setup"
 require "cc/engine/analyzers/ruby/main"
+require "cc/engine/analyzers/java/main"
 require "cc/engine/analyzers/javascript/main"
 require "cc/engine/analyzers/php/main"
 require "cc/engine/analyzers/python/main"
@@ -16,6 +17,7 @@ module CC
     class Duplication
       LANGUAGES = {
         "ruby"       => ::CC::Engine::Analyzers::Ruby::Main,
+        "java"       => ::CC::Engine::Analyzers::Java::Main,
         "javascript" => ::CC::Engine::Analyzers::Javascript::Main,
         "php"        => ::CC::Engine::Analyzers::Php::Main,
         "python"     => ::CC::Engine::Analyzers::Python::Main,

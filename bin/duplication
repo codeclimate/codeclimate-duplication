@@ -5,9 +5,11 @@ $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
 require "cc/logger"
 require "cc/engine/duplication"
 
+config_path = ARGV[1] || "/config.json"
+
 config =
-  if File.exist?("/config.json")
-    JSON.parse(File.read("/config.json"))
+  if File.exist?(config_path)
+    JSON.parse(File.read(config_path))
   else
     {}
   end
