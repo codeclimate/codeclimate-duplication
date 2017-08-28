@@ -1,0 +1,2 @@
+#!/bin/sh
+~/codeclimate-parser/bin/boot-retries >&2 && exec "$@"
