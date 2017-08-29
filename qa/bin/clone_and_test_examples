@@ -11,6 +11,7 @@ if [ -n "$QA" ] || test_on_branch $CIRCLE_BRANCH; then
 
   examples="$(pwd)/$1"
   image_name="$2"
+  config_template_path="$(pwd)/$1/../config.template.json"
   config_path="$examples/config.json"
   mkdir -p "$examples"
   cd "$examples"
@@ -23,11 +24,12 @@ if [ -n "$QA" ] || test_on_branch $CIRCLE_BRANCH; then
     LANGS[0]="ruby"
     LANGS[1]="python"
     LANGS[2]="php"
-    LANGS[3]="javascript"
+    LANGS[3]="java"
+    LANGS[4]="javascript"
   fi
 
   for lang in ${LANGS[*]}; do
-    printf "{ \"config\": { \"languages\": { \"%s\": { \"mass_threshold\": 20 } } } }" "$lang" > "$config_path"
+    printf "$(cat "$config_template_path")" "$lang" > "$config_path"
 
     curl -G https://api.github.com/search/repositories \
         --data-urlencode "sort=stars" \

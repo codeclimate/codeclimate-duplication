@@ -1,0 +1,9 @@
+{
+  "config": {
+    "languages": {
+      "%s": {
+        "mass_threshold": 20
+      }
+    }
+  }
+}
