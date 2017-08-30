@@ -6,6 +6,7 @@ Pry.config.pager = false
 Pry.config.color = false
 
 require "cc/logger"
+require "cc/engine/duplication"
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
 

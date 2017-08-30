@@ -1,5 +1,4 @@
 require "spec_helper"
-require "cc/engine/duplication"
 
 module CC::Engine::Analyzers
   RSpec.describe SexpLines do
