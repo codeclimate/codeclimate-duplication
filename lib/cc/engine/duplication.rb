@@ -54,7 +54,7 @@ module CC
 
         if languages.empty?
           message = "Config Error: Unable to run the duplication engine without any languages enabled."
-          $stderr.puts message
+          CC.logger.info(message)
           raise EmptyLanguagesError, message
         else
           languages

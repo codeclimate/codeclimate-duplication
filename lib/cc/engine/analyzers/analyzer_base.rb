@@ -23,15 +23,17 @@ module CC
 
         def run(file)
           if (skip_reason = skip?(file))
-            $stderr.puts("Skipping file #{file} because #{skip_reason}")
+            CC.logger.info("Skipping file #{file} because #{skip_reason}")
+            nil
           else
             process_file(file)
           end
         rescue => ex
           if RESCUABLE_ERRORS.map { |klass| ex.instance_of?(klass) }.include?(true)
-            $stderr.puts("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
+            CC.logger.info("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
+            nil
           else
-            $stderr.puts("#{ex.class} error occurred processing file #{file}: aborting.")
+            CC.logger.info("#{ex.class} error occurred processing file #{file}: aborting.")
             raise ex
           end
         end

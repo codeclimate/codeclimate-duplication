@@ -20,7 +20,7 @@ module CC
         end
 
         def run
-          debug("Processing #{language_strategy.files.count} #{lang} files concurrency=#{engine_config.concurrency}")
+          CC.logger.debug("Processing #{language_strategy.files.count} #{lang} files concurrency=#{engine_config.concurrency}")
 
           process_files
 
@@ -28,7 +28,7 @@ module CC
             dump_ast
           else
             report
-            debug("Reported #{reports.size} violations...")
+            CC.logger.debug("Reported #{reports.size} violations...")
           end
         end
 
@@ -39,11 +39,10 @@ module CC
 
           return if issues.empty?
 
-          debug "Sexps for issues:"
-          debug
+          CC.logger.debug("Sexps for issues:")
 
           issues.each_with_index do |issue, idx1|
-            debug(
+            CC.logger.debug(
               format(
                 "#%2d) %s#%d mass=%d:",
                 idx1 + 1,
@@ -52,20 +51,15 @@ module CC
                 issue.mass,
               ),
             )
-            debug
 
             locs = issue.locations.map.with_index do |loc, idx2|
               format("# %d.%d) %s:%s", idx1 + 1, idx2 + 1, loc.file, loc.line)
             end
 
             locs.zip(flay.hashes[issue.structural_hash]).each do |loc, sexp|
-              debug loc
-              debug
-              debug sexp.pretty_inspect
-              debug
+              CC.logger.debug(loc)
+              CC.logger.debug(sexp.pretty_inspect)
             end
-
-            debug
           end
         end
 
@@ -78,7 +72,7 @@ module CC
           processed_files_count = Concurrent::AtomicFixnum.new
 
           pool.run do |file|
-            debug("Processing #{lang} file: #{file}")
+            CC.logger.debug("Processing #{lang} file: #{file}")
 
             sexp = language_strategy.run(file)
 
@@ -89,7 +83,7 @@ module CC
 
           pool.join
 
-          debug("Processed #{processed_files_count.value} #{lang} files")
+          CC.logger.debug("Processed #{processed_files_count.value} #{lang} files")
         end
 
         def lang
@@ -102,7 +96,7 @@ module CC
 
             violations.each do |violation|
               next if (violation.occurrences + 1) < language_strategy.count_threshold
-              debug("Violation name=#{violation.report_name} mass=#{violation.mass}")
+              CC.logger.debug("Violation name=#{violation.report_name} mass=#{violation.mass}")
 
               unless reports.include?(violation.report_name)
                 reports.add(violation.report_name)
@@ -139,12 +133,6 @@ module CC
           }
 
           CCFlay.default_options.merge changes
-        end
-
-        def debug(message = "")
-          IO_M.synchronize do
-            $stderr.puts(message) if engine_config.debug?
-          end
         end
       end
     end

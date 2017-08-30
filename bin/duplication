@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
+require "cc/logger"
 require "cc/engine/duplication"
 
 engine_config =
@@ -9,6 +10,13 @@ engine_config =
     JSON.parse(File.read("/config.json"))
   else
     {}
+  end
+
+CC.logger.level =
+  if config["debug"]
+    ::Logger::DEBUG
+  else
+    ::Logger::INFO
   end
 
 directory = ARGV[0] || "/code"

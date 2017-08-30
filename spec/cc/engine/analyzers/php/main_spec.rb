@@ -129,9 +129,8 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         <?php blorb &; "fee
       EOPHP
 
-      expect {
-        expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      expect(CC.logger).to receive(:info).with(/Skipping file/)
+      expect(run_engine(engine_conf)).to eq("")
     end
 
     it "can parse php 7 code" do

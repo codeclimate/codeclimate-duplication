@@ -27,7 +27,7 @@ module CC
           def process_file(file)
             RubyParser.new.process(File.binread(file), file, TIMEOUT)
           rescue Timeout::Error
-            warn "TIMEOUT parsing #{file}. Skipping."
+            CC.logger.warn("TIMEOUT parsing #{file}. Skipping.")
           end
         end
       end

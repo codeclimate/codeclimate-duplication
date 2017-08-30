@@ -1,10 +1,11 @@
-require 'bundler/setup'
-require 'flay'
-require 'tmpdir'
-
+require "bundler/setup"
+require "flay"
+require "tmpdir"
 require "pry"
 Pry.config.pager = false
 Pry.config.color = false
+
+require "cc/logger"
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
 
@@ -27,24 +28,6 @@ RSpec.configure do |config|
     end
   end
 
-  class DummyStderr
-    def write(*)
-    end
-
-    def method_missing(*)
-    end
-  end
-
-  unless ENV["ENGINE_DEBUG"]
-    config.before(:each) do
-      $stderr = DummyStderr.new
-    end
-
-    config.after(:each) do
-      $stderr = STDERR
-    end
-  end
-
   config.order = :random
   config.disable_monkey_patching!
 
@@ -53,3 +36,5 @@ RSpec.configure do |config|
   config.alias_example_to :pit, pending: true
   config.run_all_when_everything_filtered = true
 end
+
+CC.logger.level = ::Logger::ERROR

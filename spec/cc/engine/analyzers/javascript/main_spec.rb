@@ -74,7 +74,9 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         });
       EOJS
 
-      expect { run_engine(engine_conf) }.not_to output(/Skipping file/).to_stderr
+
+      expect(CC.logger).not_to receive(:info).with(/Skipping file/)
+      run_engine(engine_conf)
     end
 
     it "skips unparsable files" do
@@ -82,18 +84,16 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         function () { do(); // missing closing brace
       EOJS
 
-      expect {
-        expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      expect(CC.logger).to receive(:info).with(/Skipping file/)
+      expect(run_engine(engine_conf)).to eq("")
     end
 
     it "skips minified files" do
       path = fixture_path("huge_js_file.js")
       create_source_file("foo.js", File.read(path))
 
-      expect {
-        expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      expect(CC.logger).to receive(:info).with(/Skipping file/)
+      expect(run_engine(engine_conf)).to eq("")
     end
   end
 

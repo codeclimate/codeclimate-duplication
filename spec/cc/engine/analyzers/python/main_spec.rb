@@ -111,9 +111,8 @@ def c(thing: str):
         ---
       EOPY
 
-      expect {
-        expect(run_engine(engine_conf)).to eq("")
-      }.to output(/Skipping file/).to_stderr
+      expect(CC.logger).to receive(:info).with(/Skipping file/)
+      expect(run_engine(engine_conf)).to eq("")
     end
   end
 
