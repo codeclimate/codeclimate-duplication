@@ -1,5 +1,4 @@
 require "spec_helper"
-require "cc/engine/duplication"
 
 RSpec.describe CC::Engine do
   around do |example|
