@@ -109,6 +109,16 @@ module CC::Engine::Analyzers
         expect(json["fingerprint"]).to eq("dbb957b34f7b5312538235c0aa3f52a0")
         expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
       end
+
+      it "outputs a warning for unprocessable errors" do
+        create_source_file("foo.java", <<-EOF)
+          ---
+        EOF
+
+        expect(CC.logger).to receive(:warn).with(/Response status: 422/)
+        expect(CC.logger).to receive(:warn).with(/Skipping/)
+        run_engine(engine_conf)
+      end
     end
   end
 end
