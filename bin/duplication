@@ -5,7 +5,7 @@ $:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "../lib")))
 require "cc/logger"
 require "cc/engine/duplication"
 
-engine_config =
+config =
   if File.exist?("/config.json")
     JSON.parse(File.read("/config.json"))
   else
@@ -22,5 +22,5 @@ CC.logger.level =
 directory = ARGV[0] || "/code"
 
 CC::Engine::Duplication.new(
-  directory: directory, engine_config: engine_config, io: STDOUT,
+  directory: directory, engine_config: config, io: STDOUT,
 ).run
