@@ -11,10 +11,6 @@ module CC
           @config = normalize(hash)
         end
 
-        def debug?
-          config.fetch("config", {}).fetch("debug", "false").to_s.casecmp("true").zero?
-        end
-
         def include_paths
           config.fetch("include_paths", ["./"])
         end

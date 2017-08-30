@@ -33,7 +33,7 @@ module CC
 
             self
           rescue Timeout::Error
-            warn "TIMEOUT parsing #{filename}. Skipping."
+            CC.logger.warn("TIMEOUT parsing #{filename}. Skipping.")
           end
 
           private

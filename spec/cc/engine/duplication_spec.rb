@@ -14,10 +14,9 @@ RSpec.describe CC::Engine do
       original_directory = Dir.pwd
       engine = CC::Engine::Duplication.new(directory: @directory, engine_config: {}, io: StringIO.new)
 
-      expected_output = "Config Error: Unable to run the duplication engine without any languages enabled.\n"
-      expect {
-        expect { engine.run }.to raise_error(CC::Engine::Duplication::EmptyLanguagesError)
-      }.to output(expected_output).to_stderr
+      expected_output = "Config Error: Unable to run the duplication engine without any languages enabled."
+      expect(CC.logger).to receive(:info).with(expected_output)
+      expect { engine.run }.to raise_error(CC::Engine::Duplication::EmptyLanguagesError)
 
       Dir.chdir(original_directory)
     end

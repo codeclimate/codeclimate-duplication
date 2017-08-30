@@ -18,9 +18,8 @@ module CC::Engine::Analyzers
         EORUBY
 
         pending "Potential lexing bug. Ask customer to remove escaping."
-        expect {
-          expect(run_engine(engine_conf)).to eq("")
-        }.to output(/Skipping file/).to_stderr
+        expect(CC.logger).to receive(:info).with(/Skipping file/)
+        expect(run_engine(engine_conf)).to eq("")
       end
 
       it "calculates locations correctly for conditional statements" do
@@ -145,9 +144,8 @@ module CC::Engine::Analyzers
           ---
         EORUBY
 
-        expect {
-          expect(run_engine(engine_conf)).to eq("")
-        }.to output(/Skipping file/).to_stderr
+        expect(CC.logger).to receive(:info).with(/Skipping file/)
+        expect(run_engine(engine_conf)).to eq("")
       end
 
       it "does not see hashes as similar" do
