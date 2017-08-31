@@ -71,6 +71,14 @@ new_nodes.each do |name|
   Sexp::NODE_NAMES[name] = Sexp::NODE_NAMES.size
 end
 
+# Overwrite method from Flay to suppress ignorable errors and for thread safety
+# (please see bug #206)
+node_names_mutex = Mutex.new
+
+Sexp::NODE_NAMES.default_proc = lambda do |hash, key|
+  node_names_mutex.synchronize { hash[key] = Sexp::NODE_NAMES.size }
+end
+
 class Sexp
   attr_writer :mass
 
