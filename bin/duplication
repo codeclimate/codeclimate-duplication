@@ -13,7 +13,7 @@ config =
   end
 
 CC.logger.level =
-  if config["debug"]
+  if config["debug"] || config.fetch("config", {})["debug"]
     ::Logger::DEBUG
   else
     ::Logger::INFO
