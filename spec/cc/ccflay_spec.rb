@@ -20,4 +20,14 @@ RSpec.describe CCFlay do
       expect(inn.flatter.mass).to eq(8)
     end
   end
+
+  describe Sexp::NODE_NAMES do
+    describe ".default_proc" do
+      context "'couldn't find node type' errors (bug #206)" do
+        it "should suppress them" do
+          expect { Sexp::NODE_NAMES["bug_206_node"] }.to_not output.to_stderr
+        end
+      end
+    end
+  end
 end
