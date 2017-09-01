@@ -13,5 +13,5 @@ citest:
 
 qa: image
 	# requires QA=true to run locally
-	# optionally pass LANGUAGE=x
+	# optionally pass `LANGS="x y"`
 	qa/bin/clone_and_test_examples qa/examples $(IMAGE_NAME)
