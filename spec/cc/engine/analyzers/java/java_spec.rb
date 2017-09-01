@@ -119,6 +119,29 @@ module CC::Engine::Analyzers
         expect(CC.logger).to receive(:warn).with(/Skipping/)
         run_engine(engine_conf)
       end
+
+      it "ignores import and package declarations" do
+        create_source_file("foo.java", <<-EOF)
+package org.springframework.rules.constraint;
+
+import java.util.Comparator;
+
+import org.springframework.rules.constraint.Constraint;
+import org.springframework.rules.closure.BinaryConstraint;
+        EOF
+
+        create_source_file("bar.java", <<-EOF)
+package org.springframework.rules.constraint;
+
+import java.util.Comparator;
+
+import org.springframework.rules.constraint.Constraint;
+import org.springframework.rules.closure.BinaryConstraint;
+        EOF
+
+        issues = run_engine(engine_conf).strip.split("\0")
+        expect(issues).to be_empty
+      end
     end
   end
 end
