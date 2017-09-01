@@ -51,7 +51,7 @@ module CC
         end
 
         def filters
-          engine_config.filters_for(language) + default_filters
+          engine_config.filters_for(language) | default_filters
         end
 
         def language
