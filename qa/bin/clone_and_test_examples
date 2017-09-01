@@ -18,15 +18,9 @@ if [ -n "$QA" ] || test_on_branch $CIRCLE_BRANCH; then
 
   REPOS_PER_LANGUAGE=20
 
-  if [ -n "$LANGUAGE" ]; then
-    LANGS[0]="$LANGUAGE"
-  else
-    LANGS[0]="ruby"
-    LANGS[1]="python"
-    LANGS[2]="php"
-    LANGS[3]="java"
-    LANGS[4]="javascript"
-  fi
+	if [ -z "$LANGS" ]; then
+		LANGS=(ruby python php java javascript)
+	fi
 
   for lang in ${LANGS[*]}; do
     printf "$(cat "$config_template_path")" "$lang" > "$config_path"
