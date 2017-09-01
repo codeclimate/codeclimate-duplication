@@ -51,7 +51,7 @@ module CC
         end
 
         def filters
-          engine_config.filters_for(language)
+          engine_config.filters_for(language) + default_filters
         end
 
         def language
@@ -89,6 +89,10 @@ module CC
 
         def base_points
           self.class::BASE_POINTS
+        end
+
+        def default_filters
+          []
         end
 
         def points_per_overage
