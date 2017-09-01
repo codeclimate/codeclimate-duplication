@@ -15,6 +15,10 @@ module CC
           LANGUAGE = "java".freeze
           PATTERNS = ["**/*.java"].freeze
           DEFAULT_MASS_THRESHOLD = 40
+          DEFAULT_FILTERS = [
+            "(ImportDeclaration ___)".freeze,
+            "(PackageDeclaration ___)".freeze,
+          ].freeze
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/java".freeze
           TIMEOUT = 300
@@ -43,6 +47,10 @@ module CC
               CC.logger.debug { "Contents:\n#{processed_source.raw_source}" }
               raise
             end
+          end
+
+          def default_filters
+            DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
 
           def unparsable_file_error?(ex)
