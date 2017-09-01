@@ -120,7 +120,7 @@ module CC::Engine::Analyzers
         run_engine(engine_conf)
       end
 
-      it "ignores import statements and package declarations" do
+      it "ignores import and package declarations" do
         create_source_file("foo.java", <<-EOF)
 package org.springframework.rules.constraint;
 
