@@ -43,7 +43,7 @@ new_nodes = [
   :LabeledStatement, :LogicalExpression, :LtE,
   :MemberExpression, :Name, :NewExpression, :NotIn,
   :NullLiteral, :Num, :NumericLiteral, :ObjectExpression,
-  :ObjectMethod, :ObjectPattern, :ObjectProperty, :Or,
+  :ObjectMethod, :ObjectPattern, :ObjectProperty, :Or, :PackageDeclaration,
   :Print, :RegExpLiteral, :ReturnStatement,
   :SequenceExpression, :Slice, :Str, :StringLiteral,
   :Subscript, :Super, :SwitchCase, :SwitchStatement,
