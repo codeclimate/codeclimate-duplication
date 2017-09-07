@@ -23,6 +23,14 @@ RSpec.describe CCFlay do
 
   describe Sexp::NODE_NAMES do
     describe ".default_proc" do
+      it "should consistently hash node names on-demand with a CRC checksum" do
+        node1 = Sexp::NODE_NAMES["some_node1"]
+        node2 = Sexp::NODE_NAMES["some_node2"]
+
+        expect(node1).to eq(1_364_960_975)
+        expect(node2).to eq(3_360_880_501)
+      end
+
       context "'couldn't find node type' errors (bug #206)" do
         it "should suppress them" do
           expect { Sexp::NODE_NAMES["bug_206_node"] }.to_not output.to_stderr

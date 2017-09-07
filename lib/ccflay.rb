@@ -3,6 +3,7 @@
 require "flay"
 require "concurrent"
 require "digest"
+require "zlib"
 
 ##
 # A thread-safe and stable hash subclass of Flay.
@@ -20,55 +21,14 @@ class CCFlay < Flay
   end
 end
 
-new_nodes = [
-  :And, :ArrayExpression, :ArrowFunctionExpression,
-  :Assign, :AssignmentExpression, :AssignmentPattern,
-  :Attribute, :BinaryExpression, :BlockStatement, :BoolOp,
-  :BooleanLiteral, :Break, :BreakStatement, :Call,
-  :CallExpression, :CatchClause, :ClassBody,
-  :ClassDeclaration, :ClassMethod, :ClassProperty,
-  :Compare, :ConditionalExpression, :Continue,
-  :ContinueStatement, :Dict, :Directive, :DirectiveLiteral,
-  :DirectiveLiteral, :DoWhileStatement, :EmptyStatement,
-  :Eq, :ExceptHandler, :ExportDefaultDeclaration,
-  :ExportNamedDeclaration, :ExportSpecifier, :Expr,
-  :ExpressionStatement, :For, :ForInStatement,
-  :ForStatement, :FunctionDeclaration, :FunctionDef,
-  :FunctionExpression, :Gt, :Identifier, :If, :IfExp,
-  :IfStatement, :Import, :ImportDeclaration,
-  :ImportDefaultSpecifier, :ImportFrom, :ImportSpecifier,
-  :Index, :JSXAttribute, :JSXClosingElement, :JSXElement,
-  :JSXExpressionContainer, :JSXIdentifier,
-  :JSXOpeningElement, :JSXSpreadAttribute, :JSXText,
-  :LabeledStatement, :LogicalExpression, :LtE,
-  :MemberExpression, :Name, :NewExpression, :NotIn,
-  :NullLiteral, :Num, :NumericLiteral, :ObjectExpression,
-  :ObjectMethod, :ObjectPattern, :ObjectProperty, :Or,
-  :Print, :RegExpLiteral, :ReturnStatement,
-  :SequenceExpression, :Slice, :Str, :StringLiteral,
-  :Subscript, :Super, :SwitchCase, :SwitchStatement,
-  :TaggedTemplateExpression, :TemplateElement,
-  :TemplateLiteral, :ThisExpression, :ThrowStatement,
-  :TryExcept, :TryStatement, :Tuple, :UnaryExpression,
-  :UpdateExpression, :VariableDeclaration,
-  :VariableDeclarator, :WhileStatement, :Yield, :alternate,
-  :argument, :arguments, :array_dim_fetch, :assign,
-  :assign_op_minus, :attributes, :binary_op_bitwise_and,
-  :binary_op_bitwise_or, :binary_op_concat,
-  :binary_op_shift_right, :binary_op_smaller_or_equal,
-  :body, :callee, :cases, :children, :comparators,
-  :consequent, :declaration, :declarations, :directives,
-  :elements, :elts, :exp, :expression, :expressions,
-  :extra, :finalizer, :foreach, :func_call, :function, :id,
-  :init, :init, :key, :keyword, :left, :list, :lnumber,
-  :name, :object, :param, :params, :properties, :property,
-  :quasis, :right, :specifiers, :string, :superClass,
-  :target, :test, :update, :value, :values, :variable
-]
+# Overwrite `NODE_NAMES` from Flay to assign all values on-demand instead of
+# using a predefined registry.
+Sexp::NODE_NAMES.delete_if { true }
 
-# Add known javascript and php nodes to the hash registry.
-new_nodes.each do |name|
-  Sexp::NODE_NAMES[name] = Sexp::NODE_NAMES.size
+Sexp::NODE_NAMES.default_proc = lambda do |hash, key|
+  # Use CRC checksums so hash values are order-independent (i.e. consistent
+  # between runs).
+  hash[key] = Zlib.crc32(key.to_s)
 end
 
 class Sexp
