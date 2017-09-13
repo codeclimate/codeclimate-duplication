@@ -73,9 +73,18 @@ module CC
 
         def normalize(hash)
           hash.tap do |config|
-            languages = config.fetch("config", {}).fetch("languages", {})
+            languages = config.fetch("config", {}).fetch("languages") do
+              default_languages
+            end
             config["languages"] = build_language_config(languages)
           end
+        end
+
+        def default_languages
+          tuples = Duplication::LANGUAGES.map do |language, _|
+            [language, {}]
+          end
+          Hash[tuples]
         end
 
         def build_language_config(languages)
