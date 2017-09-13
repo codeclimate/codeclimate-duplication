@@ -32,8 +32,21 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       })
 
       expect(engine_config.languages).to eq({
-        "elixir" =>  {},
+        "elixir" => {},
         "ruby" => {},
+      })
+    end
+
+    it "enables all languages by default" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {},
+      })
+
+      expect(engine_config.languages).to eq({
+        "ruby" => {},
+        "javascript" => {},
+        "php" => {},
+        "python" => {},
       })
     end
 
