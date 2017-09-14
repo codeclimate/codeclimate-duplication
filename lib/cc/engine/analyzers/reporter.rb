@@ -136,7 +136,13 @@ module CC
         end
 
         def skip?(violation)
-          insufficient_occurrence?(violation) || check_disabled?(violation)
+          below_threshold?(violation) ||
+            insufficient_occurrence?(violation) ||
+            check_disabled?(violation)
+        end
+
+        def below_threshold?(violation)
+          violation.mass < language_strategy.check_mass_threshold(violation.inner_check_name)
         end
 
         def insufficient_occurrence?(violation)

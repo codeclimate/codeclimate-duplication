@@ -58,6 +58,10 @@ module CC
           self.class::LANGUAGE
         end
 
+        def check_mass_threshold(check)
+          engine_config.mass_threshold_for(language, check) || self.class::DEFAULT_MASS_THRESHOLD
+        end
+
         def mass_threshold
           engine_config.minimum_mass_threshold_for(language) || self.class::DEFAULT_MASS_THRESHOLD
         end
@@ -66,8 +70,8 @@ module CC
           engine_config.count_threshold_for(language)
         end
 
-        def calculate_points(mass)
-          overage = mass - mass_threshold
+        def calculate_points(violation)
+          overage = violation.mass - check_mass_threshold(violation.inner_check_name)
           base_points + (overage * points_per_overage)
         end
 
