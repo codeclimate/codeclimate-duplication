@@ -186,9 +186,49 @@ module CC::Engine::Analyzers
 
         expect(issues.length).to eq(0)
       end
+
+      it "respects the per-check mass thresholds" do
+        create_source_file("foo.rb", <<-EORUBY)
+          def identical
+            puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
+            puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
+            puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
+          end
+          describe 'similar1' do
+            before { subject.type = 'js' }
+            it 'returns true' do
+              expect(subject.ruby?).to be true
+            end
+          end
+          describe 'similar2' do
+            before { subject.type = 'js' }
+            it 'returns true' do
+              expect(subject.js?).to be true
+            end
+          end
+        EORUBY
+
+        config = CC::Engine::Analyzers::EngineConfig.new({
+          "config" => {
+            "languages" => %w[ruby],
+            "checks" => {
+              "identical-code" => { "config" => { "threshold" => 5 } },
+              "similar-code" => { "config" => { "threshold" => 20 } },
+            },
+          },
+        })
+        output = run_engine(config).strip.split("\0").first.strip
+        json = JSON.parse(output)
+
+        expect(json["check_name"]).to eq "Identical code"
+        expect(json["location"]).to eq({
+          "path" => "foo.rb",
+          "lines" => { "begin" => 2, "end" => 2 },
+        })
+      end
     end
 
-    describe "#calculate_points(mass)" do
+    describe "#calculate_points" do
       let(:analyzer) { Ruby::Main.new(engine_config: engine_conf) }
       let(:base_points) { Ruby::Main::BASE_POINTS }
       let(:points_per) { Ruby::Main::POINTS_PER_OVERAGE }
@@ -198,9 +238,10 @@ module CC::Engine::Analyzers
         it "calculates mass overage points" do
           mass = threshold + 10
           overage = mass - threshold
+          violation = OpenStruct.new(mass: mass, inner_check_name: "identical-code")
 
           expected_points = base_points + overage * points_per
-          points = analyzer.calculate_points(mass)
+          points = analyzer.calculate_points(violation)
 
           expect(points).to eq(expected_points)
         end
@@ -210,9 +251,10 @@ module CC::Engine::Analyzers
         it "calculates mass overage points" do
           mass = threshold - 5
           overage = mass - threshold
+          violation = OpenStruct.new(mass: mass, inner_check_name: "identical-code")
 
           expected_points = base_points + overage * points_per
-          points = analyzer.calculate_points(mass)
+          points = analyzer.calculate_points(violation)
 
           expect(points).to eq(expected_points)
         end
@@ -222,9 +264,10 @@ module CC::Engine::Analyzers
         it "calculates mass overage points" do
           mass = threshold
           overage = mass - threshold
+          violation = OpenStruct.new(mass: mass, inner_check_name: "identical-code")
 
           expected_points = base_points + overage * points_per
-          points = analyzer.calculate_points(mass)
+          points = analyzer.calculate_points(violation)
 
           expect(points).to eq(expected_points)
         end

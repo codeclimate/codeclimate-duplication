@@ -50,6 +50,14 @@ module CC
           @identical
         end
 
+        def inner_check_name
+          if identical?
+            EngineConfig::IDENTICAL_CODE_CHECK
+          else
+            EngineConfig::SIMILAR_CODE_CHECK
+          end
+        end
+
         private
 
         attr_reader :language_strategy, :other_sexps, :current_sexp
@@ -59,7 +67,7 @@ module CC
         end
 
         def calculate_points
-          @calculate_points ||= language_strategy.calculate_points(mass)
+          @calculate_points ||= language_strategy.calculate_points(self)
         end
 
         def points_across_occurrences
