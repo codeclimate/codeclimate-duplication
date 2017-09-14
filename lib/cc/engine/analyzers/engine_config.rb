@@ -44,11 +44,24 @@ module CC
           enabled?(SIMILAR_CODE_CHECK)
         end
 
-        def mass_threshold_for(language)
-          threshold = fetch_language(language).fetch("mass_threshold", nil)
+        def minimum_mass_threshold_for(language)
+          [
+            mass_threshold_for(language, IDENTICAL_CODE_CHECK),
+            mass_threshold_for(language, SIMILAR_CODE_CHECK),
+          ].compact.min
+        end
 
-          if threshold
-            threshold.to_i
+        def mass_threshold_for(language, check)
+          qm_threshold = checks.fetch(check, {}).fetch("config", {})["threshold"]
+
+          if qm_threshold
+            qm_threshold.to_i
+          else
+            threshold = fetch_language(language).fetch("mass_threshold", nil)
+
+            if threshold
+              threshold.to_i
+            end
           end
         end
 

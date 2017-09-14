@@ -59,7 +59,7 @@ module CC
         end
 
         def mass_threshold
-          engine_config.mass_threshold_for(language) || self.class::DEFAULT_MASS_THRESHOLD
+          engine_config.minimum_mass_threshold_for(language) || self.class::DEFAULT_MASS_THRESHOLD
         end
 
         def count_threshold
