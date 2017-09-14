@@ -95,7 +95,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
     end
   end
 
-  describe "mass_threshold_for" do
+  describe "minimum_mass_threshold_for" do
     it "returns configured mass threshold as integer" do
       engine_config = described_class.new({
         "config" => {
@@ -104,10 +104,14 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
               "mass_threshold" => "13",
             },
           },
+          "checks" => {
+            "identical-code" => {},
+            "similar-code" => {},
+          },
         },
       })
 
-      expect(engine_config.mass_threshold_for("elixir")).to eq(13)
+      expect(engine_config.minimum_mass_threshold_for("elixir")).to eq(13)
     end
 
     it "returns nil when language is empty" do
@@ -119,7 +123,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         },
       })
 
-      expect(engine_config.mass_threshold_for("ruby")).to be_nil
+      expect(engine_config.minimum_mass_threshold_for("ruby")).to be_nil
     end
 
     it "returns nil when language is empty via array" do
@@ -129,7 +133,87 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         },
       })
 
-      expect(engine_config.mass_threshold_for("ruby")).to be_nil
+      expect(engine_config.minimum_mass_threshold_for("ruby")).to be_nil
+    end
+
+    it "uses QM threshold when one specified" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => { "mass_threshold" => 10 },
+          },
+          "checks" => {
+            "identical-code" => { "config" => { "threshold" => 5 } },
+            "similar-code" => {},
+          },
+        },
+      })
+
+      expect(engine_config.minimum_mass_threshold_for("ruby")).to eq(5)
+    end
+
+    it "uses minimum QM threshold when both specified" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => { "mass_threshold" => 10 },
+          },
+          "checks" => {
+            "identical-code" => { "config" => { "threshold" => 5 } },
+            "similar-code" => { "config" => { "threshold" => 8 } },
+          },
+        },
+      })
+
+      expect(engine_config.minimum_mass_threshold_for("ruby")).to eq(5)
+    end
+  end
+
+  describe "#mass_threshold_for" do
+    it "gives the QM check treshold when specified" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => { "mass_threshold" => 10 },
+          },
+          "checks" => {
+            "identical-code" => { "config" => { "threshold" => 5 } },
+            "similar-code" => {},
+          },
+        },
+      })
+
+      expect(engine_config.mass_threshold_for("ruby", "identical-code")).to eq(5)
+    end
+
+    it "gives the legacy language threshold when specified" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => {
+            "ruby" => { "mass_threshold" => 10 },
+          },
+          "checks" => {
+            "identical-code" => { "config" => { "threshold" => 5 } },
+            "similar-code" => {},
+          },
+        },
+      })
+
+      expect(engine_config.mass_threshold_for("ruby", "similar-code")).to eq(10)
+    end
+
+    it "gives nil when no threshold specified" do
+      engine_config = CC::Engine::Analyzers::EngineConfig.new({
+        "config" => {
+          "languages" => %w[ruby],
+          "checks" => {
+            "identical-code" => {},
+            "similar-code" => {},
+          },
+        },
+      })
+
+      expect(engine_config.mass_threshold_for("ruby", "identical-code")).to be_nil
     end
   end
 
