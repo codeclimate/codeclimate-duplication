@@ -21,6 +21,17 @@ CC.logger.level =
 
 directory = ARGV[0] || "/code"
 
+if ENV["CODECLIMATE_PROFILE"]
+  require "stackprof"
+
+  StackProf.start mode: :wall, out: "/code/profile.bin"
+end
+
 CC::Engine::Duplication.new(
   directory: directory, engine_config: config, io: STDOUT,
 ).run
+
+if ENV["CODECLIMATE_PROFILE"]
+  StackProf.stop
+  StackProf.results
+end

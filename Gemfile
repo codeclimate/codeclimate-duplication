@@ -10,4 +10,5 @@ group :test do
   gem "pry"
   gem "rake"
   gem "rspec"
+  gem "stackprof"
 end
