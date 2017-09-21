@@ -92,7 +92,7 @@ module CC::Engine::Analyzers
         json = JSON.parse(result)
 
         expect(json["type"]).to eq("issue")
-        expect(json["check_name"]).to eq("Similar code")
+        expect(json["check_name"]).to eq("similar-code")
         expect(json["description"]).to eq("Similar blocks of code found in 2 locations. Consider refactoring.")
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
@@ -220,7 +220,7 @@ module CC::Engine::Analyzers
         output = run_engine(config).strip.split("\0").first.strip
         json = JSON.parse(output)
 
-        expect(json["check_name"]).to eq "Identical code"
+        expect(json["check_name"]).to eq "identical-code"
         expect(json["location"]).to eq({
           "path" => "foo.rb",
           "lines" => { "begin" => 2, "end" => 2 },
@@ -238,7 +238,7 @@ module CC::Engine::Analyzers
         it "calculates mass overage points" do
           mass = threshold + 10
           overage = mass - threshold
-          violation = OpenStruct.new(mass: mass, inner_check_name: "identical-code")
+          violation = OpenStruct.new(mass: mass, check_name: "identical-code")
 
           expected_points = base_points + overage * points_per
           points = analyzer.calculate_points(violation)
@@ -251,7 +251,7 @@ module CC::Engine::Analyzers
         it "calculates mass overage points" do
           mass = threshold - 5
           overage = mass - threshold
-          violation = OpenStruct.new(mass: mass, inner_check_name: "identical-code")
+          violation = OpenStruct.new(mass: mass, check_name: "identical-code")
 
           expected_points = base_points + overage * points_per
           points = analyzer.calculate_points(violation)
@@ -264,7 +264,7 @@ module CC::Engine::Analyzers
         it "calculates mass overage points" do
           mass = threshold
           overage = mass - threshold
-          violation = OpenStruct.new(mass: mass, inner_check_name: "identical-code")
+          violation = OpenStruct.new(mass: mass, check_name: "identical-code")
 
           expected_points = base_points + overage * points_per
           points = analyzer.calculate_points(violation)

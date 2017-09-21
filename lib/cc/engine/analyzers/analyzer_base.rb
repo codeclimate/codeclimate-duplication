@@ -71,7 +71,7 @@ module CC
         end
 
         def calculate_points(violation)
-          overage = violation.mass - check_mass_threshold(violation.inner_check_name)
+          overage = violation.mass - check_mass_threshold(violation.check_name)
           base_points + (overage * points_per_overage)
         end
 

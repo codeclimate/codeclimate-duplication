@@ -336,43 +336,71 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
     end
   end
 
-  describe "#similar_code_check_enabled?" do
-    it "returns false when similar code check set to false" do
+  describe "#check_enabled?" do
+    it "returns false for similar-code check when disabled" do
       engine_config = stub_qm_config(similar: false)
 
-      expect(engine_config).not_to be_similar_code_check_enabled
+      violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
+      expect(engine_config.check_enabled?(violation)).to eq(false)
     end
 
-    it "returns true when similar code check set to true" do
+    it "returns true for similar-code check when enabled" do
       engine_config = stub_qm_config(similar: true)
 
-      expect(engine_config).to be_similar_code_check_enabled
+      violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
+      expect(engine_config.check_enabled?(violation)).to eq(true)
+    end
+
+    it "respects legacy config when present" do
+      engine_config = described_class.new(
+        "checks" => { "Similar code" => { "enabled" => false } },
+        "config" => {
+          "checks" => { "identical-code" => { "enabled" => true } },
+        },
+      )
+
+      violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
+      expect(engine_config.check_enabled?(violation)).to eq(false)
+    end
+
+    it "overrides legacy config when both present" do
+      engine_config = described_class.new(
+        "checks" => { "Similar code" => { "enabled" => false } },
+        "config" => {
+          "checks" => { "similar-code" => { "enabled" => false } },
+        },
+      )
+
+      violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
+      expect(engine_config.check_enabled?(violation)).to eq(false)
     end
 
     it "returns true by default" do
       engine_config = described_class.new({ "config" => {} })
 
-      expect(engine_config).to be_similar_code_check_enabled
+      violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
+      expect(engine_config.check_enabled?(violation)).to eq(true)
     end
-  end
 
-  describe "#identical_code_check_enabled?" do
-    it "returns false when identical code check set to false" do
+    it "returns false for identical-code check when disabled" do
       engine_config = stub_qm_config(identical: false)
 
-      expect(engine_config).not_to be_identical_code_check_enabled
+      violation = double(check_name: "identical-code", fingerprint_check_name: "Identical code")
+      expect(engine_config.check_enabled?(violation)).to eq(false)
     end
 
-    it "returns true when identical code check set to true" do
+    it "returns true for identical-code check when enabled" do
       engine_config = stub_qm_config(identical: true)
 
-      expect(engine_config).to be_identical_code_check_enabled
+      violation = double(check_name: "identical-code", fingerprint_check_name: "Identical code")
+      expect(engine_config.check_enabled?(violation)).to eq(true)
     end
 
     it "returns true by default" do
       engine_config = described_class.new({ "config" => {} })
 
-      expect(engine_config).to be_identical_code_check_enabled
+      violation = double(check_name: "identical-code", fingerprint_check_name: "Identical code")
+      expect(engine_config.check_enabled?(violation)).to eq(true)
     end
   end
 

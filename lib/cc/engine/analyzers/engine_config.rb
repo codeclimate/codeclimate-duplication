@@ -36,14 +36,6 @@ module CC
           end
         end
 
-        def identical_code_check_enabled?
-          enabled?(IDENTICAL_CODE_CHECK)
-        end
-
-        def similar_code_check_enabled?
-          enabled?(SIMILAR_CODE_CHECK)
-        end
-
         def minimum_mass_threshold_for(language)
           [
             mass_threshold_for(language, IDENTICAL_CODE_CHECK),
@@ -52,7 +44,7 @@ module CC
         end
 
         def mass_threshold_for(language, check)
-          qm_threshold = checks.fetch(check, {}).fetch("config", {})["threshold"]
+          qm_threshold = qm_checks.fetch(check, {}).fetch("config", {})["threshold"]
 
           if qm_threshold
             qm_threshold.to_i
@@ -89,6 +81,14 @@ module CC
 
         def patterns_for(language, fallbacks)
           Array(fetch_language(language).fetch("patterns", fallbacks))
+        end
+
+        def check_enabled?(violation)
+          legacy_config = legacy_checks.fetch(violation.fingerprint_check_name, {
+            "enabled" => true
+          })
+
+          qm_checks.fetch(violation.check_name, legacy_config).fetch("enabled", true)
         end
 
         private
@@ -136,12 +136,12 @@ module CC
           end
         end
 
-        def checks
-          config.fetch("config", {}).fetch("checks", {})
+        def legacy_checks
+          config.fetch("checks", {})
         end
 
-        def enabled?(check)
-          checks.fetch(check, {}).fetch("enabled", true)
+        def qm_checks
+          config.fetch("config", {}).fetch("checks", {})
         end
       end
     end

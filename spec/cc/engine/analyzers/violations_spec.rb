@@ -24,7 +24,7 @@ module CC::Engine::Analyzers
         third_formatted = violations[2].format
 
         expect(first_formatted[:type]).to eq("issue")
-        expect(first_formatted[:check_name]).to eq("Identical code")
+        expect(first_formatted[:check_name]).to eq("identical-code")
         expect(first_formatted[:description]).to eq("Identical blocks of code found in 3 locations. Consider refactoring.")
         expect(first_formatted[:categories]).to eq(["Duplication"])
         expect(first_formatted[:remediation_points]).to eq(30)

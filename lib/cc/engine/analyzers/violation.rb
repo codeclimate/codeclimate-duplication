@@ -50,21 +50,17 @@ module CC
           @identical
         end
 
-        def inner_check_name
-          if identical?
-            EngineConfig::IDENTICAL_CODE_CHECK
-          else
-            EngineConfig::SIMILAR_CODE_CHECK
-          end
+        def check_name
+          "#{duplication_type}-code"
+        end
+
+        def fingerprint_check_name
+          "#{duplication_type.capitalize} code"
         end
 
         private
 
         attr_reader :language_strategy, :other_sexps, :current_sexp
-
-        def check_name
-          "#{duplication_type.capitalize} code"
-        end
 
         def calculate_points
           @calculate_points ||= language_strategy.calculate_points(self)
@@ -109,7 +105,7 @@ module CC
           digest << "-"
           digest << current_sexp.mass.to_s
           digest << "-"
-          digest << check_name
+          digest << fingerprint_check_name
           digest.to_s
         end
 

@@ -19,7 +19,7 @@ print("Hello", "python")
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
-      expect(json["check_name"]).to eq("Identical code")
+      expect(json["check_name"]).to eq("identical-code")
       expect(json["description"]).to eq("Identical blocks of code found in 3 locations. Consider refactoring.")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
@@ -48,7 +48,7 @@ print("Hello from the other side", "python")
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
-      expect(json["check_name"]).to eq("Similar code")
+      expect(json["check_name"]).to eq("similar-code")
       expect(json["description"]).to eq("Similar blocks of code found in 3 locations. Consider refactoring.")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
@@ -92,7 +92,7 @@ def c(thing: str):
       json = JSON.parse(result)
 
       expect(json["type"]).to eq("issue")
-      expect(json["check_name"]).to eq("Similar code")
+      expect(json["check_name"]).to eq("similar-code")
       expect(json["description"]).to eq("Similar blocks of code found in 3 locations. Consider refactoring.")
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
