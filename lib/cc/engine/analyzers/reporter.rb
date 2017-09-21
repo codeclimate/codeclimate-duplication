@@ -142,19 +142,11 @@ module CC
         end
 
         def below_threshold?(violation)
-          violation.mass < language_strategy.check_mass_threshold(violation.inner_check_name)
+          violation.mass < language_strategy.check_mass_threshold(violation.check_name)
         end
 
         def insufficient_occurrence?(violation)
           (violation.occurrences + 1) < language_strategy.count_threshold
-        end
-
-        def check_disabled?(violation)
-          if violation.identical?
-            !engine_config.identical_code_check_enabled?
-          else
-            !engine_config.similar_code_check_enabled?
-          end
         end
 
         def skip?(violation)
@@ -166,11 +158,7 @@ module CC
         end
 
         def check_disabled?(violation)
-          if violation.identical?
-            !engine_config.identical_code_check_enabled?
-          else
-            !engine_config.similar_code_check_enabled?
-          end
+          !engine_config.check_enabled?(violation)
         end
       end
     end
