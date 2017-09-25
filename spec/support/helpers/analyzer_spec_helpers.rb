@@ -1,6 +1,5 @@
 module AnalyzerSpecHelpers
   def create_source_file(path, content)
-    raise "Must use in_tmpdir tag" unless @code
     File.write(File.join(@code, path), content)
   end
 
