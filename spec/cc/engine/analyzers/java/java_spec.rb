@@ -4,7 +4,7 @@ require "cc/engine/analyzers/engine_config"
 require "cc/engine/analyzers/file_list"
 
 module CC::Engine::Analyzers
-  RSpec.describe Java::Main, in_tmpdir: true, focus: true do
+  RSpec.describe Java::Main, in_tmpdir: true do
     include AnalyzerSpecHelpers
 
     describe "#run" do
@@ -144,6 +144,7 @@ import org.springframework.rules.closure.BinaryConstraint;
       end
 
       it "prints an issue for similar code when the only difference is the value of two hexadecimal numbers" do
+        # TODO: shrink this down if possible
         create_source_file("foo.java", <<-EOF)
           public class ArrayDemo {
             public static void foo() {
@@ -197,19 +198,21 @@ import org.springframework.rules.closure.BinaryConstraint;
 
         expect(json["type"]).to eq("issue")
         expect(json["check_name"]).to eq("similar-code")
-        # expect(json["description"]).to eq("Similar blocks of code found in 2 locations. Consider refactoring.")
-        # expect(json["categories"]).to eq(["Duplication"])
-        # expect(json["location"]).to eq({
-        #   "path" => "foo.java",
-        #   "lines" => { "begin" => 2, "end" => 16 },
-        # })
-        # expect(json["remediation_points"]).to eq(930_000)
-        # expect(json["other_locations"]).to eq([
-        #   {"path" => "foo.java", "lines" => { "begin" => 18, "end" => 32 } },
-        # ])
-        # expect(json["content"]["body"]).to match /This issue has a mass of 103/
-        # expect(json["fingerprint"]).to eq("48eb151dc29634f90a86ffabf9d3c4b5")
-        # expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
+
+        # TODO: the following will need to be updated
+        expect(json["description"]).to eq("Similar blocks of code found in 2 locations. Consider refactoring.")
+        expect(json["categories"]).to eq(["Duplication"])
+        expect(json["location"]).to eq({
+          "path" => "foo.java",
+          "lines" => { "begin" => 2, "end" => 16 },
+        })
+        expect(json["remediation_points"]).to eq(930_000)
+        expect(json["other_locations"]).to eq([
+          {"path" => "foo.java", "lines" => { "begin" => 18, "end" => 32 } },
+        ])
+        expect(json["content"]["body"]).to match /This issue has a mass of 103/
+        expect(json["fingerprint"]).to eq("48eb151dc29634f90a86ffabf9d3c4b5")
+        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
       end
     end
   end
