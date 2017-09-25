@@ -143,7 +143,7 @@ import org.springframework.rules.closure.BinaryConstraint;
         expect(issues).to be_empty
       end
 
-      it "prints an issue for similar code when the only difference is the value of two hexadecimal numbers" do
+      it "prints an issue for similar code when the only difference is the value of a literal" do
         create_source_file("foo.java", <<-EOF)
           public class ArrayDemo {
             public static void foo() {
