@@ -10,17 +10,13 @@ require "cc/engine/sexp_builder"
 module CC
   module Engine
     module Analyzers
-      module Java
+      module TypeScript
         class Main < CC::Engine::Analyzers::Base
-          LANGUAGE = "java".freeze
-          PATTERNS = ["**/*.java"].freeze
+          LANGUAGE = "typescript".freeze
+          PATTERNS = ["**/*.ts"].freeze
           DEFAULT_MASS_THRESHOLD = 40
-          DEFAULT_FILTERS = [
-            "(ImportDeclaration ___)".freeze,
-            "(PackageDeclaration ___)".freeze,
-          ].freeze
-          POINTS_PER_OVERAGE = 10_000
-          REQUEST_PATH = "/java".freeze
+          POINTS_PER_OVERAGE = 30_000
+          REQUEST_PATH = "/typescript".freeze
 
           private
 
@@ -46,10 +42,6 @@ module CC
               CC.logger.debug { "Contents:\n#{processed_source.raw_source}" }
               raise
             end
-          end
-
-          def default_filters
-            DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
 
           def unparsable_file_error?(ex)
