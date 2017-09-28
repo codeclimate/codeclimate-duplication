@@ -21,25 +21,6 @@ simple. We have a [docs page][what-is-duplication] explaining the algorithm.
 
 ## Configuring
 
-### Languages
-
-By enabling the duplication engine with the Code Climate CLI, all supported
-languages are configured by default, but we recommend adjusting this
-configuration to enable only the languages you care about. If you have a project
-with Ruby and JavaScript files, you might want the following configuration:
-
-```yaml
-engines:
-  duplication:
-    enabled: true
-    config:
-      languages:
-        ruby:
-        javascript:
-```
-
-This will tell the duplication engine to analyze Ruby and JavaScript files.
-
 ### Mass Threshold
 
 We set useful threshold defaults for the languages we support but you may want
@@ -51,18 +32,16 @@ duplication, try raising the threshold. If you suspect that the engine isn't
 catching enough duplication, try lowering the threshold. The best setting tends
 to differ from language to language.
 
-To adjust this setting, add a `mass_threshold` key with your preferred value for
-an enabled language:
+To adjust this setting, use the top-level `checks` key in your config file:
 
 ```yaml
-engines:
-  duplication:
-    enabled: true
+checks:
+  identical-code:
     config:
-      languages:
-        ruby:
-          mass_threshold: 20
-        javascript:
+      threshold: 25
+  similar-code:
+    config:
+      threshold: 50
 ```
 
 Note that you have the update the YAML structure under the `languages` key to
@@ -73,7 +52,7 @@ the Hash type to support extra configuration.
 By default, the duplication engine will report code that has been duplicated in just two locations. You can be less strict by only raising a warning if code is duplicated in three or more locations only. To adjust this setting, add a `count_threshold` key to your config. For instance, to use the default `mass_threshold` for ruby, but to enforce the [Rule of Three][rule-of-three], you could use this configuration:
 
 ```yaml
-engines:
+plugins:
   duplication:
     enabled: true
     config:
@@ -82,38 +61,24 @@ engines:
           count_threshold: 3
 ```
 
-You can also change the default count_threshold for all languages:
+You can also change the default `count_threshold` for all languages:
 
 ```yaml
-engines:
+plugins:
   duplication:
     enabled: true
     count_threshold: 3
 ```
 
-### Excluding files and directories
-
-As with any other Code Climate engine, you can exclude certain files or
-directories from being analyzed. For more information, see
-[*Exclude paths for specific engines*][exclude-files-engine] in our
-documentation.
-
-```yaml
-engines:
-  duplication:
-    exclude_paths:
-    - examples/
-```
-
 ### Custom file name patterns
 
 All engines check only appropriate files but you can override default set of
-patterns. Patterns are ran aginast the project root direcory so you have to use
+patterns. Patterns are ran against the project root direcory so you have to use
 `**` to match files in nested directories. Also note that you have to specify
 all patterns, not only the one you want to add.
 
 ```yml
-engines:
+plugins:
   duplication:
     enabled: true
     config:
@@ -135,7 +100,7 @@ can specify language specific filters to ignore any issues that match
 the pattern. Here is an example that filters simple hashes and arrays:
 
 ```yaml
-engines:
+plugins:
   duplication:
     enabled: true
     config:
@@ -161,7 +126,7 @@ out the parse-trees instead! Just add `dump_ast: true` and `debug: true` to your
 
 ```
 ---
-engines:
+plugins:
   duplication:
     enabled: true
     config:
@@ -249,7 +214,7 @@ Then you can add that filter to your config:
 
 ```
 ---
-engines:
+plugins:
   duplication:
     enabled: true
     config:
