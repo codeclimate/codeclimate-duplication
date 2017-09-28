@@ -1,4 +1,4 @@
-.PHONY: image test citest qa
+.PHONY: image test citest
 
 IMAGE_NAME ?= codeclimate/codeclimate-duplication
 
@@ -10,8 +10,3 @@ test: image
 
 citest:
 	docker run --rm $(IMAGE_NAME) bundle exec rake
-
-qa: image
-	# requires QA=true to run locally
-	# optionally pass `LANGS="x y"`
-	qa/bin/clone_and_test_examples qa/examples $(IMAGE_NAME)

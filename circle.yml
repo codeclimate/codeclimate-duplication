@@ -14,15 +14,10 @@ dependencies:
       codeclimate/patrick pull || true
     - docker login --username "$DOCKER_USERNAME" --password "$DOCKER_PASSWORD" --email "$DOCKER_EMAIL"
     - make image
-  cache_dependencies:
-    - qa/examples
 
 test:
   override:
     - make citest
-    # N.B. Only QA-ing languages which have been updated to use our new parser
-    # backend
-    - LANGS=java make qa
 
 deployment:
   registry:
