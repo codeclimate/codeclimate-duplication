@@ -16,6 +16,8 @@ module CC
           PATTERNS = [
             "**/*.js",
             "**/*.jsx",
+            "**/*.es",
+            "**/*.es6",
           ].freeze
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 40
