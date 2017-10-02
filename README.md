@@ -2,7 +2,7 @@
 
 [![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate-duplication/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate-duplication)
 
-`codeclimate-duplication` is an engine that wraps [flay] and supports Ruby,
+`codeclimate-duplication` is an engine that wraps [flay] and supports Java, Ruby,
 Python, JavaScript, and PHP. You can run it on the command line using the Code
 Climate CLI or on our [hosted analysis platform][codeclimate].
 
