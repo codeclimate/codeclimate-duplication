@@ -1,7 +1,6 @@
 require "spec_helper"
 require "cc/engine/analyzers/java/main"
 require "cc/engine/analyzers/engine_config"
-require "cc/engine/analyzers/file_list"
 
 module CC::Engine::Analyzers
   RSpec.describe Java::Main, in_tmpdir: true do

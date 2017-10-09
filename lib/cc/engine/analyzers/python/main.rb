@@ -3,7 +3,6 @@
 require "cc/engine/analyzers/python/parser"
 require "cc/engine/analyzers/python/node"
 require "cc/engine/analyzers/reporter"
-require "cc/engine/analyzers/file_list"
 require "cc/engine/analyzers/analyzer_base"
 require "flay"
 
