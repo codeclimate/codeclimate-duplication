@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'cc/engine/analyzers/python/main'
 require 'cc/engine/analyzers/engine_config'
-require 'cc/engine/analyzers/file_list'
 
 RSpec.describe CC::Engine::Analyzers::Python::Main, in_tmpdir: true do
   include AnalyzerSpecHelpers

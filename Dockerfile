@@ -13,12 +13,11 @@ RUN apt-get update && \
   RUNLEVEL=1 apt-get install --yes --no-install-recommends \
     python2.7
 
-COPY Gemfile* package.json package-lock.json ./
+COPY Gemfile* ./
 COPY vendor/php-parser/composer* ./vendor/php-parser/
 
 RUN bundle install --jobs 4 --quiet && \
-    composer install --no-interaction --quiet --working-dir ./vendor/php-parser && \
-    npm install
+    composer install --no-interaction --quiet --working-dir ./vendor/php-parser
 
 COPY . ./
 RUN chown -R app:app ./

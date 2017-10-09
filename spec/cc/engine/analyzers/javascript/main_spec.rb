@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'cc/engine/analyzers/javascript/main'
 require 'cc/engine/analyzers/reporter'
 require 'cc/engine/analyzers/engine_config'
-require 'cc/engine/analyzers/file_list'
 
 RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
   include AnalyzerSpecHelpers
@@ -86,7 +85,8 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         function () { do(); // missing closing brace
       EOJS
 
-      expect(CC.logger).to receive(:info).with(/Skipping file/)
+      expect(CC.logger).to receive(:warn).with(/Skipping \.\/foo\.js/)
+      expect(CC.logger).to receive(:warn).with("Response status: 422")
       expect(run_engine(engine_conf)).to eq("")
     end
 
@@ -94,7 +94,8 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       path = fixture_path("huge_js_file.js")
       create_source_file("foo.js", File.read(path))
 
-      expect(CC.logger).to receive(:info).with(/Skipping file/)
+      expect(CC.logger).to receive(:warn).with(/Skipping \.\/foo\.js/)
+      expect(CC.logger).to receive(:warn).with("Response status: 422")
       expect(run_engine(engine_conf)).to eq("")
     end
   end
