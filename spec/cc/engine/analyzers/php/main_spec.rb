@@ -165,31 +165,31 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
     end
 
     it "ignores namespace and use declarations" do
-      create_source_file("foo.php", <<-EOF)
-<?php
-namespace KeepClear\\Http\\Controllers\\API\\V1;
-use Illuminate\\Http\\Request;
-use KeepClear\\Http\\Controllers\\Controller;
-use KeepClear\\Models\\Comment;
-use KeepClear\\Models\\User;
-use KeepClear\\Models\\Asset;
-use KeepClear\\Traits\\Controllers\\ApiFilter;
-use KeepClear\\Traits\\Controllers\\ApiParseBody;
-use KeepClear\\Traits\\Controllers\\ApiException;
-      EOF
+      create_source_file("foo.php", <<~EOPHP)
+      <?php
+      namespace KeepClear\\Http\\Controllers\\API\\V1;
+      use Illuminate\\Http\\Request;
+      use KeepClear\\Http\\Controllers\\Controller;
+      use KeepClear\\Models\\Comment;
+      use KeepClear\\Models\\User;
+      use KeepClear\\Models\\Asset;
+      use KeepClear\\Traits\\Controllers\\ApiFilter;
+      use KeepClear\\Traits\\Controllers\\ApiParseBody;
+      use KeepClear\\Traits\\Controllers\\ApiException;
+      EOPHP
 
-      create_source_file("bar.php", <<-EOF)
-<?php
-namespace KeepClear\\Http\\Controllers\\API\\V1;
-use Illuminate\\Http\\Request;
-use KeepClear\\Http\\Controllers\\Controller;
-use KeepClear\\Models\\Comment;
-use KeepClear\\Models\\User;
-use KeepClear\\Models\\Asset;
-use KeepClear\\Traits\\Controllers\\ApiFilter;
-use KeepClear\\Traits\\Controllers\\ApiParseBody;
-use KeepClear\\Traits\\Controllers\\ApiException;
-      EOF
+      create_source_file("bar.php", <<~EOPHP)
+      <?php
+      namespace KeepClear\\Http\\Controllers\\API\\V1;
+      use Illuminate\\Http\\Request;
+      use KeepClear\\Http\\Controllers\\Controller;
+      use KeepClear\\Models\\Comment;
+      use KeepClear\\Models\\User;
+      use KeepClear\\Models\\Asset;
+      use KeepClear\\Traits\\Controllers\\ApiFilter;
+      use KeepClear\\Traits\\Controllers\\ApiParseBody;
+      use KeepClear\\Traits\\Controllers\\ApiException;
+      EOPHP
 
       issues = run_engine(engine_conf).strip.split("\0")
       expect(issues).to be_empty

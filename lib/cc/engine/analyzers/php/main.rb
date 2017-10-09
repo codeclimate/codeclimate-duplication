@@ -15,6 +15,9 @@ module CC
             "**/*.php",
           ].freeze
           DEFAULT_MASS_THRESHOLD = 28
+          DEFAULT_FILTERS = [
+            "(use ___)".freeze,
+          ].freeze
           POINTS_PER_OVERAGE = 100_000
 
           def transform_sexp(sexp)
@@ -31,6 +34,10 @@ module CC
 
           def php_parser
             ::CC::Engine::Analyzers::Php::Parser
+          end
+
+          def default_filters
+            DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
         end
       end
