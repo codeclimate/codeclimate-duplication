@@ -15,6 +15,7 @@ module CC
           DEFAULT_MASS_THRESHOLD = 40
           DEFAULT_FILTERS = [
             "(ImportDeclaration ___)".freeze,
+            "(VariableDeclarator ___)".freeze,
           ].freeze
           POINTS_PER_OVERAGE = 30_000
           REQUEST_PATH = "/javascript".freeze
