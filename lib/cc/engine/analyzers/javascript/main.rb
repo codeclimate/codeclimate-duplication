@@ -12,7 +12,7 @@ module CC
             "**/*.jsx",
           ].freeze
           LANGUAGE = "javascript"
-          DEFAULT_MASS_THRESHOLD = 40
+          DEFAULT_MASS_THRESHOLD = 45
           POINTS_PER_OVERAGE = 30_000
           REQUEST_PATH = "/javascript".freeze
 
