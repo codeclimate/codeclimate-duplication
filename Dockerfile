@@ -1,4 +1,4 @@
-FROM codeclimate/codeclimate-parser:b413
+FROM codeclimate/codeclimate-parser:b419
 LABEL maintainer="Code Climate <hello@codeclimate.com>"
 
 # Reset from base image
