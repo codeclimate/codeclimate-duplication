@@ -13,6 +13,10 @@ module CC
           ].freeze
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 45
+          DEFAULT_FILTERS = [
+            "(ImportDeclaration ___)".freeze,
+          ].freeze
+
           POINTS_PER_OVERAGE = 30_000
           REQUEST_PATH = "/javascript".freeze
 
@@ -20,6 +24,10 @@ module CC
 
           def process_file(file)
             parse(file, REQUEST_PATH)
+          end
+
+          def default_filters
+            DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
         end
       end

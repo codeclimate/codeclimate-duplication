@@ -122,6 +122,25 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
     expect(issues.length).to eq 1
   end
 
+  it "ignores namespace and use declarations" do
+      create_source_file("foo.js", <<~EOJS)
+      import React, { Component, PropTypes } from 'react'
+      import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table'
+      import values from 'lodash/values'
+      import { v4 } from 'uuid'
+      EOJS
+
+      create_source_file("bar.js", <<~EOJS)
+      import React, { Component, PropTypes } from 'react'
+      import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table'
+      import values from 'lodash/values'
+      import { v4 } from 'uuid'
+      EOJS
+
+      issues = run_engine(engine_conf).strip.split("\0")
+      expect(issues).to be_empty
+    end
+
   def engine_conf
     CC::Engine::Analyzers::EngineConfig.new({
       'config' => {
