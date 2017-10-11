@@ -12,7 +12,7 @@ module CC
             "**/*.jsx",
           ].freeze
           LANGUAGE = "javascript"
-          DEFAULT_MASS_THRESHOLD = 40
+          DEFAULT_MASS_THRESHOLD = 45
           DEFAULT_FILTERS = [
             "(ImportDeclaration ___)".freeze,
             "(VariableDeclarator ___)".freeze,
