@@ -150,7 +150,7 @@ module CC
           CC.logger.error(ex.message)
           CC.logger.debug { "Contents:\n#{processed_source.raw_source}" }
 
-          raise
+          raise ex
         end
       end
     end
