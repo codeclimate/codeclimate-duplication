@@ -38,14 +38,14 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 6 },
+        "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(900_000)
+      expect(json["remediation_points"]).to eq(1_060_000)
       expect(json["other_locations"]).to eq([
-        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
-      expect(json["fingerprint"]).to eq("8234e10d96fd6ef608085c22c91c9ab1")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 24/)
+      expect(json["fingerprint"]).to eq("367e371730140daeda61ab577c617236")
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
@@ -80,14 +80,14 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       expect(json["categories"]).to eq(["Duplication"])
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 6 },
+        "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(900_000)
+      expect(json["remediation_points"]).to eq(1_060_000)
       expect(json["other_locations"]).to eq([
-        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 14} },
+        {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 11/)
-      expect(json["fingerprint"]).to eq("e25ff98e21ce7e3e4ec3504174a820d2")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 24/)
+      expect(json["fingerprint"]).to eq("8fe741c1e4cccc7226bbf6f0244fc49d")
     end
 
     it "runs against complex files" do
@@ -129,7 +129,9 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         <?php blorb &; "fee
       EOPHP
 
-      expect(CC.logger).to receive(:info).with(/Skipping file/)
+      expect(CC.logger).to receive(:warn).with(/Skipping \.\/foo.php/)
+      expect(CC.logger).to receive(:warn).with(/Response status: 422/)
+
       expect(run_engine(engine_conf)).to eq("")
     end
 
@@ -141,7 +143,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       json = JSON.parse(result)
       expect(json["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 117, "end" => 118 },
+        "lines" => { "begin" => 190, "end" => 190 },
       })
     end
 
@@ -154,12 +156,12 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       expect(JSON.parse(issues.first.strip)["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 2, "end" => 7 },
+        "lines" => { "begin" => 2, "end" => 9 },
       })
 
       expect(JSON.parse(issues.last.strip)["location"]).to eq({
         "path" => "foo.php",
-        "lines" => { "begin" => 11, "end" => 16 },
+        "lines" => { "begin" => 11, "end" => 18 },
       })
     end
 
@@ -192,6 +194,84 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
 
       issues = run_engine(engine_conf).strip.split("\0")
       expect(issues).to be_empty
+    end
+
+    context "comments" do
+      it "ignores PHPDoc comments" do
+        create_source_file("foo.php", <<-EOPHP)
+          <?php
+
+          /**
+           * Says "hello"
+           *
+           * @param string $name
+           */
+          function hello($name) {
+            if (empty($name)) {
+              echo "Hello World!";
+            } else {
+              echo "Hello $name!";
+            }
+          }
+
+          /**
+           * Says "hi"
+           *
+           * @param string $nickname
+           */
+          function hi($nickname) {
+            if (empty($nickname)) {
+              echo "Hi World!";
+            } else {
+              echo "Hi $nickname!";
+            }
+          }
+        EOPHP
+
+        issues = run_engine(engine_conf).strip.split("\0")
+        expect(issues.length).to be > 0
+
+        issue = JSON.parse(issues.first.strip)
+        expect(issue["location"]).to eq(
+          "path" => "foo.php",
+          "lines" => { "begin" => 8, "end" => 14 },
+        )
+        expect(issue["content"]["body"]).to match(/This issue has a mass of 24/)
+      end
+
+      it "ignores one-line comments" do
+        create_source_file("foo.php", <<-EOPHP)
+          <?php
+
+          // Says "hello"
+          function hello($name) {
+            if (empty($name)) {
+              echo "Hello World!";
+            } else {
+              echo "Hello $name!";
+            }
+          }
+
+          // Says "hi"
+          function hi($nickname) {
+            if (empty($nickname)) {
+              echo "Hi World!";
+            } else {
+              echo "Hi $nickname!";
+            }
+          }
+        EOPHP
+
+        issues = run_engine(engine_conf).strip.split("\0")
+        expect(issues.length).to be > 0
+
+        issue = JSON.parse(issues.first.strip)
+        expect(issue["location"]).to eq(
+          "path" => "foo.php",
+          "lines" => { "begin" => 4, "end" => 10 },
+        )
+        expect(issue["content"]["body"]).to match(/This issue has a mass of 24/)
+      end
     end
   end
 
