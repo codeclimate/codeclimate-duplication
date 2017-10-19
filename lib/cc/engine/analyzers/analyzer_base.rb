@@ -126,31 +126,28 @@ module CC
 
         def parse(file, request_path)
           processed_source = ProcessedSource.new(file, request_path)
-
           SexpBuilder.new(processed_source.ast, file).build
-        rescue CC::Parser::Client::HTTPError => ex
-          unexpected_parse_error!(ex) unless ex.response_status.to_s.start_with?("4")
-
-          CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
-          CC.logger.warn("Response status: #{ex.response_status}")
-          CC.logger.debug { "Contents:\n#{processed_source.raw_source}" }
-          CC.logger.debug { "Response:\n#{ex.response_body}" }
-          nil
-        rescue CC::Parser::Client::NestingDepthError => ex
-          CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
-          CC.logger.warn(ex.message)
-          CC.logger.debug { "Contents:\n#{processed_source.raw_source}" }
-          nil
         rescue => ex
-          unexpected_parse_error!(ex)
+          handle_exception(processed_source, ex)
         end
 
-        def unexpected_parse_error!(ex)
-          CC.logger.error("Error processing file: #{processed_source.path}")
-          CC.logger.error(ex.message)
+        def handle_exception(processed_source, ex)
           CC.logger.debug { "Contents:\n#{processed_source.raw_source}" }
 
-          raise ex
+          case
+          when ex.is_a?(CC::Parser::Client::HTTPError) && ex.response_status.to_s.start_with?("4")
+            CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
+            CC.logger.warn("Response status: #{ex.response_status}")
+            CC.logger.debug { "Response:\n#{ex.response_body}" }
+          when ex.is_a?(CC::Parser::Client::NestingDepthError)
+            CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
+            CC.logger.warn(ex.message)
+          else
+            CC.logger.error("Error processing file: #{processed_source.path}")
+            CC.logger.error(ex.message)
+            raise ex
+          end
+          nil
         end
       end
     end

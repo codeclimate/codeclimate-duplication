@@ -75,7 +75,6 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         });
       EOJS
 
-
       expect(CC.logger).not_to receive(:info).with(/Skipping file/)
       run_engine(engine_conf)
     end
@@ -97,6 +96,19 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       expect(CC.logger).to receive(:warn).with(/Skipping \.\/foo\.js/)
       expect(CC.logger).to receive(:warn).with("Response status: 422")
       expect(run_engine(engine_conf)).to eq("")
+    end
+
+    it "handles parser 500s" do
+      create_source_file("foo.js", <<-EOJS)
+      EOJS
+
+      error = CC::Parser::Client::HTTPError.new(500, "Error processing file: ./foo.js")
+      allow(CC::Parser).to receive(:parse).with("", "/javascript").and_raise(error)
+
+      expect(CC.logger).to receive(:error).with("Error processing file: ./foo.js")
+      expect(CC.logger).to receive(:error).with(error.message)
+
+      expect { run_engine(engine_conf) }.to raise_error(error)
     end
   end
 
