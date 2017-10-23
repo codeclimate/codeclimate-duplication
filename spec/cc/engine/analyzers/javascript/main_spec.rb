@@ -172,6 +172,35 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
     expect(issues).to be_empty
   end
 
+  it "outputs the correct line numbers for ASTs missing line details (codeclimate/app#6227)" do
+    create_source_file("foo.js", <<~EOJS)
+      `/movie?${getQueryString({ movie_id: movieId })}`
+    EOJS
+
+    create_source_file("bar.js", <<~EOJS)
+      var greeting = "hello";
+
+      `/movie?${getQueryString({ movie_id: movieId })}`
+    EOJS
+
+    issues = run_engine(engine_conf).strip.split("\0")
+    expect(issues).to_not be_empty
+
+    issues.map! { |issue| JSON.parse(issue) }
+
+    foo_issue = issues.detect { |issue| issue.fetch("location").fetch("path") == "foo.js" }
+    expect(foo_issue["location"]).to eq({
+      "path" => "foo.js",
+      "lines" => { "begin" => 1, "end" => 1 },
+    })
+
+    bar_issue = issues.detect { |issue| issue.fetch("location").fetch("path") == "bar.js" }
+    expect(bar_issue["location"]).to eq({
+      "path" => "bar.js",
+      "lines" => { "begin" => 3, "end" => 3 },
+    })
+  end
+
   def engine_conf
     CC::Engine::Analyzers::EngineConfig.new({
       'config' => {

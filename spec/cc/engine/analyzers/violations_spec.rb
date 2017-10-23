@@ -5,7 +5,7 @@ module CC::Engine::Analyzers
     describe "#each" do
       let(:issue) { double(:issue, mass: 10, identical?: true) }
       let(:hashes) { sexps }
-      let(:language_strategy) { double(:language_strategy, calculate_points: 30, calculate_severity: CC::Engine::Analyzers::Base::MINOR) }
+      let(:language_strategy) { double(:language_strategy, calculate_points: 30, calculate_severity: CC::Engine::Analyzers::Base::MINOR, use_sexp_lines?: true) }
       let(:violations) { [] }
 
       before do

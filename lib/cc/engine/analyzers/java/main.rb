@@ -20,6 +20,10 @@ module CC
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/java".freeze
 
+          def use_sexp_lines?
+            false
+          end
+
           private
 
           def process_file(file)

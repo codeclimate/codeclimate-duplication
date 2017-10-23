@@ -85,14 +85,24 @@ module CC
         end
 
         def format_sexp(sexp)
-          lines = SexpLines.new(sexp)
-          {
-            "path": sexp.file.gsub(%r{^./}, ""),
-            "lines": {
-              "begin": lines.begin_line,
-              "end": lines.end_line,
-            },
-          }
+          if language_strategy.use_sexp_lines?
+            lines = SexpLines.new(sexp)
+            {
+              "path": sexp.file.gsub(%r{^./}, ""),
+              "lines": {
+                "begin": lines.begin_line,
+                "end": lines.end_line,
+              },
+            }
+          else
+            {
+              "path": sexp.file.gsub(%r{^./}, ""),
+              "lines": {
+                "begin": sexp.line,
+                "end": sexp.end_line,
+              },
+            }
+          end
         end
 
         def content_body
