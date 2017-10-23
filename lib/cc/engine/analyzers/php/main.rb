@@ -23,6 +23,10 @@ module CC
             delete_comments!(sexp)
           end
 
+          def use_sexp_lines?
+            false
+          end
+
           private
 
           def process_file(file)

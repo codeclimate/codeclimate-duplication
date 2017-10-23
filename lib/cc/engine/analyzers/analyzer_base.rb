@@ -90,6 +90,11 @@ module CC
           sexp
         end
 
+        # Please see: codeclimate/app#6227
+        def use_sexp_lines?
+          true
+        end
+
         private
 
         attr_reader :engine_config
