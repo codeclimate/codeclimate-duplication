@@ -24,10 +24,6 @@ module CC
             sexp.flatter
           end
 
-          def use_sexp_lines?
-            false
-          end
-
           private
 
           def process_file(path)
