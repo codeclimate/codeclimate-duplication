@@ -8,6 +8,7 @@ require "cc/engine/analyzers/javascript/main"
 require "cc/engine/analyzers/php/main"
 require "cc/engine/analyzers/python/main"
 require "cc/engine/analyzers/reporter"
+require "cc/engine/analyzers/typescript/main"
 require "cc/engine/analyzers/engine_config"
 require "cc/engine/analyzers/sexp"
 require "flay"
@@ -22,6 +23,7 @@ module CC
         "javascript" => ::CC::Engine::Analyzers::Javascript::Main,
         "php"        => ::CC::Engine::Analyzers::Php::Main,
         "python"     => ::CC::Engine::Analyzers::Python::Main,
+        "typescript" => ::CC::Engine::Analyzers::TypeScript::Main,
       }.freeze
 
       def initialize(directory:, engine_config:, io:)
