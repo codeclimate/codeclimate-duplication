@@ -72,13 +72,18 @@ module CC
           processed_files_count = Concurrent::AtomicFixnum.new
 
           pool.run do |file|
-            CC.logger.debug("Processing #{lang} file: #{file}")
+            begin
+              CC.logger.debug("Processing #{lang} file: #{file}")
 
-            sexp = language_strategy.run(file)
+              sexp = language_strategy.run(file)
 
-            process_sexp(sexp)
+              process_sexp(sexp)
 
-            processed_files_count.increment
+              processed_files_count.increment
+            rescue Exception => ex
+              CC.logger.warn("Error processing file: #{file}")
+              raise ex
+            end
           end
 
           pool.join
