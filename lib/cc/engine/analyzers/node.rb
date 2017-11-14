@@ -47,7 +47,7 @@ module CC
             elsif value.is_a?(Hash)
               create_sexp(key.to_sym, self.class.new(value, @file, @line).format)
             else
-              value.to_s.to_sym
+              replace_invalid_characters(value.to_s).to_sym
             end
           end
         end
@@ -65,6 +65,14 @@ module CC
 
         def line_number
           raise "Subclass must implement `line_number`"
+        end
+
+        def replace_invalid_characters(value)
+          value.encode(Encoding::UTF_8,
+            invalid: :replace,
+            undef: :replace,
+            replace: "?",
+          )
         end
       end
     end

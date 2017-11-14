@@ -135,6 +135,17 @@ def a(thing):
     expect(run_engine(engine_conf)).to eq("")
   end
 
+  context "EncodingError: invalid encoding symbol (codeclimate/escalations#180)" do
+    it "parses" do
+      path = fixture_path("escalation-180.py")
+      create_source_file("foo.py", File.read(path))
+      create_source_file("bar.py", File.read(path))
+
+      issues = run_engine(engine_conf).strip.split("\0")
+      expect(issues).to_not be_empty
+    end
+  end
+
   def engine_conf
     CC::Engine::Analyzers::EngineConfig.new({
       "config" => {
