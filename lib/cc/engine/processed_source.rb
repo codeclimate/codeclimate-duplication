@@ -11,7 +11,7 @@ module CC
       end
 
       def raw_source
-        @raw_source ||= File.binread(path)
+        @raw_source ||= File.read(path)
       end
 
       def ast

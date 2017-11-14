@@ -144,6 +144,8 @@ module CC
             CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
             CC.logger.warn("Response status: #{ex.response_status}")
             CC.logger.debug { "Response:\n#{ex.response_body}" }
+          when ex.is_a?(CC::Parser::Client::EncodingError)
+            CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}: #{ex.message}")
           when ex.is_a?(CC::Parser::Client::NestingDepthError)
             CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
             CC.logger.warn(ex.message)
