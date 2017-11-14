@@ -103,7 +103,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       EOJS
 
       error = CC::Parser::Client::HTTPError.new(500, "Error processing file: ./foo.js")
-      allow(CC::Parser).to receive(:parse).with("", "/javascript").and_raise(error)
+      allow(CC::Parser).to receive(:parse).with("", "/javascript", filename: "./foo.js").and_raise(error)
 
       expect(CC.logger).to receive(:error).with("Error processing file: ./foo.js")
       expect(CC.logger).to receive(:error).with(error.message)
