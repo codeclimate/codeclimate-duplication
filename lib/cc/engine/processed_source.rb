@@ -15,7 +15,7 @@ module CC
       end
 
       def ast
-        @ast ||= CC::Parser.parse(raw_source, request_path)
+        @ast ||= CC::Parser.parse(raw_source, request_path, filename: path)
       end
 
       private
