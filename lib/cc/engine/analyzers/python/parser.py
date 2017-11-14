@@ -42,4 +42,4 @@ if __name__ == '__main__':
     source = ""
     for line in sys.stdin.readlines():
         source += line
-    print(json.dumps(to_json(ast.parse(source))))
+    print(json.dumps(to_json(ast.parse(source)), encoding='unicode_escape'))
