@@ -341,14 +341,14 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       engine_config = stub_qm_config(similar: false)
 
       violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
-      expect(engine_config.check_enabled?(violation)).to eq(false)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(false)
     end
 
     it "returns true for similar-code check when enabled" do
       engine_config = stub_qm_config(similar: true)
 
       violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
-      expect(engine_config.check_enabled?(violation)).to eq(true)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(true)
     end
 
     it "respects legacy config when present" do
@@ -360,7 +360,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       )
 
       violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
-      expect(engine_config.check_enabled?(violation)).to eq(false)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(false)
     end
 
     it "overrides legacy config when both present" do
@@ -372,35 +372,77 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       )
 
       violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
-      expect(engine_config.check_enabled?(violation)).to eq(false)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(false)
     end
 
     it "returns true by default" do
       engine_config = described_class.new({ "config" => {} })
 
       violation = double(check_name: "similar-code", fingerprint_check_name: "Similar code")
-      expect(engine_config.check_enabled?(violation)).to eq(true)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(true)
     end
 
     it "returns false for identical-code check when disabled" do
       engine_config = stub_qm_config(identical: false)
 
       violation = double(check_name: "identical-code", fingerprint_check_name: "Identical code")
-      expect(engine_config.check_enabled?(violation)).to eq(false)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(false)
     end
 
     it "returns true for identical-code check when enabled" do
       engine_config = stub_qm_config(identical: true)
 
       violation = double(check_name: "identical-code", fingerprint_check_name: "Identical code")
-      expect(engine_config.check_enabled?(violation)).to eq(true)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(true)
     end
 
     it "returns true by default" do
       engine_config = described_class.new({ "config" => {} })
 
       violation = double(check_name: "identical-code", fingerprint_check_name: "Identical code")
-      expect(engine_config.check_enabled?(violation)).to eq(true)
+      expect(engine_config.check_enabled?(violation.fingerprint_check_name, violation.check_name)).to eq(true)
+    end
+  end
+
+  describe "#all_checks_disabled?" do
+    context "qm config" do
+      it "returns true if all checks are disabled" do
+        engine_config = stub_qm_config(identical: false, similar: false)
+
+        expect(engine_config.all_checks_disabled?).to eq(true)
+      end
+
+      it "returns false if only one check is disabled" do
+        engine_config = stub_qm_config(identical: false, similar: true)
+
+        expect(engine_config.all_checks_disabled?).to eq(false)
+      end
+
+      it "returns false if no checks are disabled" do
+        engine_config = stub_qm_config(identical: true, similar: true)
+
+        expect(engine_config.all_checks_disabled?).to eq(false)
+      end
+    end
+
+    context "legacy config" do
+      it "returns true if all checks are disabled" do
+        engine_config = stub_legacy_config(identical: false, similar: false)
+
+        expect(engine_config.all_checks_disabled?).to eq(true)
+      end
+
+      it "returns false if only one check is disabled" do
+        engine_config = stub_legacy_config(identical: false, similar: true)
+
+        expect(engine_config.all_checks_disabled?).to eq(false)
+      end
+
+      it "returns false if no checks are disabled" do
+        engine_config = stub_legacy_config(identical: true, similar: true)
+
+        expect(engine_config.all_checks_disabled?).to eq(false)
+      end
     end
   end
 
@@ -414,6 +456,19 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
           "identical-code" => {
             "enabled" => identical,
           },
+        },
+      },
+    })
+  end
+
+  def stub_legacy_config(similar: true, identical: true)
+    described_class.new({
+      "checks" => {
+        "Similar code" => {
+          "enabled" => similar,
+        },
+        "Identical code" => {
+          "enabled" => identical,
         },
       },
     })
