@@ -94,7 +94,7 @@ RSpec.describe CC::Engine::Analyzers::TypeScript::Main, in_tmpdir: true do
       EOTS
 
       error = CC::Parser::Client::HTTPError.new(500, "Error processing file: ./foo.ts")
-      allow(CC::Parser).to receive(:parse).with("", "/typescript").and_raise(error)
+      allow(CC::Parser).to receive(:parse).with("", "/typescript", filename: "./foo.ts").and_raise(error)
 
       expect(CC.logger).to receive(:error).with("Error processing file: ./foo.ts")
       expect(CC.logger).to receive(:error).with(error.message)
@@ -180,6 +180,33 @@ RSpec.describe CC::Engine::Analyzers::TypeScript::Main, in_tmpdir: true do
       "path" => "bar.ts",
       "lines" => { "begin" => 3, "end" => 3 },
     })
+  end
+
+  it "supports TypeScript+React files" do
+    create_source_file("foo.tsx", <<~EOTS)
+      function ComponentFoo(prop: FooProp) {
+        return <SomeComponent name="prop.name" />;
+      }
+
+      function ComponentFoo(prop: FooProp) {
+        return <AnotherComponent name="prop.name" />;
+      }
+    EOTS
+
+    issues = run_engine(engine_conf).strip.split("\0")
+    result = issues.first.strip
+    json = JSON.parse(result)
+
+    expect(json["type"]).to eq("issue")
+    expect(json["check_name"]).to eq("similar-code")
+    expect(json["location"]).to eq({
+      "path" => "foo.tsx",
+      "lines" => { "begin" => 1, "end" => 3 },
+    })
+    expect(json["other_locations"]).to eq([
+      {"path" => "foo.tsx", "lines" => { "begin" => 5, "end" => 7 } }
+    ])
+    expect(json["fingerprint"]).to eq("d8f0315c3c4e9ba81003a7ec6c823fb0")
   end
 
   def engine_conf
