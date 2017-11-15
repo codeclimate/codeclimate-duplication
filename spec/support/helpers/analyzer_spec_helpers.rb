@@ -1,3 +1,5 @@
+require 'cc/engine/parse_metrics'
+
 module AnalyzerSpecHelpers
   def create_source_file(path, content)
     raise "Must use in_tmpdir tag" unless @code
@@ -11,7 +13,13 @@ module AnalyzerSpecHelpers
   def run_engine(config = nil)
     io = StringIO.new
 
-    engine = described_class.new(engine_config: config)
+    engine = described_class.new(
+      engine_config: config,
+      parse_metrics: CC::Engine::ParseMetrics.new(
+        language: described_class::LANGUAGE,
+        io: StringIO.new,
+      ),
+    )
     reporter = ::CC::Engine::Analyzers::Reporter.new(config, engine, io)
 
     reporter.run

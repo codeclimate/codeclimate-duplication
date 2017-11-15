@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
+require "cc/engine/parse_metrics"
 require "cc/engine/analyzers/ruby/main"
 require "cc/engine/analyzers/java/main"
 require "cc/engine/analyzers/javascript/main"
@@ -34,9 +35,17 @@ module CC
 
         Dir.chdir(directory) do
           languages_to_analyze.each do |language|
-            engine = LANGUAGES[language].new(engine_config: engine_config)
+            parse_metrics = ParseMetrics.new(
+              language: language,
+              io: io,
+            )
+            engine = LANGUAGES[language].new(
+              engine_config: engine_config,
+              parse_metrics: parse_metrics,
+            )
             reporter = CC::Engine::Analyzers::Reporter.new(engine_config, engine, io)
             reporter.run
+            parse_metrics.report
           end
         end
       end

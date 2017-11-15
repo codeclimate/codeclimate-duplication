@@ -28,8 +28,9 @@ module CC
 
         MAJOR_SEVERITY_THRESHOLD = 120 * POINTS_PER_MINUTE
 
-        def initialize(engine_config:)
+        def initialize(engine_config:, parse_metrics:)
           @engine_config = engine_config
+          @parse_metrics = parse_metrics
         end
 
         def run(file)
@@ -97,7 +98,7 @@ module CC
 
         private
 
-        attr_reader :engine_config
+        attr_reader :engine_config, :parse_metrics
 
         def base_points
           self.class::BASE_POINTS
@@ -131,6 +132,7 @@ module CC
 
         def parse(file, request_path)
           processed_source = ProcessedSource.new(file, request_path)
+          parse_metrics.incr(:succeeded)
           SexpBuilder.new(processed_source.ast, file).build
         rescue => ex
           handle_exception(processed_source, ex)
@@ -144,11 +146,14 @@ module CC
             CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
             CC.logger.warn("Response status: #{ex.response_status}")
             CC.logger.debug { "Response:\n#{ex.response_body}" }
+            parse_metrics.incr(ex.code.to_sym)
           when ex.is_a?(CC::Parser::Client::EncodingError)
             CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}: #{ex.message}")
+            parse_metrics.incr(:encoding_error)
           when ex.is_a?(CC::Parser::Client::NestingDepthError)
             CC.logger.warn("Skipping #{processed_source.path} due to #{ex.class}")
             CC.logger.warn(ex.message)
+            parse_metrics.incr(:client_nesting_depth_error)
           else
             CC.logger.error("Error processing file: #{processed_source.path}")
             CC.logger.error(ex.message)

@@ -1,6 +1,7 @@
 require 'spec_helper'
-require 'cc/engine/analyzers/ruby/main'
 require 'cc/engine/analyzers/engine_config'
+require 'cc/engine/analyzers/ruby/main'
+require 'cc/engine/parse_metrics'
 
 module CC::Engine::Analyzers
   RSpec.describe Ruby::Main, in_tmpdir: true do
@@ -228,7 +229,7 @@ module CC::Engine::Analyzers
     end
 
     describe "#calculate_points" do
-      let(:analyzer) { Ruby::Main.new(engine_config: engine_conf) }
+      let(:analyzer) { new_analyzer }
       let(:base_points) { Ruby::Main::BASE_POINTS }
       let(:points_per) { Ruby::Main::POINTS_PER_OVERAGE }
       let(:threshold) { Ruby::Main::DEFAULT_MASS_THRESHOLD }
@@ -274,7 +275,7 @@ module CC::Engine::Analyzers
     end
 
     describe "#calculate_severity(points)" do
-      let(:analyzer) { Ruby::Main.new(engine_config: engine_conf) }
+      let(:analyzer) { new_analyzer }
       let(:base_points) { Ruby::Main::BASE_POINTS }
       let(:points_per) { Ruby::Main::POINTS_PER_OVERAGE }
       let(:threshold) { Ruby::Main::DEFAULT_MASS_THRESHOLD }
@@ -305,6 +306,16 @@ module CC::Engine::Analyzers
           expect(severity).to eq(Base::MINOR)
         end
       end
+    end
+
+    def new_analyzer
+      Ruby::Main.new(
+        engine_config: engine_conf,
+        parse_metrics: CC::Engine::ParseMetrics.new(
+          language: "ruby",
+          io: StringIO.new,
+        ),
+      )
     end
 
     def engine_conf
