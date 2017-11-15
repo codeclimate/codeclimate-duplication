@@ -9,6 +9,7 @@ module CC
         class Main < CC::Engine::Analyzers::Base
           PATTERNS = [
             "**/*.ts",
+            "**/*.tsx",
           ]
           LANGUAGE = "typescript"
           DEFAULT_MASS_THRESHOLD = 45
