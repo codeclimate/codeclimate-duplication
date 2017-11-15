@@ -15,7 +15,15 @@ module CC::Engine::Analyzers
     include AnalyzerSpecHelpers
 
     let(:engine_config) { EngineConfig.new({}) }
-    let(:analyzer) { DummyAnalyzer.new(engine_config: engine_config) }
+    let(:analyzer) do
+      DummyAnalyzer.new(
+        engine_config: engine_config,
+        parse_metrics: CC::Engine::ParseMetrics.new(
+          language: "dummy",
+          io: StringIO.new,
+        ),
+      )
+    end
 
     before(:each) do
       create_source_file("foo.a", "")
