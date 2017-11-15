@@ -163,7 +163,10 @@ module CC
         end
 
         def check_disabled?(violation)
-          !engine_config.check_enabled?(violation)
+          !engine_config.check_enabled?(
+            violation.fingerprint_check_name,
+            violation.check_name,
+          )
         end
       end
     end
