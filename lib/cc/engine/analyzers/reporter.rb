@@ -10,8 +10,6 @@ module CC
   module Engine
     module Analyzers
       class Reporter
-        IO_M = Mutex.new
-
         def initialize(engine_config, language_strategy, io)
           @engine_config = engine_config
           @language_strategy = language_strategy
