@@ -6,7 +6,13 @@ module CC
       class EngineConfig
         DEFAULT_COUNT_THRESHOLD = 2
         IDENTICAL_CODE_CHECK = "identical-code".freeze
+        IDENTICAL_CODE_CHECK_LEGACY_NAME = "Identical code".freeze
         SIMILAR_CODE_CHECK = "similar-code".freeze
+        SIMILAR_CODE_CHECK_LEGACY_NAME = "Similar code".freeze
+        CHECK_MAPPINGS = {
+          IDENTICAL_CODE_CHECK_LEGACY_NAME => IDENTICAL_CODE_CHECK,
+          SIMILAR_CODE_CHECK_LEGACY_NAME => SIMILAR_CODE_CHECK,
+        }.freeze
 
         InvalidConfigError = Class.new(StandardError)
 
@@ -83,12 +89,18 @@ module CC
           Array(fetch_language(language).fetch("patterns", fallbacks))
         end
 
-        def check_enabled?(violation)
-          legacy_config = legacy_checks.fetch(violation.fingerprint_check_name, {
+        def check_enabled?(legacy_check_name, check_name)
+          legacy_config = legacy_checks.fetch(legacy_check_name, {
             "enabled" => true
           })
 
-          qm_checks.fetch(violation.check_name, legacy_config).fetch("enabled", true)
+          qm_checks.fetch(check_name, legacy_config).fetch("enabled", true)
+        end
+
+        def all_checks_disabled?
+          CHECK_MAPPINGS.none? do |legacy_check_name, check_name|
+            check_enabled?(legacy_check_name, check_name)
+          end
         end
 
         private

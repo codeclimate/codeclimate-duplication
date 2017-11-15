@@ -30,6 +30,8 @@ module CC
       end
 
       def run
+        return if engine_config.all_checks_disabled?
+
         Dir.chdir(directory) do
           languages_to_analyze.each do |language|
             engine = LANGUAGES[language].new(engine_config: engine_config)
