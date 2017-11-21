@@ -88,7 +88,7 @@ module CC
           if language_strategy.use_sexp_lines?
             lines = SexpLines.new(sexp)
             {
-              "path": sexp.file.gsub(%r{^./}, ""),
+              "path": sexp.file.gsub(%r{^\./}, ""),
               "lines": {
                 "begin": lines.begin_line,
                 "end": lines.end_line,
@@ -96,7 +96,7 @@ module CC
             }
           else
             {
-              "path": sexp.file.gsub(%r{^./}, ""),
+              "path": sexp.file.gsub(%r{^\./}, ""),
               "lines": {
                 "begin": sexp.line,
                 "end": sexp.end_line,
