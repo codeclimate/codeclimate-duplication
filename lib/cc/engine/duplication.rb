@@ -5,6 +5,7 @@ require "cc/engine/parse_metrics"
 require "cc/engine/analyzers/ruby/main"
 require "cc/engine/analyzers/java/main"
 require "cc/engine/analyzers/javascript/main"
+require "cc/engine/analyzers/go/main"
 require "cc/engine/analyzers/php/main"
 require "cc/engine/analyzers/python/main"
 require "cc/engine/analyzers/reporter"
@@ -24,6 +25,7 @@ module CC
         "php"        => ::CC::Engine::Analyzers::Php::Main,
         "python"     => ::CC::Engine::Analyzers::Python::Main,
         "typescript" => ::CC::Engine::Analyzers::TypeScript::Main,
+        "go"         => ::CC::Engine::Analyzers::Go::Main
       }.freeze
 
       def initialize(directory:, engine_config:, io:)
