@@ -12,17 +12,17 @@ module CC
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "go".freeze
           PATTERNS = ["**/*.go"].freeze
-          DEFAULT_MASS_THRESHOLD = 45
-          POINTS_PER_OVERAGE = 10_000
+          DEFAULT_MASS_THRESHOLD = 25
+          DEFAULT_FILTERS = [
+            "(ImportSpec ___)".freeze,
+            "(File ___)".freeze,
+            "(Comment ___)".freeze,
+          ].freeze
+          POINTS_PER_OVERAGE = 40_000
           REQUEST_PATH = "/go".freeze
-          COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
 
           def use_sexp_lines?
             false
-          end
-
-          def transform_sexp(sexp)
-            delete_comments!(sexp)
           end
 
           private
@@ -31,8 +31,8 @@ module CC
             parse(file, REQUEST_PATH)
           end
 
-          def delete_comments!(sexp)
-            sexp.search_each(COMMENT_MATCHER) { |node| node.delete_at(1) }
+          def default_filters
+            DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
         end
       end
