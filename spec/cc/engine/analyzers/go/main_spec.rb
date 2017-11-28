@@ -14,16 +14,18 @@ module CC::Engine::Analyzers
 
           import "fmt"
 
-          func add(x int, y int) int {
-          	return x + y
-          }
-
-          func add(x int, y int) int {
-            return x + y
-          }
-
           func main() {
-          	fmt.Println(add(42, 13))
+              some_string()
+          }
+
+          func some_string() {
+              fmt.Println("this is a string")
+              fmt.Println("this is a string")
+          }
+
+          func some_string() {
+              fmt.Println("this is a string")
+              fmt.Println("this is a string")
           }
         EOGO
 
@@ -49,7 +51,7 @@ module CC::Engine::Analyzers
         expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
       end
 
-      it "prints an issues for similar code" do
+      it "prints an issue for similar code" do
         create_source_file("foo.go", <<-EOGO)
           package main
 
@@ -57,10 +59,12 @@ module CC::Engine::Analyzers
 
           func add(x int, y int) int {
           	return x + y
+            fmt.Println("Add some stuff!")
           }
 
           func add(x int, y int) int {
             return x + y
+            fmt.Println("Add all the stuff!")
           }
 
           func main() {
@@ -78,15 +82,52 @@ module CC::Engine::Analyzers
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
           "path" => "foo.go",
-          "lines" => { "begin" => 5, "end" => 7 },
+          "lines" => { "begin" => 5, "end" => 8 },
           })
-        expect(json["remediation_points"]).to eq(630_000)
+        expect(json["remediation_points"]).to eq(1_900_000)
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.go", "lines" => { "begin" => 9, "end" => 11} },
+          {"path" => "foo.go", "lines" => { "begin" => 10, "end" => 13} },
         ])
-        expect(json["content"]["body"]).to match /This issue has a mass of 34/
-        expect(json["fingerprint"]).to eq("ed3f2dbc039a394ad03d16e4d9f342fe")
+        expect(json["content"]["body"]).to match /This issue has a mass of 45/
+        expect(json["fingerprint"]).to eq("f1551c88ceadf1241f6a0c92cce82413")
         expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
+      end
+
+      it "outputs a warning for unprocessable errors" do
+        create_source_file("foo.go", <<-EOGO)
+          ---
+        EOGO
+
+        expect(CC.logger).to receive(:warn).with(/Response status: 422/)
+        expect(CC.logger).to receive(:warn).with(/Skipping/)
+        run_engine(engine_conf)
+      end
+
+      it "ignores import and package declarations" do
+        create_source_file("foo.go", <<-EOGO)
+          package main
+          package main
+
+          import "fmt"
+          import "fmt"
+          import "fmt"
+
+          func main() {
+            fmt.Println("Hello!")
+          }
+        EOGO
+
+        issues = run_engine(engine_conf).strip.split("\0")
+        expect(issues).to be_empty
+      end
+
+      it "does not flag duplicate comments" do
+        create_source_file("foo.go", <<-EOGO)
+          // This is a comment.
+          // This is a comment.
+        EOGO
+
+        expect(run_engine(engine_conf)).to be_empty
       end
 
       def engine_conf
@@ -102,7 +143,7 @@ module CC::Engine::Analyzers
             },
             'languages' => {
               'go' => {
-                'mass_threshold' => 1,
+                'mass_threshold' => 5,
               },
             },
           },
