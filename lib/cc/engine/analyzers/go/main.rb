@@ -12,7 +12,7 @@ module CC
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "go".freeze
           PATTERNS = ["**/*.go"].freeze
-          DEFAULT_MASS_THRESHOLD = 25
+          DEFAULT_MASS_THRESHOLD = 30
           DEFAULT_FILTERS = [
             "(ImportSpec ___)".freeze,
             "(File ___)".freeze,
