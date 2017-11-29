@@ -15,13 +15,23 @@ RSpec.describe CC::Engine::Analyzers::FileList do
         File.write(File.join(@tmp_dir, "foo.jsx"), "")
         File.write(File.join(@tmp_dir, "foo.ex"), "")
 
-        example.run
+        File.write("/tmp/bar.js", "")
+        FileUtils.ln_s("/tmp/bar.js", File.join(@tmp_dir, "bar.js"))
+        Dir.mkdir("/tmp/baz")
+        File.write("/tmp/baz/baz.js", "")
+        FileUtils.ln_s("/tmp/baz/", File.join(@tmp_dir, "baz"))
+
+        begin
+          example.run
+        ensure
+          FileUtils.rm_rf(["/tmp/bar.js", "/tmp/baz"])
+        end
       end
     end
   end
 
   describe "#files" do
-    it "expands patterns for directory includes" do
+    it "expands patterns for directory includes, and ignores symlinks" do
       file_list = ::CC::Engine::Analyzers::FileList.new(
         engine_config: CC::Engine::Analyzers::EngineConfig.new(
           "include_paths" => ["./"],

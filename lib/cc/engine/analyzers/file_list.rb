@@ -13,9 +13,10 @@ module CC
 
         def files
           engine_config.include_paths.flat_map do |path|
-            if path.end_with?("/")
+            pathname = Pathname.new(path)
+            if pathname.directory? && !pathname.cleanpath.symlink?
               expand(path)
-            elsif matches?(path)
+            elsif pathname.file? && !pathname.symlink? && matches?(path)
               [path]
             else
               []
@@ -30,11 +31,11 @@ module CC
         def expand(path)
           globs = patterns.map { |p| File.join(relativize(path), p) }
 
-          Dir.glob(globs).select { |f| File.file?(f) }
+          Dir.glob(globs).select { |f| File.file?(f) && !File.symlink?(f) }
         end
 
         def matches?(path)
-          File.file?(path) && patterns.any? do |p|
+          patterns.any? do |p|
             File.fnmatch?(
               relativize(p),
               relativize(path),
