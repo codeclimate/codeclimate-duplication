@@ -27,6 +27,16 @@ module CC::Engine::Analyzers
               fmt.Println("this is a string")
               fmt.Println("this is a string")
           }
+
+          func some_string() {
+              fmt.Println("this is a string")
+              fmt.Println("this is a string")
+          }
+
+          func some_string() {
+              fmt.Println("this is a string")
+              fmt.Println("this is a string")
+          }
         EOGO
 
         issues = run_engine(engine_conf).strip.split("\0")
@@ -38,17 +48,17 @@ module CC::Engine::Analyzers
         expect(json["description"]).to eq("Identical blocks of code found in 3 locations. Consider refactoring.")
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
-          "path" => "foo.ts",
-          "lines" => { "begin" => 1, "end" => 1 },
+          "path" => "foo.go",
+          "lines" => { "begin" => 9, "end" => 12 },
         })
-        expect(json["remediation_points"]).to eq(990_000)
+        expect(json["remediation_points"]).to eq(380_000)
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.ts", "lines" => { "begin" => 2, "end" => 2} },
-          {"path" => "foo.ts", "lines" => { "begin" => 3, "end" => 3} },
+          {"path" => "foo.go", "lines" => { "begin" => 14, "end" => 17} },
+          {"path" => "foo.go", "lines" => { "begin" => 19, "end" => 22} },
         ])
-        expect(json["content"]["body"]).to match(/This issue has a mass of 24/)
-        expect(json["fingerprint"]).to eq("a53b767d2f602f832540ef667ca0618f")
-        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
+        expect(json["content"]["body"]).to match(/This issue has a mass of 32/)
+        expect(json["fingerprint"]).to eq("729e7221b4530916ed63cfb6f4a3fe90")
+        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
       end
 
       it "prints an issue for similar code" do
@@ -69,6 +79,7 @@ module CC::Engine::Analyzers
 
           func main() {
           	fmt.Println(add(42, 13))
+            fmt.Println(add(44, 15))
           }
         EOGO
 
@@ -84,7 +95,7 @@ module CC::Engine::Analyzers
           "path" => "foo.go",
           "lines" => { "begin" => 5, "end" => 8 },
           })
-        expect(json["remediation_points"]).to eq(1_900_000)
+        expect(json["remediation_points"]).to eq(900_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.go", "lines" => { "begin" => 10, "end" => 13} },
         ])
@@ -143,7 +154,7 @@ module CC::Engine::Analyzers
             },
             'languages' => {
               'go' => {
-                'mass_threshold' => 5,
+                'mass_threshold' => 30,
               },
             },
           },
