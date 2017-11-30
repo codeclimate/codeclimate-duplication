@@ -52,7 +52,7 @@ module CC::Engine::Analyzers
           import "fmt"
 
           func add(x int, y int) int {
-          	return x + y
+            return x + y
           }
 
           func add_something(x int, y int) int {
