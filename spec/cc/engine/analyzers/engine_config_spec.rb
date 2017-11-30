@@ -49,6 +49,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "php" => {},
         "python" => {},
         "typescript" => {},
+        "go" => {},
       })
     end
 
