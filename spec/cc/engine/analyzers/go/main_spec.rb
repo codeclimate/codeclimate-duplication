@@ -15,22 +15,12 @@ module CC::Engine::Analyzers
           import "fmt"
 
           func main() {
-              some_string()
+            fmt.Println(add(24, 24))
+            fmt.Println(add(24, 24))
           }
 
-          func some_string() {
-              fmt.Println("this is a string")
-              fmt.Println("this is a string")
-          }
-
-          func some_string() {
-              fmt.Println("this is a string")
-              fmt.Println("this is a string")
-          }
-
-          func some_string() {
-              fmt.Println("this is a string")
-              fmt.Println("this is a string")
+          func add(x int, y int) int {
+            return x + y
           }
         EOGO
 
@@ -40,20 +30,19 @@ module CC::Engine::Analyzers
 
         expect(json["type"]).to eq("issue")
         expect(json["check_name"]).to eq("identical-code")
-        expect(json["description"]).to eq("Identical blocks of code found in 3 locations. Consider refactoring.")
+        expect(json["description"]).to eq("Identical blocks of code found in 2 locations. Consider refactoring.")
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
           "path" => "foo.go",
-          "lines" => { "begin" => 9, "end" => 12 },
+          "lines" => { "begin" => 6, "end" => 6 },
         })
-        expect(json["remediation_points"]).to eq(380_000)
+        expect(json["remediation_points"]).to eq(820_000)
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.go", "lines" => { "begin" => 14, "end" => 17} },
-          {"path" => "foo.go", "lines" => { "begin" => 19, "end" => 22} },
+          {"path" => "foo.go", "lines" => { "begin" => 7, "end" => 7} },
         ])
-        expect(json["content"]["body"]).to match(/This issue has a mass of 32/)
-        expect(json["fingerprint"]).to eq("729e7221b4530916ed63cfb6f4a3fe90")
-        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
+        expect(json["content"]["body"]).to match(/This issue has a mass of 16/)
+        expect(json["fingerprint"]).to eq("484ee5799eb0e6c933751cfa85ba33c3")
+        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
       end
 
       it "prints an issue for similar code" do
@@ -64,17 +53,20 @@ module CC::Engine::Analyzers
 
           func add(x int, y int) int {
           	return x + y
-            fmt.Println("Add some stuff!")
           }
 
-          func add(x int, y int) int {
+          func add_something(x int, y int) int {
             return x + y
-            fmt.Println("Add all the stuff!")
+          }
+
+          func add_something_else(x int, y int) int {
+            return x + y
           }
 
           func main() {
-          	fmt.Println(add(42, 13))
             fmt.Println(add(44, 15))
+            fmt.Println(add_something(44, 15))
+            fmt.Println(add_something_else(44, 15))
           }
         EOGO
 
@@ -84,18 +76,19 @@ module CC::Engine::Analyzers
 
         expect(json["type"]).to eq("issue")
         expect(json["check_name"]).to eq("similar-code")
-        expect(json["description"]).to eq("Similar blocks of code found in 2 locations. Consider refactoring.")
+        expect(json["description"]).to eq("Similar blocks of code found in 3 locations. Consider refactoring.")
         expect(json["categories"]).to eq(["Duplication"])
         expect(json["location"]).to eq({
           "path" => "foo.go",
-          "lines" => { "begin" => 5, "end" => 8 },
+          "lines" => { "begin" => 5, "end" => 7 },
           })
-        expect(json["remediation_points"]).to eq(900_000)
+        expect(json["remediation_points"]).to eq(1_540_000)
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.go", "lines" => { "begin" => 10, "end" => 13} },
+          {"path" => "foo.go", "lines" => { "begin" => 9, "end" => 11} },
+          {"path" => "foo.go", "lines" => { "begin" => 13, "end" => 15} },
         ])
-        expect(json["content"]["body"]).to match /This issue has a mass of 45/
-        expect(json["fingerprint"]).to eq("f1551c88ceadf1241f6a0c92cce82413")
+        expect(json["content"]["body"]).to match /This issue has a mass of 34/
+        expect(json["fingerprint"]).to eq("ed3f2dbc039a394ad03d16e4d9f342fe")
         expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
       end
 
@@ -114,11 +107,19 @@ module CC::Engine::Analyzers
           package main
 
           import "fmt"
-          import "fmt"
+
+          func main() {
+            fmt.Println("This is a thing")
+          }
+        EOGO
+
+        create_source_file("bar.go", <<-EOGO)
+          package main
+
           import "fmt"
 
           func main() {
-            fmt.Println("Hello!")
+            fmt.Println("This is something else!")
           }
         EOGO
 
@@ -130,27 +131,35 @@ module CC::Engine::Analyzers
         create_source_file("foo.go", <<-EOGO)
           package main
 
-          import "fmt"
-
           // This is a comment.
           // This is a comment.
           // This is a comment.
           // This is also a comment.
           // This is also a comment.
-
-          func add(x int, y int) int {
-            return x + y
-            fmt.Println("Add some stuff!")
-          }
-
-          /* This is a multiline comment */
-          /* This is a multiline comment */
-          /* This is a also multiline comment */
-          /* This is a also multiline comment */
 
           func main() {
-            fmt.Println(add(42, 13))
           }
+
+          /* This is a multiline comment */
+          /* This is a multiline comment */
+          /* This is a also multiline comment */
+          /* This is a also multiline comment */
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
         EOGO
 
         expect(run_engine(engine_conf)).to be_empty
@@ -169,7 +178,7 @@ module CC::Engine::Analyzers
             },
             'languages' => {
               'go' => {
-                'mass_threshold' => 30,
+                'mass_threshold' => 3,
               },
             },
           },
