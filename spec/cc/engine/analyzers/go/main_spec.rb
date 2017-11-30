@@ -32,11 +32,6 @@ module CC::Engine::Analyzers
               fmt.Println("this is a string")
               fmt.Println("this is a string")
           }
-
-          func some_string() {
-              fmt.Println("this is a string")
-              fmt.Println("this is a string")
-          }
         EOGO
 
         issues = run_engine(engine_conf).strip.split("\0")
@@ -114,9 +109,8 @@ module CC::Engine::Analyzers
         run_engine(engine_conf)
       end
 
-      it "ignores import and package declarations" do
+      it "ignores import declarations" do
         create_source_file("foo.go", <<-EOGO)
-          package main
           package main
 
           import "fmt"
@@ -134,8 +128,29 @@ module CC::Engine::Analyzers
 
       it "does not flag duplicate comments" do
         create_source_file("foo.go", <<-EOGO)
+          package main
+
+          import "fmt"
+
           // This is a comment.
           // This is a comment.
+          // This is a comment.
+          // This is also a comment.
+          // This is also a comment.
+
+          func add(x int, y int) int {
+            return x + y
+            fmt.Println("Add some stuff!")
+          }
+
+          /* This is a multiline comment */
+          /* This is a multiline comment */
+          /* This is a also multiline comment */
+          /* This is a also multiline comment */
+
+          func main() {
+            fmt.Println(add(42, 13))
+          }
         EOGO
 
         expect(run_engine(engine_conf)).to be_empty
