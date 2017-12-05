@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/php/parser"
 require "cc/engine/analyzers/analyzer_base"
-require "flay"
-require "json"
 
 module CC
   module Engine
@@ -14,30 +11,34 @@ module CC
           PATTERNS = [
             "**/*.php",
           ].freeze
-          DEFAULT_MASS_THRESHOLD = 28
+          DEFAULT_MASS_THRESHOLD = 75
           DEFAULT_FILTERS = [
-            "(use ___)".freeze,
+            "(Stmt_Use ___)",
           ].freeze
-          POINTS_PER_OVERAGE = 100_000
+          POINTS_PER_OVERAGE = 35_000
+          REQUEST_PATH = "/php"
+          COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
 
           def transform_sexp(sexp)
-            sexp.flatter
+            delete_comments!(sexp)
+          end
+
+          def use_sexp_lines?
+            false
           end
 
           private
 
-          def process_file(path)
-            code = File.binread(path)
-            ast = php_parser.new(code, path).parse
-            ast.syntax_tree&.to_sexp if ast
-          end
-
-          def php_parser
-            ::CC::Engine::Analyzers::Php::Parser
+          def process_file(file)
+            parse(file, REQUEST_PATH)
           end
 
           def default_filters
             DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
+          end
+
+          def delete_comments!(sexp)
+            sexp.search_each(COMMENT_MATCHER) { |node| node.delete_at(1) }
           end
         end
       end
