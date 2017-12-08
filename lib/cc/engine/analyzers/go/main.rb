@@ -18,14 +18,14 @@ module CC
           ].freeze
           POINTS_PER_OVERAGE = 40_000
           REQUEST_PATH = "/go"
-          COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
-
-          def use_sexp_lines?
-            false
-          end
+          COMMENT_MATCHER = Sexp::Matcher.parse("(CommentGroup ___)")
 
           def transform_sexp(sexp)
             delete_comments!(sexp)
+          end
+
+          def use_sexp_lines?
+            false
           end
 
           private
