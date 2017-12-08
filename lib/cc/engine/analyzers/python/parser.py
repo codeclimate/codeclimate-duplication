@@ -1,6 +1,15 @@
-import json, sys, ast
+import json, sys, ast, _ast
 
 PY3 = sys.version_info[0] == 3
+
+try:
+    from _ast import AsyncFunctionDef
+    additional_docstring_types = [AsyncFunctionDef]
+except ImportError:
+    additional_docstring_types = []
+
+possible_docstring_types = [_ast.FunctionDef, _ast.ClassDef, _ast.Module]
+possible_docstring_types.extend(additional_docstring_types)
 
 def string_type():
     return str if PY3 else basestring
@@ -38,8 +47,16 @@ def cast_value(value):
     else:
         return to_json(value)
 
+def remove_docstring_from_ast(tree):
+    for node in ast.walk(tree):
+        if (type(node) in possible_docstring_types and node.body and isinstance(node.body[0], _ast.Expr)
+                    and isinstance(node.body[0].value, _ast.Str)):
+                node.body.pop(0)
+
 if __name__ == '__main__':
     source = ""
     for line in sys.stdin.readlines():
         source += line
-    print(json.dumps(to_json(ast.parse(source))))
+    tree = ast.parse(source)
+    remove_docstring_from_ast(tree)
+    print(json.dumps(to_json(tree)))
