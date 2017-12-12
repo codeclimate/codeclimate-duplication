@@ -152,14 +152,6 @@ module CC
           (violation.occurrences + 1) < language_strategy.count_threshold
         end
 
-        def skip?(violation)
-          insufficient_occurrence?(violation) || check_disabled?(violation)
-        end
-
-        def insufficient_occurrence?(violation)
-          (violation.occurrences + 1) < language_strategy.count_threshold
-        end
-
         def check_disabled?(violation)
           !engine_config.check_enabled?(
             violation.fingerprint_check_name,
