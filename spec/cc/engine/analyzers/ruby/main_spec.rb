@@ -187,44 +187,93 @@ module CC::Engine::Analyzers
         expect(issues.length).to eq(0)
       end
 
-      it "respects the per-check mass thresholds" do
-        create_source_file("foo.rb", <<-EORUBY)
-          def identical
-            puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
-            puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
-            puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
-          end
-          describe 'similar1' do
-            before { subject.type = 'js' }
-            it 'returns true' do
-              expect(subject.ruby?).to be true
+      context "per-check mass thresholds" do
+        before do
+          create_source_file("foo.rb", <<-EORUBY)
+            # identical mass of 15
+            def identical
+              puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
+              puts "identical \#{thing.bar} \#{other.fun} \#{moo ? "moo" : "cluck"}"
             end
-          end
-          describe 'similar2' do
-            before { subject.type = 'js' }
-            it 'returns true' do
-              expect(subject.js?).to be true
-            end
-          end
-        EORUBY
 
-        config = CC::Engine::Analyzers::EngineConfig.new({
-          "config" => {
-            "languages" => %w[ruby],
-            "checks" => {
-              "identical-code" => { "config" => { "threshold" => 5 } },
-              "similar-code" => { "config" => { "threshold" => 20 } },
+            # similar mass of 10
+            def similar1
+              foo.select { |f| if f.baz?; 10; end }
+            end
+
+            def similar2
+              foo.select { |f| if f.bar?; 15; end }
+            end
+          EORUBY
+        end
+
+        it "reports identical issues when only that threshold exceeded" do
+          config = CC::Engine::Analyzers::EngineConfig.new({
+            "config" => {
+              "languages" => %w[ruby],
+              "checks" => {
+                "identical-code" => { "config" => { "threshold" => 5 } },
+                "similar-code" => { "config" => { "threshold" => 20 } },
+              },
             },
-          },
-        })
-        output = run_engine(config).strip.split("\0").first.strip
-        json = JSON.parse(output)
+          })
 
-        expect(json["check_name"]).to eq "identical-code"
-        expect(json["location"]).to eq({
-          "path" => "foo.rb",
-          "lines" => { "begin" => 2, "end" => 2 },
-        })
+          issues = run_engine(config).strip.split("\0")
+          expect(issues.length).to eq(2)
+
+          issues.each do |issue|
+            expect(JSON.parse(issue)["check_name"]).to eq("identical-code")
+          end
+        end
+
+        it "reports similar issues when only that threshold exceeded" do
+          config = CC::Engine::Analyzers::EngineConfig.new({
+            "config" => {
+              "languages" => %w[ruby],
+              "checks" => {
+                "identical-code" => { "config" => { "threshold" => 20 } },
+                "similar-code" => { "config" => { "threshold" => 5 } },
+              },
+            },
+          })
+
+          issues = run_engine(config).strip.split("\0")
+          expect(issues.length).to eq(2)
+
+          issues.each do |issue|
+            expect(JSON.parse(issue)["check_name"]).to eq("similar-code")
+          end
+        end
+
+        it "reports similar and identical issues when both thresholds exceeded" do
+          config = CC::Engine::Analyzers::EngineConfig.new({
+            "config" => {
+              "languages" => %w[ruby],
+              "checks" => {
+                "identical-code" => { "config" => { "threshold" => 5 } },
+                "similar-code" => { "config" => { "threshold" => 5 } },
+              },
+            },
+          })
+
+          issues = run_engine(config).strip.split("\0")
+          expect(issues.length).to eq(4)
+        end
+
+        it "reports no issues when neither threshold exceeded" do
+          config = CC::Engine::Analyzers::EngineConfig.new({
+            "config" => {
+              "languages" => %w[ruby],
+              "checks" => {
+                "identical-code" => { "config" => { "threshold" => 20 } },
+                "similar-code" => { "config" => { "threshold" => 20 } },
+              },
+            },
+          })
+
+          issues = run_engine(config).strip.split("\0")
+          expect(issues.length).to eq(0)
+        end
       end
     end
 
