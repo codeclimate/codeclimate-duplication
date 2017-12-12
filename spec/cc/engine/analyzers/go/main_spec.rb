@@ -36,7 +36,7 @@ module CC::Engine::Analyzers
           "path" => "foo.go",
           "lines" => { "begin" => 6, "end" => 6 },
         })
-        expect(json["remediation_points"]).to eq(500_000)
+        expect(json["remediation_points"]).to eq(540_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.go", "lines" => { "begin" => 7, "end" => 7} },
         ])
@@ -82,7 +82,7 @@ module CC::Engine::Analyzers
           "path" => "foo.go",
           "lines" => { "begin" => 5, "end" => 7 },
           })
-        expect(json["remediation_points"]).to eq(1_220_000)
+        expect(json["remediation_points"]).to eq(1_260_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.go", "lines" => { "begin" => 9, "end" => 11} },
           {"path" => "foo.go", "lines" => { "begin" => 13, "end" => 15} },
@@ -127,6 +127,15 @@ module CC::Engine::Analyzers
         expect(issues).to be_empty
       end
 
+      it "does not flag entire file as issue" do
+        create_source_file("foo.go", File.read(fixture_path("issue_6609_1.go")))
+        create_source_file("bar.go", File.read(fixture_path("issue_6609_2.go")))
+        issues = run_engine(engine_conf).strip.split("\0")
+        issues.map! {|issue| JSON.parse issue}
+        invalid_issues = issues.find_all{|issue| issue["location"]["lines"]["begin"] == 1}
+        expect(invalid_issues).to be_empty, invalid_issues.map {|issue| issue["location"]}.join("\n")
+      end
+
       it "does not flag duplicate comments" do
         create_source_file("foo.go", <<-EOGO)
           // This is a comment.
@@ -137,7 +146,10 @@ module CC::Engine::Analyzers
 
           package main
 
+          // import "fmt"
+
           func main() {
+            fmt.Println("This is a duplicate!")
           }
 
           /* This is a multiline comment */
@@ -171,7 +183,14 @@ module CC::Engine::Analyzers
 
           package main
 
+          // import "fmt"
+
           func main() {
+            // This is a comment.
+            // This is a comment.
+            // This is a comment.
+            // This is also a comment.
+            // This is also a comment.
           }
 
           /* This is a multiline comment */
@@ -212,7 +231,7 @@ module CC::Engine::Analyzers
             },
             'languages' => {
               'go' => {
-                'mass_threshold' => 11,
+                'mass_threshold' => 10,
               },
             },
           },
