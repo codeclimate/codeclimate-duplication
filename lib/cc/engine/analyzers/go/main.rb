@@ -18,10 +18,12 @@ module CC
           ].freeze
           POINTS_PER_OVERAGE = 40_000
           REQUEST_PATH = "/go"
-          COMMENT_MATCHER = Sexp::Matcher.parse("(CommentGroup ___)")
+          COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
 
           def transform_sexp(sexp)
             delete_comments!(sexp)
+            sexp.delete_if { |node| node[0] == :name }
+            sexp.delete_if { |node| node[0] == :unresolved }
           end
 
           def use_sexp_lines?
