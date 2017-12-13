@@ -23,7 +23,6 @@ module CC
           def transform_sexp(sexp)
             delete_comments!(sexp)
             sexp.delete_if { |node| node[0] == :name }
-            sexp.delete_if { |node| node[0] == :unresolved }
           end
 
           def use_sexp_lines?
