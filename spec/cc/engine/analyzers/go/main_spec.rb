@@ -36,13 +36,13 @@ module CC::Engine::Analyzers
           "path" => "foo.go",
           "lines" => { "begin" => 6, "end" => 6 },
         })
-        expect(json["remediation_points"]).to eq(820_000)
+        expect(json["remediation_points"]).to eq(540_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.go", "lines" => { "begin" => 7, "end" => 7} },
         ])
         expect(json["content"]["body"]).to match(/This issue has a mass of 16/)
         expect(json["fingerprint"]).to eq("484ee5799eb0e6c933751cfa85ba33c3")
-        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
+        expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MINOR)
       end
 
       it "prints an issue for similar code" do
@@ -82,7 +82,7 @@ module CC::Engine::Analyzers
           "path" => "foo.go",
           "lines" => { "begin" => 5, "end" => 7 },
           })
-        expect(json["remediation_points"]).to eq(1_540_000)
+        expect(json["remediation_points"]).to eq(1_260_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.go", "lines" => { "begin" => 9, "end" => 11} },
           {"path" => "foo.go", "lines" => { "begin" => 13, "end" => 15} },
@@ -127,17 +127,70 @@ module CC::Engine::Analyzers
         expect(issues).to be_empty
       end
 
+      it "does not flag entire file as issue" do
+        create_source_file("foo.go", File.read(fixture_path("issue_6609_1.go")))
+        create_source_file("bar.go", File.read(fixture_path("issue_6609_2.go")))
+        issues = run_engine(engine_conf).strip.split("\0")
+        issues.map! {|issue| JSON.parse issue}
+        invalid_issues = issues.find_all{|issue| issue["location"]["lines"]["begin"] == 1}
+        expect(invalid_issues).to be_empty, invalid_issues.map {|issue| issue["location"]}.join("\n")
+      end
+
       it "does not flag duplicate comments" do
         create_source_file("foo.go", <<-EOGO)
+          // This is a comment.
+          // This is a comment.
+          // This is a comment.
+          // This is also a comment.
+          // This is also a comment.
+
           package main
 
+          // import "fmt"
+
+          func main() {
+            fmt.Println("This is a duplicate!")
+          }
+
+          /* This is a multiline comment */
+          /* This is a multiline comment */
+          /* This is a also multiline comment */
+          /* This is a also multiline comment */
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
+
+          // func add(x int, y int) int {
+          //   return x + y
+          // }
+        EOGO
+
+        create_source_file("bar.go", <<-EOGO)
           // This is a comment.
           // This is a comment.
           // This is a comment.
           // This is also a comment.
           // This is also a comment.
 
+          package main
+
+          // import "fmt"
+
           func main() {
+            // This is a comment.
+            // This is a comment.
+            // This is a comment.
+            // This is also a comment.
+            // This is also a comment.
           }
 
           /* This is a multiline comment */
@@ -178,7 +231,7 @@ module CC::Engine::Analyzers
             },
             'languages' => {
               'go' => {
-                'mass_threshold' => 3,
+                'mass_threshold' => 10,
               },
             },
           },

@@ -20,12 +20,13 @@ module CC
           REQUEST_PATH = "/go"
           COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
 
-          def use_sexp_lines?
-            false
-          end
-
           def transform_sexp(sexp)
             delete_comments!(sexp)
+            sexp.delete_if { |node| node[0] == :name }
+          end
+
+          def use_sexp_lines?
+            false
           end
 
           private
