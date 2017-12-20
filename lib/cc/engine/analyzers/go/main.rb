@@ -12,11 +12,11 @@ module CC
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "go"
           PATTERNS = ["**/*.go"].freeze
-          DEFAULT_MASS_THRESHOLD = 30
+          DEFAULT_MASS_THRESHOLD = 100
           DEFAULT_FILTERS = [
             "(ImportSpec ___)",
           ].freeze
-          POINTS_PER_OVERAGE = 40_000
+          POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/go"
           COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
 

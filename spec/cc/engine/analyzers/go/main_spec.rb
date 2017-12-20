@@ -36,7 +36,7 @@ module CC::Engine::Analyzers
           "path" => "foo.go",
           "lines" => { "begin" => 6, "end" => 6 },
         })
-        expect(json["remediation_points"]).to eq(540_000)
+        expect(json["remediation_points"]).to eq(360_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.go", "lines" => { "begin" => 7, "end" => 7} },
         ])
@@ -82,7 +82,7 @@ module CC::Engine::Analyzers
           "path" => "foo.go",
           "lines" => { "begin" => 5, "end" => 7 },
           })
-        expect(json["remediation_points"]).to eq(1_260_000)
+        expect(json["remediation_points"]).to eq(540_000)
         expect(json["other_locations"]).to eq([
           {"path" => "foo.go", "lines" => { "begin" => 9, "end" => 11} },
           {"path" => "foo.go", "lines" => { "begin" => 13, "end" => 15} },
