@@ -39,3 +39,5 @@ RSpec.configure do |config|
 end
 
 CC.logger.level = ::Logger::ERROR
+
+CC::Parser.configure { |config| config.logger = CC.logger }
