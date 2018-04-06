@@ -3,7 +3,6 @@
 require "flay"
 require "concurrent"
 require "digest"
-require "zlib"
 
 ##
 # A thread-safe and stable hash subclass of Flay.
@@ -19,16 +18,6 @@ class CCFlay < Flay
     self.identical = Concurrent::Hash.new
     self.masses = Concurrent::Hash.new
   end
-end
-
-# Overwrite `NODE_NAMES` from Flay to assign all values on-demand instead of
-# using a predefined registry.
-Sexp::NODE_NAMES.delete_if { true }
-
-Sexp::NODE_NAMES.default_proc = lambda do |hash, key|
-  # Use CRC checksums so hash values are order-independent (i.e. consistent
-  # between runs).
-  hash[key] = Zlib.crc32(key.to_s)
 end
 
 class Sexp
