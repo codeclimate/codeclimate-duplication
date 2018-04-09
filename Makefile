@@ -10,3 +10,9 @@ test: image
 
 citest:
 	docker run --rm $(IMAGE_NAME) bundle exec rake
+
+bundle:
+	docker run --rm \
+	  --entrypoint /bin/sh \
+	  --volume $(PWD):/usr/src/app \
+	  $(IMAGE_NAME) -c "bundle $(BUNDLE_ARGS)"
