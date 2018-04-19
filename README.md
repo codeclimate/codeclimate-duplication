@@ -67,7 +67,8 @@ You can also change the default `count_threshold` for all languages:
 plugins:
   duplication:
     enabled: true
-    count_threshold: 3
+    config:
+      count_threshold: 3
 ```
 
 ### Custom file name patterns
