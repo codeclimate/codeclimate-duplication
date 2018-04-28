@@ -123,7 +123,7 @@ module CC::Engine::Analyzers
           }
         EOGO
 
-        issues = run_engine(engine_conf).strip.split("\0")
+        issues = run_engine(engine_conf 25).strip.split("\0")
         expect(issues).to be_empty
       end
 
@@ -218,7 +218,7 @@ module CC::Engine::Analyzers
         expect(run_engine(engine_conf)).to be_empty
       end
 
-      def engine_conf
+      def engine_conf mass = 10
         CC::Engine::Analyzers::EngineConfig.new({
           'config' => {
             'checks' => {
@@ -231,7 +231,7 @@ module CC::Engine::Analyzers
             },
             'languages' => {
               'go' => {
-                'mass_threshold' => 10,
+                'mass_threshold' => mass,
               },
             },
           },

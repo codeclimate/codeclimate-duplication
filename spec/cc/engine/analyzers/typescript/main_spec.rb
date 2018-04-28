@@ -140,6 +140,7 @@ RSpec.describe CC::Engine::Analyzers::TypeScript::Main, in_tmpdir: true do
       b = require('bar'),
       c = require('baz'),
       d = require('bam');
+    print(a);
     EOTS
 
     create_source_file("bar.ts", <<~EOTS)
@@ -147,9 +148,10 @@ RSpec.describe CC::Engine::Analyzers::TypeScript::Main, in_tmpdir: true do
       b = require('bar'),
       c = require('baz'),
       d = require('bam');
+    c * d;
     EOTS
 
-    issues = run_engine(engine_conf).strip.split("\0")
+    issues = run_engine(engine_conf 3).strip.split("\0")
     expect(issues).to be_empty
   end
 
@@ -209,7 +211,7 @@ RSpec.describe CC::Engine::Analyzers::TypeScript::Main, in_tmpdir: true do
     expect(json["fingerprint"]).to eq("d8f0315c3c4e9ba81003a7ec6c823fb0")
   end
 
-  def engine_conf
+  def engine_conf mass = 1
     CC::Engine::Analyzers::EngineConfig.new({
       'config' => {
         'checks' => {
@@ -222,7 +224,7 @@ RSpec.describe CC::Engine::Analyzers::TypeScript::Main, in_tmpdir: true do
         },
         'languages' => {
           'typescript' => {
-            'mass_threshold' => 1,
+            'mass_threshold' => mass,
           },
         },
       },

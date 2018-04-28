@@ -159,6 +159,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       b = require('bar'),
       c = require('baz'),
       d = require('bam');
+    a + b + c + d;
     EOJS
 
     create_source_file("bar.js", <<~EOJS)
@@ -166,9 +167,10 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
       b = require('bar'),
       c = require('baz'),
       d = require('bam');
+    print(a);
     EOJS
 
-    issues = run_engine(engine_conf).strip.split("\0")
+    issues = run_engine(engine_conf 3).strip.split("\0")
     expect(issues).to be_empty
   end
 
@@ -201,7 +203,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
     })
   end
 
-  def engine_conf
+  def engine_conf mass = 1
     CC::Engine::Analyzers::EngineConfig.new({
       'config' => {
         'checks' => {
@@ -214,7 +216,7 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
         },
         'languages' => {
           'javascript' => {
-            'mass_threshold' => 1,
+            'mass_threshold' => mass,
           },
         },
       },

@@ -14,7 +14,7 @@ module CC
           PATTERNS = ["**/*.go"].freeze
           DEFAULT_MASS_THRESHOLD = 100
           DEFAULT_FILTERS = [
-            "(ImportSpec ___)",
+            "(GenDecl _ (specs (ImportSpec ___)) _)",
             "(comments ___)",
           ].freeze
           POINTS_PER_OVERAGE = 10_000
