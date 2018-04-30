@@ -14,14 +14,10 @@ module CC
           DEFAULT_MASS_THRESHOLD = 75
           DEFAULT_FILTERS = [
             "(Stmt_Use ___)",
+            "(comments ___)",
           ].freeze
           POINTS_PER_OVERAGE = 35_000
           REQUEST_PATH = "/php"
-          COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
-
-          def transform_sexp(sexp)
-            delete_comments!(sexp)
-          end
 
           def use_sexp_lines?
             false
@@ -35,10 +31,6 @@ module CC
 
           def default_filters
             DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
-          end
-
-          def delete_comments!(sexp)
-            sexp.search_each(COMMENT_MATCHER) { |node| node.delete_at(1) }
           end
         end
       end
