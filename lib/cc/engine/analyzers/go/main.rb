@@ -14,14 +14,13 @@ module CC
           PATTERNS = ["**/*.go"].freeze
           DEFAULT_MASS_THRESHOLD = 100
           DEFAULT_FILTERS = [
-            "(ImportSpec ___)",
+            "(GenDecl _ (specs (ImportSpec ___)) _)",
+            "(comments ___)",
           ].freeze
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/go"
-          COMMENT_MATCHER = Sexp::Matcher.parse("(_ (comments ___) ___)")
 
           def transform_sexp(sexp)
-            delete_comments!(sexp)
             sexp.delete_if { |node| node[0] == :name }
           end
 
@@ -37,10 +36,6 @@ module CC
 
           def default_filters
             DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
-          end
-
-          def delete_comments!(sexp)
-            sexp.search_each(COMMENT_MATCHER) { |node| node.delete_at(1) }
           end
         end
       end

@@ -177,6 +177,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       use KeepClear\\Traits\\Controllers\\ApiFilter;
       use KeepClear\\Traits\\Controllers\\ApiParseBody;
       use KeepClear\\Traits\\Controllers\\ApiException;
+      a / b;
       EOPHP
 
       create_source_file("bar.php", <<~EOPHP)
@@ -190,9 +191,10 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       use KeepClear\\Traits\\Controllers\\ApiFilter;
       use KeepClear\\Traits\\Controllers\\ApiParseBody;
       use KeepClear\\Traits\\Controllers\\ApiException;
+      a + b;
       EOPHP
 
-      issues = run_engine(engine_conf).strip.split("\0")
+      issues = run_engine(engine_conf 6).strip.split("\0")
       expect(issues).to be_empty
     end
 
@@ -275,12 +277,12 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
     end
   end
 
-  def engine_conf
+  def engine_conf mass = 5
     CC::Engine::Analyzers::EngineConfig.new({
       'config' => {
         'languages' => {
           'php' => {
-            'mass_threshold' => 5,
+            'mass_threshold' => mass,
           },
         },
       },
