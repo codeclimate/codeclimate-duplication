@@ -133,6 +133,7 @@ module CC
           changes = {
             mass: language_strategy.mass_threshold,
             filters: language_strategy.filters,
+            post_filters: language_strategy.post_filters,
           }
 
           CCFlay.default_options.merge changes

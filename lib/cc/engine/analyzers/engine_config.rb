@@ -42,6 +42,12 @@ module CC
           end
         end
 
+        def post_filters_for(language)
+          fetch_language(language).fetch("post_filters", []).map do |filter|
+            Sexp::Matcher.parse filter
+          end
+        end
+
         def minimum_mass_threshold_for(language)
           [
             mass_threshold_for(language, IDENTICAL_CODE_CHECK),
