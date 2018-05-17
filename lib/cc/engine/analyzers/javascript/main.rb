@@ -14,13 +14,13 @@ module CC
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 45
           DEFAULT_FILTERS = [
-            "(directives (Directive (value (DirectiveLiteral ___))))",
+            "(directives (Directive (value (DirectiveLiteral ___))))".freeze,
             "(ImportDeclaration ___)".freeze,
             "(VariableDeclarator _ (init (CallExpression (_ (Identifier require)) ___)))".freeze,
           ].freeze
           DEFAULT_POST_FILTERS = [
-            "(NUKE ___)",
-            "(Program _ ___)",
+            "(NUKE ___)".freeze,
+            "(Program _ ___)".freeze,
           ].freeze
           POINTS_PER_OVERAGE = 30_000
           REQUEST_PATH = "/javascript".freeze
