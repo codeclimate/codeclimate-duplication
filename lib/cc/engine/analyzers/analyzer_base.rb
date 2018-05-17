@@ -58,6 +58,10 @@ module CC
           engine_config.filters_for(language) | default_filters
         end
 
+        def post_filters
+          engine_config.post_filters_for(language) | default_post_filters
+        end
+
         def language
           self.class::LANGUAGE
         end
@@ -105,6 +109,10 @@ module CC
         end
 
         def default_filters
+          []
+        end
+
+        def default_post_filters
           []
         end
 

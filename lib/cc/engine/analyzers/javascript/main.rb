@@ -14,14 +14,32 @@ module CC
           LANGUAGE = "javascript"
           DEFAULT_MASS_THRESHOLD = 45
           DEFAULT_FILTERS = [
+            "(directives (Directive (value (DirectiveLiteral ___))))",
             "(ImportDeclaration ___)".freeze,
             "(VariableDeclarator _ (init (CallExpression (_ (Identifier require)) ___)))".freeze,
+          ].freeze
+          DEFAULT_POST_FILTERS = [
+            "(NUKE ___)",
+            "(Program _ ___)",
           ].freeze
           POINTS_PER_OVERAGE = 30_000
           REQUEST_PATH = "/javascript".freeze
 
           def use_sexp_lines?
             false
+          end
+
+          ##
+          # Transform sexp as such:
+          #
+          #               s(:Program, :module, s(:body, ... ))
+          #   => s(:NUKE, s(:Program, :module, s(:NUKE, ... )))
+
+          def transform_sexp(sexp)
+            sexp.body.sexp_type = :NUKE # negate top level body
+            sexp = s(:NUKE, sexp) # wrap with extra node to force full process
+
+            sexp
           end
 
           private
@@ -32,6 +50,10 @@ module CC
 
           def default_filters
             DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
+          end
+
+          def default_post_filters
+            DEFAULT_POST_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
         end
       end

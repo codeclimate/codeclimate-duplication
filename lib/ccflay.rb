@@ -18,6 +18,25 @@ class CCFlay < Flay
     self.identical = Concurrent::Hash.new
     self.masses = Concurrent::Hash.new
   end
+
+  def post_filter *patterns
+    return if patterns.empty?
+
+    self.hashes.delete_if { |_, sexps|
+      sexps.any? { |sexp|
+        patterns.any? { |pattern|
+          # pattern =~ sexp
+          pattern.satisfy? sexp
+        }
+      }
+    }
+  end
+
+  def prune
+    post_filter(*option[:post_filters])
+
+    super
+  end
 end
 
 class Sexp

@@ -174,6 +174,94 @@ RSpec.describe CC::Engine::Analyzers::Javascript::Main, in_tmpdir: true do
     expect(issues).to be_empty
   end
 
+  it "ignores imports and reports proper line number boundaries" do
+    create_source_file("foo.js", <<~EOJS)
+      'use strict';
+
+      import React          from 'react';
+
+      import Translator             from '../../../i18n/translator-tag.jsx';
+      import { gettingSeniorID }    from '../../../helpers/data/senior';
+      import { choosingReducedFee } from '../../../helpers/data/reduced-fee';
+      import { correctID }          from '../../../helpers/data/card-type';
+
+
+      const Senior = (props) => {
+        if (!gettingSeniorID(props.IDApp)) { return null; }
+        return <Translator tag='p' translationPath = 'intro.getStartedPage.whatYouAreDoing.correctingSeniorID' />
+      };
+
+      const Reduced = (props) => {
+        if (!choosingReducedFee(props.IDApp)) { return null; }
+        return <Translator tag='p' translationPath = 'intro.getStartedPage.whatYouAreDoing.correctingReducedFeeID' />
+      };
+
+      const Regular = (props) => {
+        if (gettingSeniorID(props.IDApp) || choosingReducedFee(props.IDApp)) { return null; }
+        return <Translator tag='p' translationPath = 'intro.getStartedPage.whatYouAreDoing.correctingID' />
+      };
+
+
+      const CorrectingIDInfo = (props) => {
+        if(!correctID(props)) { return null; }
+        return (
+          <div className='correcting-id-info'>
+            <Senior   IDApp = {props.IDApp }/>
+            <Reduced  IDApp = {props.IDApp }/>
+            <Regular  IDApp = { props.IDApp}/>
+          </div>
+          );
+      };
+
+      export default CorrectingIDInfo;
+    EOJS
+
+    create_source_file("bar.js", <<~EOJS)
+      'use strict';
+
+      import React                  from 'react';
+      import { updateID }           from '../../../helpers/data/card-type';
+      import { gettingSeniorID }    from '../../../helpers/data/senior';
+      import { choosingReducedFee } from '../../../helpers/data/reduced-fee';
+      import Translator             from '../../../i18n/translator-tag.jsx';
+
+      const Senior = (props) => {
+        if (!gettingSeniorID(props.IDApp)) { return null; }
+        return <Translator tag='p' translationPath = 'intro.getStartedPage.whatYouAreDoing.updatingSeniorID' />
+      };
+
+      const Reduced = (props) => {
+        if (!choosingReducedFee(props.IDApp)) { return null; }
+        return <Translator tag='p' translationPath = 'intro.getStartedPage.whatYouAreDoing.updatingReducedFeeID' />
+      };
+
+      const Regular = (props) => {
+        if (gettingSeniorID(props.IDApp) || choosingReducedFee(props.IDApp)) { return null; }
+        return <Translator tag='p' translationPath = 'intro.getStartedPage.whatYouAreDoing.updatingID' />
+      };
+
+      const UpdatingIDInfo = (props) => {
+        if (!updateID(props)) { return null; }
+        return (
+          <div className='updating-id-info'>
+            <Senior   IDApp = {props.IDApp } />
+            <Reduced  IDApp = {props.IDApp } />
+            <Regular  IDApp = { props.IDApp} />
+          </div>
+          );
+      };
+
+      export default UpdatingIDInfo;
+    EOJS
+
+    issues = run_engine(engine_conf).strip.split("\0")
+    issues = issues.map { |issue| JSON.parse issue }
+
+    infected = issues.any? { |i| i.dig("location", "lines", "begin") == 1 }
+
+    expect(infected).to be false
+  end
+
   it "outputs the correct line numbers for ASTs missing line details (codeclimate/app#6227)" do
     create_source_file("foo.js", <<~EOJS)
       `/movie?${getQueryString({ movie_id: movieId })}`
