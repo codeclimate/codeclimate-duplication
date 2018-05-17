@@ -36,6 +36,8 @@ module CC
           #   => s(:NUKE, s(:Program, :module, s(:NUKE, ... )))
 
           def transform_sexp(sexp)
+            return sexp unless sexp.body
+
             sexp.body.sexp_type = :NUKE # negate top level body
             sexp = s(:NUKE, sexp) # wrap with extra node to force full process
 
