@@ -10,15 +10,15 @@ module CC
           PATTERNS = [
             "**/*.ts",
             "**/*.tsx",
-          ]
+          ].freeze
           LANGUAGE = "typescript"
           DEFAULT_MASS_THRESHOLD = 45
           DEFAULT_FILTERS = [
-            "(ImportDeclaration ___)",
-            "(VariableDeclarator _ (init (CallExpression (_ (Identifier require)) ___)))",
-          ]
+            "(ImportDeclaration ___)".freeze,
+            "(VariableDeclarator _ (init (CallExpression (_ (Identifier require)) ___)))".freeze,
+          ].freeze
           POINTS_PER_OVERAGE = 30_000
-          REQUEST_PATH = "/typescript"
+          REQUEST_PATH = "/typescript".freeze
 
           def use_sexp_lines?
             false
