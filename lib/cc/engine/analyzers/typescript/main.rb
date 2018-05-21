@@ -1,61 +1,20 @@
 # frozen_string_literal: true
 
-require "cc/engine/analyzers/analyzer_base"
+require "cc/engine/analyzers/javascript/main"
 
 module CC
   module Engine
     module Analyzers
-      module TypeScript
-        class Main < CC::Engine::Analyzers::Base
+      module TypeScript # TODO: inconsistent naming w/ Javascript
+        class Main < CC::Engine::Analyzers::Javascript::Main
           PATTERNS = [
             "**/*.ts",
             "**/*.tsx",
           ].freeze
+
           LANGUAGE = "typescript"
-          DEFAULT_MASS_THRESHOLD = 45
-          DEFAULT_FILTERS = [
-            "(ImportDeclaration ___)".freeze,
-            "(VariableDeclarator _ (init (CallExpression (_ (Identifier require)) ___)))".freeze,
-          ].freeze
-          DEFAULT_POST_FILTERS = [
-            "(NUKE ___)".freeze,
-            "(Program _ ___)".freeze,
-          ].freeze
-          POINTS_PER_OVERAGE = 30_000
+
           REQUEST_PATH = "/typescript".freeze
-
-          def use_sexp_lines?
-            false
-          end
-
-          ##
-          # Transform sexp as such:
-          #
-          #               s(:Program, :module, s(:body, ... ))
-          #   => s(:NUKE, s(:Program, :module, s(:NUKE, ... )))
-
-          def transform_sexp(sexp)
-            return sexp unless sexp.body
-
-            sexp.body.sexp_type = :NUKE # negate top level body
-            sexp = s(:NUKE, sexp) # wrap with extra node to force full process
-
-            sexp
-          end
-
-          private
-
-          def process_file(file)
-            parse(file, REQUEST_PATH)
-          end
-
-          def default_filters
-            DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
-          end
-
-          def default_post_filters
-            DEFAULT_POST_FILTERS.map { |filter| Sexp::Matcher.parse filter }
-          end
         end
       end
     end
