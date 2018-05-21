@@ -44,18 +44,18 @@ module CC
             sexp
           end
 
-          private
+          protected
 
           def process_file(file)
-            parse(file, REQUEST_PATH)
+            parse(file, self.class::REQUEST_PATH)
           end
 
           def default_filters
-            DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
+            self.class::DEFAULT_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
 
           def default_post_filters
-            DEFAULT_POST_FILTERS.map { |filter| Sexp::Matcher.parse filter }
+            self.class::DEFAULT_POST_FILTERS.map { |filter| Sexp::Matcher.parse filter }
           end
         end
       end
