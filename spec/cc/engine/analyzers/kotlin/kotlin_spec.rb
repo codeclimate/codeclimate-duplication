@@ -142,11 +142,11 @@ module CC::Engine::Analyzers
 
               val anArray: Array<Int> = Array(10)
 
-              for (i in 0..<10) {
+              for (i in 0..10) {
                 anArray[i] = i
               }
 
-              for (i in 0..<10) {
+              for (i in 0..10) {
                 println(anArray[i] + " ")
               }
 
@@ -160,11 +160,11 @@ module CC::Engine::Analyzers
 
               val anArray: Array<Int> = Array(10)
 
-              for (i in 0..<10) {
+              for (i in 0..10) {
                 anArray[i] = i
               }
 
-              for (i in 0..<10) {
+              for (i in 0..10) {
                 println(anArray[i] + " ")
               }
 
