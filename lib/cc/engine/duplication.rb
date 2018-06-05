@@ -4,6 +4,7 @@ require "bundler/setup"
 require "cc/engine/parse_metrics"
 require "cc/engine/analyzers/ruby/main"
 require "cc/engine/analyzers/java/main"
+require "cc/engine/analyzers/kotlin/main"
 require "cc/engine/analyzers/javascript/main"
 require "cc/engine/analyzers/go/main"
 require "cc/engine/analyzers/php/main"
@@ -22,6 +23,7 @@ module CC
       LANGUAGES = {
         "ruby"       => ::CC::Engine::Analyzers::Ruby::Main,
         "java"       => ::CC::Engine::Analyzers::Java::Main,
+        "kotlin"     => ::CC::Engine::Analyzers::Kotlin::Main,
         "javascript" => ::CC::Engine::Analyzers::Javascript::Main,
         "php"        => ::CC::Engine::Analyzers::Php::Main,
         "python"     => ::CC::Engine::Analyzers::Python::Main,
