@@ -122,7 +122,7 @@ could also specify `"(hash ___)"` to ignore all hashes altogether.
 Figuring out what to filter is tricky. codeclimate-duplication comes
 with a configuration option to help with the discovery. Instead of
 scanning your code and printing out issues for codeclimate, it prints
-out the parse-trees instead! Just add `dump_ast: true` and `debug: true` to your
+out the parse-trees instead! Just add `dump_ast: true` to your
 .codeclimate.yml file:
 
 ```
@@ -132,7 +132,6 @@ plugins:
     enabled: true
     config:
       dump_ast: true
-      debug: true
       ... rest of config ...
 ```
 
