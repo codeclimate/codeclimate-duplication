@@ -16,6 +16,8 @@ module CC
           DEFAULT_FILTERS = [
             "(IMPORT_LIST ___)".freeze,
             "(PACKAGE_DIRECTIVE ___)".freeze,
+            "(KDoc ___)".freeze,
+            "(EOL_COMMENT ___)".freeze,
           ].freeze
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/kotlin".freeze
