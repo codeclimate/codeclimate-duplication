@@ -233,6 +233,80 @@ set it to false) to go back to normal analysis.
 For more information on pattern matching,
 see [sexp_processor][sexp_processor], especially [sexp.rb][sexp.rb]
 
+### Node Filtering Examples
+Now for a practical example of node filtering in our duplication engine:
+
+##### someCat.js
+```javascript
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const cat = {
+  meow: PropTypes.object.isRequired,
+  jump: PropTypes.object.isRequired,
+  eatFood: PropTypes.object.isRequired,
+  sleep: PropTypes.object.isRequired,
+};
+
+class CatDoesStuff extends React.Component {
+  state = {
+    meow: false,
+  };
+
+  meow = async () => {
+    this.setState({ jump: true });
+
+    await this.props.eatFood();
+
+    this.props.sleep();
+  };
+}
+```
+
+##### someDog.js
+```javascript
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const dog = {
+  bark: PropTypes.object.isRequired,
+  run: PropTypes.object.isRequired,
+  eatFood: PropTypes.object.isRequired,
+  sleep: PropTypes.object.isRequired,
+};
+
+class DogDoesStuff extends React.Component {
+  state = {
+    bark: false,
+  };
+
+  bark = async () => {
+    this.setState({ run: true });
+
+    await this.props.eatFood();
+
+    this.props.sleep();
+  };
+}
+```
+
+These two files will return two instances of duplication. Notably, `const dog` and `const cat` will be flagged as duplication.
+
+It's conceivable that you might not want our duplication engine to flag those constants as duplication. They're common patterns in React. That's where node filtering comes into play.
+
+After you've dumped the AST following the instructions above, you'll find that adding something like this to your Code Climate config will filter out those constant declarations from duplication analysis:
+
+```yaml
+plugins:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        javascript:
+          filters:
+          - (VariableDeclaration ___ const)
+```
+
 [codeclimate]: https://codeclimate.com/dashboard
 [what-is-duplication]: https://docs.codeclimate.com/docs/duplication-concept
 [flay]: https://github.com/seattlerb/flay
