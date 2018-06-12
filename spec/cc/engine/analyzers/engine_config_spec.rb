@@ -46,6 +46,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "ruby" => {},
         "java" => {},
         "javascript" => {},
+        "kotlin" => {},
         "php" => {},
         "python" => {},
         "typescript" => {},
