@@ -45,8 +45,8 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       expect(engine_config.languages).to eq({
         "ruby" => {},
         "java" => {},
-        "kotlin" => {},
         "javascript" => {},
+        "kotlin" => {},
         "php" => {},
         "python" => {},
         "typescript" => {},
