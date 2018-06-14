@@ -12,7 +12,7 @@ module CC
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "kotlin".freeze
           PATTERNS = ["**/*.kt"].freeze
-          DEFAULT_MASS_THRESHOLD = 40
+          DEFAULT_MASS_THRESHOLD = 60
           DEFAULT_FILTERS = [
             "(IMPORT_LIST ___)".freeze,
             "(PACKAGE_DIRECTIVE ___)".freeze,
