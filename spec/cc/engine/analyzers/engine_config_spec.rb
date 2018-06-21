@@ -51,6 +51,7 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
         "python" => {},
         "typescript" => {},
         "go" => {},
+        "scala" => {},
         "swift" => {},
       })
     end
