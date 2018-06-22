@@ -138,7 +138,19 @@ module CC::Engine::Analyzers
           import org.springframework.rules.closure.BinaryConstraint;
         EOF
 
-        issues = run_engine(engine_conf).strip.split("\0")
+        conf = CC::Engine::Analyzers::EngineConfig.new({
+          'config' => {
+            'checks' => {
+              'similar-code' => { 'enabled' => true },
+              'identical-code' => { 'enabled' => true },
+            },
+            'languages' => {
+              'scala' => { 'mass_threshold' => 9 },
+            },
+          },
+        })
+
+        issues = run_engine(conf).strip.split("\0")
         expect(issues).to be_empty
       end
 
