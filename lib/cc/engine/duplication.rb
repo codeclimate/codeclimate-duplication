@@ -10,6 +10,7 @@ require "cc/engine/analyzers/go/main"
 require "cc/engine/analyzers/php/main"
 require "cc/engine/analyzers/python/main"
 require "cc/engine/analyzers/reporter"
+require "cc/engine/analyzers/scala/main"
 require "cc/engine/analyzers/swift/main"
 require "cc/engine/analyzers/typescript/main"
 require "cc/engine/analyzers/engine_config"
@@ -29,6 +30,7 @@ module CC
         "python"     => ::CC::Engine::Analyzers::Python::Main,
         "typescript" => ::CC::Engine::Analyzers::TypeScript::Main,
         "go"         => ::CC::Engine::Analyzers::Go::Main,
+        "scala"      => ::CC::Engine::Analyzers::Scala::Main,
         "swift"      => ::CC::Engine::Analyzers::Swift::Main,
       }.freeze
 
