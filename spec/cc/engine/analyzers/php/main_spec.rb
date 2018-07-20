@@ -169,6 +169,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       create_source_file("foo.php", <<~EOPHP)
       <?php
       namespace KeepClear\\Http\\Controllers\\API\\V1;
+
       use Illuminate\\Http\\Request;
       use KeepClear\\Http\\Controllers\\Controller;
       use KeepClear\\Models\\Comment;
@@ -177,12 +178,14 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       use KeepClear\\Traits\\Controllers\\ApiFilter;
       use KeepClear\\Traits\\Controllers\\ApiParseBody;
       use KeepClear\\Traits\\Controllers\\ApiException;
+      
       a / b;
       EOPHP
 
       create_source_file("bar.php", <<~EOPHP)
       <?php
       namespace KeepClear\\Http\\Controllers\\API\\V1;
+
       use Illuminate\\Http\\Request;
       use KeepClear\\Http\\Controllers\\Controller;
       use KeepClear\\Models\\Comment;
@@ -191,6 +194,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
       use KeepClear\\Traits\\Controllers\\ApiFilter;
       use KeepClear\\Traits\\Controllers\\ApiParseBody;
       use KeepClear\\Traits\\Controllers\\ApiException;
+
       a + b;
       EOPHP
 
