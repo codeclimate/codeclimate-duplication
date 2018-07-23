@@ -43,16 +43,17 @@ RSpec.describe CC::Engine::Analyzers::EngineConfig  do
       })
 
       expect(engine_config.languages).to eq({
-        "ruby" => {},
+        "csharp" => {},
+        "go" => {},
         "java" => {},
         "javascript" => {},
         "kotlin" => {},
         "php" => {},
         "python" => {},
-        "typescript" => {},
-        "go" => {},
+        "ruby" => {},
         "scala" => {},
         "swift" => {},
+        "typescript" => {},
       })
     end
 

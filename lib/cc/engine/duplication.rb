@@ -2,14 +2,15 @@
 
 require "bundler/setup"
 require "cc/engine/parse_metrics"
-require "cc/engine/analyzers/ruby/main"
-require "cc/engine/analyzers/java/main"
-require "cc/engine/analyzers/kotlin/main"
-require "cc/engine/analyzers/javascript/main"
+require "cc/engine/analyzers/csharp/main"
 require "cc/engine/analyzers/go/main"
+require "cc/engine/analyzers/java/main"
+require "cc/engine/analyzers/javascript/main"
+require "cc/engine/analyzers/kotlin/main"
 require "cc/engine/analyzers/php/main"
 require "cc/engine/analyzers/python/main"
 require "cc/engine/analyzers/reporter"
+require "cc/engine/analyzers/ruby/main"
 require "cc/engine/analyzers/scala/main"
 require "cc/engine/analyzers/swift/main"
 require "cc/engine/analyzers/typescript/main"
@@ -22,14 +23,15 @@ module CC
   module Engine
     class Duplication
       LANGUAGES = {
-        "ruby"       => ::CC::Engine::Analyzers::Ruby::Main,
+        "csharp"     => ::CC::Engine::Analyzers::Csharp::Main,
+        "go"         => ::CC::Engine::Analyzers::Go::Main,
         "java"       => ::CC::Engine::Analyzers::Java::Main,
         "javascript" => ::CC::Engine::Analyzers::Javascript::Main,
         "kotlin"     => ::CC::Engine::Analyzers::Kotlin::Main,
         "php"        => ::CC::Engine::Analyzers::Php::Main,
         "python"     => ::CC::Engine::Analyzers::Python::Main,
+        "ruby"       => ::CC::Engine::Analyzers::Ruby::Main,
         "typescript" => ::CC::Engine::Analyzers::TypeScript::Main,
-        "go"         => ::CC::Engine::Analyzers::Go::Main,
         "scala"      => ::CC::Engine::Analyzers::Scala::Main,
         "swift"      => ::CC::Engine::Analyzers::Swift::Main,
       }.freeze
