@@ -12,7 +12,7 @@ module CC
       module Python
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "python"
-          PATTERNS = ["**/*.py"].freeze
+          PATTERNS = ["**/*.py", "**/*.py3"].freeze
           DEFAULT_MASS_THRESHOLD = 32
           DEFAULT_PYTHON_VERSION = 2
           POINTS_PER_OVERAGE = 50_000
