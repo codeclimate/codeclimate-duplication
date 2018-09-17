@@ -12,7 +12,6 @@ module CC
       module Python
         class Main < CC::Engine::Analyzers::Base
           LANGUAGE = "python"
-          PATTERNS = ["**/*.py", "**/*.py3"].freeze
           DEFAULT_MASS_THRESHOLD = 32
           DEFAULT_PYTHON_VERSION = 2
           POINTS_PER_OVERAGE = 50_000
@@ -33,6 +32,19 @@ module CC
 
           def python_version
             engine_config.fetch_language(LANGUAGE).fetch("python_version", DEFAULT_PYTHON_VERSION)
+          end
+
+          def patterns
+            case python_version
+            when 2, "2"
+              ["**/*.py"]
+              "python2"
+            when 3, "3"
+              ["**/*.py", "**/*.py3"]
+              "python3"
+            else
+              raise ArgumentError, "Supported python versions are 2 and 3. You configured: #{python_version.inspect}"
+            end
           end
         end
       end
