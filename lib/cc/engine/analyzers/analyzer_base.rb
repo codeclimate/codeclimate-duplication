@@ -129,7 +129,7 @@ module CC
             engine_config: engine_config,
             patterns: engine_config.patterns_for(
               language,
-              self.class::PATTERNS,
+              patterns,
             ),
           )
         end
@@ -168,6 +168,10 @@ module CC
             raise ex
           end
           nil
+        end
+
+        def patterns
+          self.class::PATTERNS
         end
       end
     end
