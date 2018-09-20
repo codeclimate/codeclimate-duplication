@@ -92,6 +92,23 @@ plugins:
             - "**/*.ruby"
 ```
 
+### Python 3
+
+By default, the Duplication engine will use a Python 2 parser. To enable
+analysis for Python 3 code, specify the `python_version` as shown in the example
+below. This will enable a Python 3 parser and add the `.py3` file extension to
+the list of included file patterns.
+
+```yml
+plugins:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        python:
+          python_version: 3
+```
+
 ### Node Filtering
 
 Sometimes structural similarities are reported that you just don't
