@@ -14,7 +14,7 @@ simple. We have a [docs page][what-is-duplication] explaining the algorithm.
 ## Installation
 
 1. Install the [Code Climate CLI][cli], if you haven't already.
-3. You're ready to analyze! `cd` into your project's folder and run `codeclimate
+1. You're ready to analyze! `cd` into your project's folder and run `codeclimate
    analyze`. Duplication analysis is enabled by default, so you don't need to do
    anything else.
 
