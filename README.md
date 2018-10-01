@@ -14,10 +14,9 @@ simple. We have a [docs page][what-is-duplication] explaining the algorithm.
 ## Installation
 
 1. Install the [Code Climate CLI][cli], if you haven't already.
-2. Run `codeclimate engines:enable duplication`. This command installs the
-   engine and enables it in your `.codeclimate.yml` file.
-3. You're ready to analyze! `cd` into your project's folder and run `codeclimate
-   analyze`.
+1. You're ready to analyze! `cd` into your project's folder and run `codeclimate
+   analyze`. Duplication analysis is enabled by default, so you don't need to do
+   anything else.
 
 ## Configuring
 
