@@ -1,4 +1,4 @@
-.PHONY: image test citest
+.PHONY: image test citest release
 
 IMAGE_NAME ?= codeclimate/codeclimate-duplication
 
@@ -16,3 +16,8 @@ bundle:
 	  --entrypoint /bin/sh \
 	  --volume $(PWD):/usr/src/app \
 	  $(IMAGE_NAME) -c "bundle $(BUNDLE_ARGS)"
+
+release: image
+	docker tag $(IMAGE_NAME) \
+		us.gcr.io/code_climate/codeclimate-duplication:$(RELEASE_TAG)
+	docker push us.gcr.io/code_climate/codeclimate-duplication:$(RELEASE_TAG)
