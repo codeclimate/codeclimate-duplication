@@ -74,6 +74,9 @@ def b(thing: str):
 
 def c(thing: str):
   print("Hello", str)
+
+def b(thing: str):
+  bytes_literal = b'asdf'
       EOJS
 
       conf = CC::Engine::Analyzers::EngineConfig.new({
