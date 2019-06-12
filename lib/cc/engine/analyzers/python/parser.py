@@ -29,6 +29,8 @@ def cast_infinity(value):
 def cast_value(value):
     if value is None or isinstance(value, (bool, string_type())):
         return value
+    elif PY3 and isinstance(value, bytes):
+        return value.decode()
     elif isinstance(value, num_types()):
         if abs(value) == 1e3000:
             return cast_infinity(value)
