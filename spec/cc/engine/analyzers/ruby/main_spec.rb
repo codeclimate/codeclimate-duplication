@@ -17,7 +17,6 @@ module CC::Engine::Analyzers
           end
         EORUBY
 
-        pending "Potential lexing bug. Ask customer to remove escaping."
         expect(CC.logger).to receive(:info).with(/Skipping file/)
         expect(run_engine(engine_conf)).to eq("")
       end
@@ -138,6 +137,19 @@ module CC::Engine::Analyzers
         issues = run_engine(engine_conf).strip.split("\0")
 
         expect(issues.length).to eq(3)
+      end
+
+      it "parses modern (>2.6) Ruby syntax" do
+        create_source_file("foo.rb", <<-EORUBY)
+          [1, 2, 3].each do |val|
+            puts val
+          rescue StandardError
+            puts "ERROR!"
+          end
+        EORUBY
+
+        issues = run_engine(engine_conf).strip.split("\0")
+        expect(issues.length).to eq(0)
       end
 
       it "skips unparsable files" do
