@@ -14,11 +14,8 @@ RUN apt-get update && \
     python2.7
 
 COPY Gemfile* ./
-COPY vendor/php-parser/composer* ./vendor/php-parser/
 
-RUN bundle install --jobs 4 --quiet && \
-    composer install --no-interaction --quiet --working-dir ./vendor/php-parser
-
+RUN bundle install --jobs 4 --quiet
 COPY . ./
 RUN chown -R app:app ./
 
