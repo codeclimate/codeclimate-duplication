@@ -40,12 +40,12 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(965_000)
+      expect(json["remediation_points"]).to eq(967000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 24/)
-      expect(json["fingerprint"]).to eq("367e371730140daeda61ab577c617236")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 28/)
+      expect(json["fingerprint"]).to eq("b41447552cff977d3d98dff4cd282ec2")
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
@@ -82,12 +82,12 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
         "path" => "foo.php",
         "lines" => { "begin" => 2, "end" => 8 },
       })
-      expect(json["remediation_points"]).to eq(965_000)
+      expect(json["remediation_points"]).to eq(967000)
       expect(json["other_locations"]).to eq([
         {"path" => "foo.php", "lines" => { "begin" => 10, "end" => 16} },
       ])
-      expect(json["content"]["body"]).to match(/This issue has a mass of 24/)
-      expect(json["fingerprint"]).to eq("8fe741c1e4cccc7226bbf6f0244fc49d")
+      expect(json["content"]["body"]).to match(/This issue has a mass of 28/)
+      expect(json["fingerprint"]).to eq("c4c0b456f59f109d0a5cfce7d4807935")
     end
 
     it "runs against complex files" do
@@ -238,7 +238,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
           "path" => "foo.php",
           "lines" => { "begin" => 8, "end" => 14 },
         )
-        expect(issue["content"]["body"]).to match(/This issue has a mass of 24/)
+        expect(issue["content"]["body"]).to match(/This issue has a mass of 28/)
       end
 
       it "ignores one-line comments" do
@@ -272,7 +272,7 @@ RSpec.describe CC::Engine::Analyzers::Php::Main, in_tmpdir: true do
           "path" => "foo.php",
           "lines" => { "begin" => 4, "end" => 10 },
         )
-        expect(issue["content"]["body"]).to match(/This issue has a mass of 24/)
+        expect(issue["content"]["body"]).to match(/This issue has a mass of 28/)
       end
     end
   end
