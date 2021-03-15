@@ -11,12 +11,12 @@ module CC
           PATTERNS = [
             "**/*.php",
           ].freeze
-          DEFAULT_MASS_THRESHOLD = 75
+          DEFAULT_MASS_THRESHOLD = 90
           DEFAULT_FILTERS = [
             "(Stmt_Use ___)",
             "(comments ___)",
           ].freeze
-          POINTS_PER_OVERAGE = 35_000
+          POINTS_PER_OVERAGE = 29_000
           REQUEST_PATH = "/php"
 
           def use_sexp_lines?
