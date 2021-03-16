@@ -39,9 +39,9 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.3.0)
     rspec-support (3.3.0)
-    ruby_parser (3.11.0)
+    ruby_parser (3.14.1)
       sexp_processor (~> 4.9)
-    sexp_processor (4.11.0)
+    sexp_processor (4.13.0)
     slop (3.6.0)
 
 PLATFORMS
@@ -57,4 +57,4 @@ DEPENDENCIES
   sexp_processor (~> 4.11)
 
 BUNDLED WITH
-   1.10.6
+   1.17.3
