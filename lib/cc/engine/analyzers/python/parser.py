@@ -7,9 +7,9 @@ def string_type():
 
 def num_types():
     if PY3:
-        return (int, float, complex)
+        return (int, float)
     else:
-        return (int, float, long, complex)
+        return (int, float, long)
 
 def to_json(node):
     json_ast = {'attributes': {}}
@@ -31,6 +31,10 @@ def cast_value(value):
         return value
     elif PY3 and isinstance(value, bytes):
         return value.decode()
+    elif isinstance(value, complex):
+        # Complex numbers cannot be serialised directly.  Ruby's to_json
+        # handles this by string-ifying the numbers, so we do similarly here.
+        return str(complex)
     elif isinstance(value, num_types()):
         if abs(value) == 1e3000:
             return cast_infinity(value)

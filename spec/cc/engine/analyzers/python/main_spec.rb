@@ -111,6 +111,53 @@ def b(thing: str):
       expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
     end
 
+    it "finds duplication with complex-number literals" do
+      create_source_file("complex.py", <<-EOJS)
+def a():
+  return 1+1j
+
+def b():
+  return 1 + 1J
+
+def c():
+  return (1 + 1j)
+
+def d():
+  return 1
+      EOJS
+
+      conf = CC::Engine::Analyzers::EngineConfig.new({
+      "config" => {
+        "languages" => {
+          "python" => {
+            "mass_threshold" => 4,
+            "python_version" => 3,
+          },
+        },
+      },
+    })
+      issues = run_engine(conf).strip.split("\0")
+      result = issues.first.strip
+      json = JSON.parse(result)
+
+      expect(json["type"]).to eq("issue")
+      expect(json["check_name"]).to eq("similar-code")
+      expect(json["description"]).to eq("Similar blocks of code found in 3 locations. Consider refactoring.")
+      expect(json["categories"]).to eq(["Duplication"])
+      expect(json["location"]).to eq({
+        "path" => "complex.py",
+        "lines" => { "begin" => 1, "end" => 2 },
+      })
+      expect(json["remediation_points"]).to eq(750_000)
+      expect(json["other_locations"]).to eq([
+        {"path" => "complex.py", "lines" => { "begin" => 4, "end" => 5 } },
+        {"path" => "complex.py", "lines" => { "begin" => 7, "end" => 8 } },
+      ])
+      expect(json["content"]["body"]).to match(/This issue has a mass of 13/)
+      expect(json["fingerprint"]).to eq("f867cd91cfb73d925510a79a58619d1a")
+      expect(json["severity"]).to eq(CC::Engine::Analyzers::Base::MAJOR)
+    end
+
     it "skips unparsable files" do
       create_source_file("foo.py", <<-EOPY)
         ---
