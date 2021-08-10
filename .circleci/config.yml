@@ -29,6 +29,10 @@ workflows:
       - release_images:
           requires:
             - build_and_test
+          filters:
+            branches:
+              # Forked pull requests have CIRCLE_BRANCH set to pull/XXX
+              ignore: /pull\/[0-9]+/
 notify:
   webhooks:
     - url: https://cc-slack-proxy.herokuapp.com/circle
