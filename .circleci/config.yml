@@ -19,7 +19,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run: docker login -u _json_key -p "$GCR_JSON_KEY" us.gcr.io
-      - run: bin/deploy
+      - run: make release RELEASE_TAG="b$CIRCLE_BUILD_NUM"
 
 workflows:
   version: 2
@@ -29,6 +29,9 @@ workflows:
       - release_images:
           requires:
             - build_and_test
+          filters:
+            branches:
+              only: /master|channel\/[\w-]+/
 notify:
   webhooks:
     - url: https://cc-slack-proxy.herokuapp.com/circle
