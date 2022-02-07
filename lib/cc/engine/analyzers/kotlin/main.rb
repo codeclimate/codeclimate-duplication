@@ -14,10 +14,10 @@ module CC
           PATTERNS = ["**/*.kt"].freeze
           DEFAULT_MASS_THRESHOLD = 60
           DEFAULT_FILTERS = [
-            "(IMPORT_LIST ___)".freeze,
-            "(PACKAGE_DIRECTIVE ___)".freeze,
-            "(KDoc ___)".freeze,
-            "(EOL_COMMENT ___)".freeze,
+            "(:IMPORT_LIST ___)".freeze,
+            "(:PACKAGE_DIRECTIVE ___)".freeze,
+            "(:KDoc ___)".freeze,
+            "(:EOL_COMMENT ___)".freeze,
           ].freeze
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/kotlin".freeze

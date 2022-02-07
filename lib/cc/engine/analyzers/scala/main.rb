@@ -14,7 +14,7 @@ module CC
           PATTERNS = ["**/*.sc", "**/*.scala"].freeze
           DEFAULT_MASS_THRESHOLD = 60
           DEFAULT_FILTERS = [
-            "(Import ___)".freeze,
+            "(:Import ___)".freeze,
           ].freeze
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/scala".freeze

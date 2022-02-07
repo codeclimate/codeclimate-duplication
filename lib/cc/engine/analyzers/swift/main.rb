@@ -13,7 +13,7 @@ module CC
           LANGUAGE = "swift"
           DEFAULT_MASS_THRESHOLD = 40
           DEFAULT_FILTERS = [
-            "(ImportDeclaration ___)".freeze,
+            "(:ImportDeclaration ___)".freeze,
           ]
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/swift"

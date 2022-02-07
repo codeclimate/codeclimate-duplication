@@ -14,8 +14,8 @@ module CC
           PATTERNS = ["**/*.java"].freeze
           DEFAULT_MASS_THRESHOLD = 40
           DEFAULT_FILTERS = [
-            "(ImportDeclaration ___)".freeze,
-            "(PackageDeclaration ___)".freeze,
+            "(:ImportDeclaration ___)".freeze,
+            "(:PackageDeclaration ___)".freeze,
           ].freeze
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/java".freeze

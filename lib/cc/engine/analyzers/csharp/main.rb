@@ -14,7 +14,7 @@ module CC
           PATTERNS = ["**/*.cs"].freeze
           DEFAULT_MASS_THRESHOLD = 60
           DEFAULT_FILTERS = [
-            "(UsingDirective ___)".freeze
+            "(:UsingDirective ___)".freeze
           ].freeze
           POINTS_PER_OVERAGE = 10_000
           REQUEST_PATH = "/csharp".freeze
