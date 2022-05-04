@@ -42,7 +42,7 @@ module CC
           end
         rescue => ex
           if RESCUABLE_ERRORS.map { |klass| ex.instance_of?(klass) }.include?(true)
-            CC.logger.info("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n#{ex.backtrace.join("\n")}")
+            CC.logger.info("Skipping file #{file} due to exception (#{ex.class}): #{ex.message}\n")
             nil
           else
             CC.logger.info("#{ex.class} error occurred processing file #{file}: aborting.")
