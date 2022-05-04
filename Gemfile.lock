@@ -57,4 +57,4 @@ DEPENDENCIES
   sexp_processor (~> 4.11)
 
 BUNDLED WITH
-   1.10.6
+   2.3.12
