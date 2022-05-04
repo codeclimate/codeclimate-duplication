@@ -24,5 +24,7 @@ RUN chown -R app:app ./
 
 USER app
 
+# Hide deprecation warnings
+ENV RUBYOPT="-W0"
 ENTRYPOINT ["/usr/src/app/entrypoint"]
 CMD ["/usr/src/app/bin/duplication", "/code", "/config.json"]
