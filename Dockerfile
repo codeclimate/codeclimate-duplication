@@ -1,4 +1,4 @@
-FROM codeclimate/codeclimate-parser:b871
+FROM codeclimate/codeclimate-parser:b879
 LABEL maintainer="Code Climate <hello@codeclimate.com>"
 
 # Reset from base image
@@ -24,5 +24,7 @@ RUN chown -R app:app ./
 
 USER app
 
+# Hide deprecation warnings
+ENV RUBYOPT="-W0"
 ENTRYPOINT ["/usr/src/app/entrypoint"]
 CMD ["/usr/src/app/bin/duplication", "/code", "/config.json"]
