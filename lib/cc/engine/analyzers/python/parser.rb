@@ -44,8 +44,10 @@ module CC
               "python2"
             when 3, "3"
               "python3"
+            when "3.7", 3.8", 3.9", 3.10", 3.11"
+              "python#{python_version}"
             else
-              raise ArgumentError, "Supported python versions are 2 and 3. You configured: #{python_version.inspect}"
+              raise ArgumentError, "Supported python versions are 2, 3, and 3.(7 thru 11). You configured: #{python_version.inspect}"
             end
           end
         end
