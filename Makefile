@@ -1,6 +1,7 @@
 .PHONY: image test citest release
 
 IMAGE_NAME ?= codeclimate/codeclimate-duplication
+RELEASE_REGISTRY ?= codeclimate
 RELEASE_TAG ?= latest
 
 image:
@@ -19,5 +20,5 @@ bundle:
 	  $(IMAGE_NAME) -c "bundle $(BUNDLE_ARGS)"
 
 release:
-	docker tag $(IMAGE_NAME) $(RELEASE_REGISTRY)/codeclimate-coffeelint:$(RELEASE_TAG)
-	docker push $(RELEASE_REGISTRY)/codeclimate-coffeelint:$(RELEASE_TAG)
+	docker tag $(IMAGE_NAME) $(RELEASE_REGISTRY)/codeclimate-duplication:$(RELEASE_TAG)
+	docker push $(RELEASE_REGISTRY)/codeclimate-duplication:$(RELEASE_TAG)
