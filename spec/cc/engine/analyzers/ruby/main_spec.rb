@@ -61,10 +61,10 @@ module CC::Engine::Analyzers
 
         expect(json["location"]).to eq({
           "path" => "foo.rb",
-          "lines" => { "begin" => 2, "end" => 12 },
+          "lines" => { "begin" => 2, "end" => 11 },
         })
         expect(json["other_locations"]).to eq([
-          {"path" => "foo.rb", "lines" => { "begin" => 18, "end" => 28} },
+          {"path" => "foo.rb", "lines" => { "begin" => 18, "end" => 27} },
         ])
       end
 
