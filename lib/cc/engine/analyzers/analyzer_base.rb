@@ -1,51 +1,5 @@
 # frozen_string_literal: true
 
-# Monkey patch for Parser class
-# used in language analyzers via Sexp::Matcher.parse
-# https://github.com/seattlerb/sexp_processor/blob/master/lib/sexp_matcher.rb
-class Sexp
-  class Matcher < Sexp
-    class Parser
-      def parse_sexp
-        token = next_token
-
-        case token
-        when "(" then
-          parse_list
-        when "[" then
-          parse_cmd
-        when "nil" then
-          nil
-        when /^\d+$/ then
-          token.to_i
-        when "___" then
-          Sexp.___
-        when "_" then
-          Sexp._
-        when %r%^/(.*)/$% then
-          re = $1
-          raise SyntaxError, "Not allowed: /%p/" % [re] unless
-            re =~ /\A([\w()|.*+^$]+)\z/
-          Regexp.new re
-        when /^"(.*)"$/ then
-          $1
-        when /^([A-Z]\w*)$/ then
-          if Object.const_defined?($1)
-              Object.const_get $1
-            else
-              # Handle as a symbol or string
-              $1.to_sym  # or return $1 as a string
-            end
-        when /^:?([\w?!=~-]+)$/ then
-          $1.to_sym
-        else
-          raise SyntaxError, "unhandled token: %p" % [token]
-        end
-      end
-    end
-  end
-end
-
 require "cc/engine/analyzers/parser_error"
 require "cc/engine/analyzers/parser_base"
 require "cc/engine/analyzers/file_list"

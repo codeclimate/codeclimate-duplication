@@ -18,9 +18,9 @@ module CC::Engine::Analyzers
 
         expect(locations.count).to eq 2
         expect(locations[0].begin_line).to eq(3)
-        expect(locations[0].end_line).to eq(4)
+        expect(locations[0].end_line).to eq(7)
         expect(locations[1].begin_line).to eq(5)
-        expect(locations[1].end_line).to eq(6)
+        expect(locations[1].end_line).to eq(7)
       end
 
       it "gets appropriate locations for hashes" do
