@@ -13,6 +13,7 @@ module CC
           ].freeze
           DEFAULT_MASS_THRESHOLD = 90
           DEFAULT_FILTERS = [
+            "(Stmt_Namespace ___)",
             "(Stmt_Use ___)",
             "(comments ___)",
           ].freeze
